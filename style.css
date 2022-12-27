@@ -1,0 +1,183 @@
+:root {
+    --blue: #51B3D2;
+    --yellow: #F6CC35;
+    --red: #D05B5B;
+    --green: #79B25E;
+    --darkgray: #202020;
+    --lightgray: #BDBDBD;
+    --white: #fafafa;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+#header {
+    background-color: #A9CEC2;
+    color: var(--white);
+    padding: 7px 15px;
+}
+
+#header-title {
+    font-weight: 700;
+    font-size: 20pt;
+    display: inline;
+}
+
+#header-message {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 100;
+    font-size: 18pt;
+    display: inline;
+    margin-left: 20px;
+}
+
+#controller-bar {
+    background-color: var(--darkgray);
+    color: var(--lightgray);
+    padding: 30px 25px;
+}
+
+#prompt-selector {
+    width: 500px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#prompt-selector-text {
+    font-size: 10pt;
+}
+
+#prompt-1 {
+    color: var(--blue);
+    font-size: 16pt;
+}
+
+#prompt-2 {
+    display: none;
+}
+
+#prompt-compare {
+    font-size: 10pt;
+    margin: 2px 0px;
+    cursor: pointer;
+}
+
+#prompt-compare-add-button {
+    position: relative;
+    display: inline-block;
+}
+
+#prompt-compare-add-button-plus {
+    position: absolute;
+}
+
+#prompt-compare-add-button-circle {
+    position: absolute;
+}
+
+#prompt-compare-text {
+    position: relative;
+    color: var(--lightgray);
+    display: inline-block;
+    margin-left: 5px;
+    top: -2.5px;
+}
+
+#controller {
+    display: inline-block;
+    margin-left: 60px;
+}
+
+#controller-buttons {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.controller-button-container {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.controller-button-background {
+    position: absolute;
+    opacity: 0%;
+}
+
+.controller-button-background#controller-button-play-background {
+    opacity: 80%;
+}
+
+.controller-button {
+    position: absolute;
+    display: inline-block;
+    margin: auto;
+    filter: invert(70%) sepia(61%) saturate(0%) hue-rotate(165deg) brightness(93%) contrast(95%);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    /* opacity: 70%; */
+    /* filter: invert(98%) sepia(40%) saturate(10%) hue-rotate(204deg) brightness(107%) contrast(96%); */
+}
+
+.controller-button#controller-button-play {
+    filter: invert(98%) sepia(40%) saturate(10%) hue-rotate(204deg) brightness(107%) contrast(96%);
+}
+
+#controller-timestep {
+    display: inline-block;
+    width: 75px;
+    text-align: center;
+    vertical-align: middle;
+    margin-left: 60px;
+}
+
+#controller-timestep-text {
+    font-size: 12pt;
+    color: #9b9b9b;
+}
+
+#controller-timestep-number {
+    color: var(--white);
+    font-size: 50pt;
+    margin-top: -7px;
+}
+
+#controller-timestep-slider-container {
+    margin-top: -2px;
+    height: 6px;
+}
+
+#controller-timestep-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 2px;
+    background: var(--white);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .1s;
+    transition: opacity .1s;
+    margin: 0;
+    vertical-align: top;
+}
+
+#controller-timestep-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--lightgray);
+    border: var(--darkgray) 1px solid;
+    cursor: pointer;
+}
+
+#controller-timestep-slider:hover {
+    opacity: 1;
+}
