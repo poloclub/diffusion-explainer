@@ -1,45 +1,106 @@
-import {promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked} from "./function.js";
+import {promptSelectorImageclicked, promptSelectorLeftScrollButtonClicked, promptSelectorRightScrollButtonClicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked} from "./function.js";
 
 let selectorDiv = d3.select("#prompt-selector")
 selectorDiv.append("div")
     .text("What text prompt do you want to use?")
     .attr("id", "prompt-selector-text")
 
-selectorDiv.append("div")
-    .attr("id", "prompt-selector-images")
+let selectorImagesDiv = selectorDiv.append("div").attr("id", "prompt-selector-images-container")
+document.getElementById("prompt-selector-images-container").leftmostImageIdx = 0;
+document.getElementById("prompt-selector-images-container").imagePerScreen = 4;
+window.selectedPromptIdx = 0;
+window.seed = 0;
+window.gs = 7.5;
 
-selectorDiv.append("div")
-    .attr("id", "prompt-1")
-    .text("Two researchers playing polo game, 4k")
-selectorDiv.append("div")
-    .attr("id", "prompt-2")
+// d3.json("./assets/json/header_img_names.json").then(
+d3.json("./assets/json/data.json").then(
+    function (data) {
+        document.getElementById("prompt-selector-images-container").lastImageIdx = data.length-1;
+        data.forEach((d, i) => {
+            selectorImagesDiv.append("div")
+                .attr("class", "prompt-selector-image-container prompt-selector-image-container-unselected")
+                .attr("id", `prompt-selector-image-container-${i}`)
+                .on("click", promptSelectorImageclicked)
+                .append("img")
+                    .attr("class", "prompt-selector-image prompt-selector-image-unselected")
+                    .attr("id", `prompt-selector-image-${i}`)
+                    // .attr("src", `./assets/header_imgs/${d["thumbnail"]}`)
+                    .attr("src", `./assets/images/${d["thumbnail"]}`)
+                    .attr("height", `60px`)
 
-let r = 7.5;
-let promptCompareDiv = selectorDiv.append("div")
-    .attr("id", "prompt-compare")
-    .on("click", promptCompareClicked);
-let promptCompareAddButtonDiv = promptCompareDiv.append("div")
-    .attr("id", "prompt-compare-add-button")
-    .style("height", `${2*r}px`)
-    .style("width", `${2*r}px`)
-promptCompareAddButtonDiv.append("svg")
-    .attr("id", "prompt-compare-add-button-circle")
-    .attr("height", 2*r)
-    .attr("width", 2*r)
-    .append("circle")
-        .attr("cx", r)
-        .attr("cy", r)
-        .attr("r", r)
-        .attr("fill", "#646464")
-promptCompareAddButtonDiv.append("div")
-    .text("+")
-    .attr("id", "prompt-compare-add-button-plus")
-    .style("left", `${r/2}px`)
-promptCompareDiv.append("div")
-    .attr("id", "prompt-compare-text")
-    .text("Compare with other text prompts")
+            document.getElementById(`prompt-selector-image-container-${i}`).promptIdx = i;
+            document.getElementById(`prompt-selector-image-container-${i}`).selected = false;
+
+            if (i == window.selectedPromptIdx) {
+                document.getElementById(`prompt-selector-image-container-${i}`).selected = true;
+                d3.select(`#prompt-selector-image-${i}`).attr("class", "prompt-selector-image prompt-selector-image-selected")
+                d3.select(`#prompt-selector-image-container-${i}`).attr("class", "prompt-selector-image-container prompt-selector-image-container-selected")
+            }
+        });
+        selectorImagesDiv.append("div")
+            .attr("class", "prompt-selector-images-container-cover")
+            .attr("id", "prompt-selector-images-container-cover-left")
+            .append("div")
+                .attr("class", "prompt-selector-images-container-scroll-container")
+                .attr("id", "prompt-selector-images-container-left-scroll-container")
+                .on("click", promptSelectorLeftScrollButtonClicked)
+                .append("img")
+                    .attr("class", "prompt-selector-scroll-button")
+                    .attr("id", "prompt-selector-left-scroll-button")
+                    .attr("src", "./icons/left.svg")
+        selectorImagesDiv.append("div")
+            .attr("class", "prompt-selector-images-container-cover")
+            .attr("id", "prompt-selector-images-container-cover-right")
+            .append("div")
+                .attr("class", "prompt-selector-images-container-scroll-container")
+                .attr("id", "prompt-selector-images-container-right-scroll-container")
+                .on("click", promptSelectorRightScrollButtonClicked)
+                .append("img")
+                    .attr("class", "prompt-selector-scroll-button")
+                    .attr("id", "prompt-selector-right-scroll-button")
+                    .attr("src", "./icons/right.svg")
+
+        let selectedData = data[window.selectedPromptIdx];
+        selectorDiv.append("div")
+            .attr("id", "prompt-1")
+            .text(selectedData["prompts"][0])
+        selectorDiv.append("div")
+            .attr("id", "prompt-2")
+
+        window.selectedPrompt = selectedData["prompts"][0];
+    }).then(
+        function () {
+
+            let r = 7.5;
+            let promptCompareDiv = selectorDiv.append("div")
+                .attr("id", "prompt-compare")
+                .on("click", promptCompareClicked);
+            let promptCompareAddButtonDiv = promptCompareDiv.append("div")
+                .attr("id", "prompt-compare-add-button")
+                .style("height", `${2*r}px`)
+                .style("width", `${2*r}px`)
+            promptCompareAddButtonDiv.append("svg")
+                .attr("id", "prompt-compare-add-button-circle")
+                .attr("height", 2*r)
+                .attr("width", 2*r)
+                .append("circle")
+                    .attr("cx", r)
+                    .attr("cy", r)
+                    .attr("r", r)
+                    .attr("fill", "#646464")
+            promptCompareAddButtonDiv.append("div")
+                .text("+")
+                .attr("id", "prompt-compare-add-button-plus")
+                .style("left", `${r/2}px`)
+            promptCompareDiv.append("div")
+                .attr("id", "prompt-compare-text")
+                .text("Compare with other text prompts")
+    });
 
 let controllerDiv = d3.select("#controller")
+document.getElementById("controller").timestep = 30;
+document.getElementById("controller").playing = true;  // TODO: change to true (auto-play)
+
 let controllerButtonsDiv = controllerDiv.append("div")
     .attr("id", "controller-buttons")
 let buttonBackgroundRadius = 19;
@@ -81,7 +142,14 @@ d3.select("#controller-button-play-container")
         .attr("src", "./icons/play.svg")
         .attr("alt", "Play SVG")
         .attr("height", `${buttonHeight}px`)
-
+d3.select("#controller-button-play-container")
+    .append("img")
+        .attr("class", "controller-button")
+        .attr("id", "controller-button-pause")
+        .attr("src", "./icons/pause.svg")
+        .attr("alt", "Pause SVG")
+        .attr("height", `${buttonHeight}px`)
+    
 controllerButtonsDiv.append("div")
     .attr("id", "controller-button-forward-container")
     .attr("class", "controller-button-container")
@@ -156,3 +224,5 @@ controllerTimestepDiv.append("div")
         .attr("value", "30")
         .attr("id", "controller-timestep-slider")
         .on("input", timestepSliderFunction)
+
+// controllerPlayButtonClicked();  // TODO: UNCOMMENT

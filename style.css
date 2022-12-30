@@ -43,10 +43,77 @@ body {
     width: 500px;
     display: inline-block;
     vertical-align: middle;
+    white-space: nowrap;
+    display: inline-block;
+    position: relative;
 }
 
 #prompt-selector-text {
     font-size: 10pt;
+}
+
+#prompt-selector-images-container {
+    /* margin: 8px 0 6px 0; */
+    height: 70px;
+    width: 450px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    margin-top: 5px;
+}
+
+#prompt-selector-images-container-cover-right {
+    position: absolute;
+    height: 62px;
+    width: 100px;
+    background: linear-gradient(90deg, #20202000, #202020ff);
+    top: 21px;
+    left: 350px;
+}
+
+#prompt-selector-images-container-cover-left {
+    position: absolute;
+    height: 62px;
+    width: 100px;
+    background: linear-gradient(90deg, #202020ff, #20202000);
+    top: 21px;
+    left: 0px;
+    display: none;
+    opacity: 0%;
+}
+
+.prompt-selector-images-container-scroll-container {
+    cursor: pointer;
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    top: 22px;
+}
+
+#prompt-selector-images-container-right-scroll-container {
+    left: 90px;
+}
+
+.prompt-selector-scroll-button {
+    filter: invert(70%) sepia(61%) saturate(0%) hue-rotate(165deg) brightness(93%) contrast(95%);
+    height: 16px;
+}
+
+.prompt-selector-image-container {
+    display: inline-block;
+    margin-right: 8px;
+    border-radius: 5px;
+    border: 1px var(--white) solid;
+    opacity: 50%;
+    cursor: pointer;
+    height: 60px;
+}
+
+.prompt-selector-image-unselected {
+    opacity: 30%;
+}
+
+.prompt-selector-image-selected, .prompt-selector-image-container-selected {
+    opacity: 100%;
 }
 
 #prompt-1 {
@@ -129,6 +196,11 @@ body {
     filter: invert(98%) sepia(40%) saturate(10%) hue-rotate(204deg) brightness(107%) contrast(96%);
 }
 
+.controller-button#controller-button-pause {
+    filter: invert(98%) sepia(40%) saturate(10%) hue-rotate(204deg) brightness(107%) contrast(96%);
+    display: none;
+}
+
 #controller-timestep {
     display: inline-block;
     width: 75px;
@@ -180,4 +252,16 @@ body {
 
 #controller-timestep-slider:hover {
     opacity: 1;
+}
+
+#architecture-container {
+    display: inline-block;
+    width: 700px;
+    height: 500px;
+    border-right: var(--lightgray) 1px solid;
+}
+
+#generated-image {
+    width: 90px;
+    height: 90px;
 }
