@@ -10,9 +10,9 @@ document.getElementById("prompt-selector-images-container").leftmostImageIdx = 0
 document.getElementById("prompt-selector-images-container").imagePerScreen = 4;
 window.selectedPromptIdx = 0;
 window.seed = 0;
-window.gs = 7.5;
+window.gs = "7.0";
+window.comparison = false;
 
-// d3.json("./assets/json/header_img_names.json").then(
 d3.json("./assets/json/data.json").then(
     function (data) {
         document.getElementById("prompt-selector-images-container").lastImageIdx = data.length-1;
@@ -24,7 +24,6 @@ d3.json("./assets/json/data.json").then(
                 .append("img")
                     .attr("class", "prompt-selector-image prompt-selector-image-unselected")
                     .attr("id", `prompt-selector-image-${i}`)
-                    // .attr("src", `./assets/header_imgs/${d["thumbnail"]}`)
                     .attr("src", `./assets/images/${d["thumbnail"]}`)
                     .attr("height", `60px`)
 
@@ -66,35 +65,32 @@ d3.json("./assets/json/data.json").then(
             .text(selectedData["prompts"][0])
         selectorDiv.append("div")
             .attr("id", "prompt-2")
-
         window.selectedPrompt = selectedData["prompts"][0];
-    }).then(
-        function () {
 
-            let r = 7.5;
-            let promptCompareDiv = selectorDiv.append("div")
-                .attr("id", "prompt-compare")
-                .on("click", promptCompareClicked);
-            let promptCompareAddButtonDiv = promptCompareDiv.append("div")
-                .attr("id", "prompt-compare-add-button")
-                .style("height", `${2*r}px`)
-                .style("width", `${2*r}px`)
-            promptCompareAddButtonDiv.append("svg")
-                .attr("id", "prompt-compare-add-button-circle")
-                .attr("height", 2*r)
-                .attr("width", 2*r)
-                .append("circle")
-                    .attr("cx", r)
-                    .attr("cy", r)
-                    .attr("r", r)
-                    .attr("fill", "#646464")
-            promptCompareAddButtonDiv.append("div")
-                .text("+")
-                .attr("id", "prompt-compare-add-button-plus")
-                .style("left", `${r/2}px`)
-            promptCompareDiv.append("div")
-                .attr("id", "prompt-compare-text")
-                .text("Compare with other text prompts")
+        let r = 7.5;
+        let promptCompareDiv = selectorDiv.append("div")
+            .attr("id", "prompt-compare")
+            .on("click", promptCompareClicked);
+        let promptCompareAddButtonDiv = promptCompareDiv.append("div")
+            .attr("id", "prompt-compare-add-button")
+            .style("height", `${2*r}px`)
+            .style("width", `${2*r}px`)
+        promptCompareAddButtonDiv.append("svg")
+            .attr("id", "prompt-compare-add-button-circle")
+            .attr("height", 2*r)
+            .attr("width", 2*r)
+            .append("circle")
+                .attr("cx", r)
+                .attr("cy", r)
+                .attr("r", r)
+                .attr("fill", "#646464")
+        promptCompareAddButtonDiv.append("div")
+            .text("+")
+            .attr("id", "prompt-compare-add-button-plus")
+            .style("left", `${r/2}px`)
+        promptCompareDiv.append("div")
+            .attr("id", "prompt-compare-text")
+            .text("Compare with other text prompts")
     });
 
 let controllerDiv = d3.select("#controller")
