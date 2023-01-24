@@ -353,6 +353,7 @@ d3.select("#unet-guidance-scale-control-container")
                     .append("option")
                         .attr("value", d => d)
                         .text(d => d)
+                        .property("selected", d => (d=="7.0"))
 
 
 // TODO
@@ -516,13 +517,14 @@ let generatedImageContainerDiv = d3.select("#architecture-container").append("di
 d3.json("./assets/json/data.json").then(
     function(data){
         let timestep = document.getElementById("controller").timestep;
-        let selectedData = data[selectedPromptIdx];
+        window.selectedPromptGroupName = Object.keys(data)[window.selectedPromptGroupIdx]
+        let selectedData = data[window.selectedPromptGroupName];
         
         console.log(selectedData);
 
         generatedImageContainerDiv.append("img")
             .attr("id", "generated-image")
-            .attr("src", `./assets/images/scheduled/${selectedData["prompts"][0]}_${timestep}_${seed}_${gs}.jpg`)
+            .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedData["prompts"][0]}_${timestep}_${seed}_${gs}.jpg`)
 
     })
 

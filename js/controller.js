@@ -1,4 +1,4 @@
-import {promptSelectorImageclicked, promptSelectorLeftScrollButtonClicked, promptSelectorRightScrollButtonClicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked} from "./function.js";
+import {promptSelectorImageclicked, promptSelectorLeftScrollButtonClicked, promptSelectorRightScrollButtonClicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updatePromptList} from "./function.js";
 
 let selectorDiv = d3.select("#prompt-selector")
 selectorDiv.append("div")
@@ -8,15 +8,19 @@ selectorDiv.append("div")
 let selectorImagesDiv = selectorDiv.append("div").attr("id", "prompt-selector-images-container")
 document.getElementById("prompt-selector-images-container").leftmostImageIdx = 0;
 document.getElementById("prompt-selector-images-container").imagePerScreen = 4;
-window.selectedPromptIdx = 0;
+window.selectedPromptGroupIdx = 0;
 window.seed = 0;
 window.gs = "7.0";
 window.comparison = false;
 
 d3.json("./assets/json/data.json").then(
     function (data) {
-        document.getElementById("prompt-selector-images-container").lastImageIdx = data.length-1;
-        data.forEach((d, i) => {
+        window.selectedPromptGroupName = Object.keys(data)[selectedPromptGroupIdx]
+        document.getElementById("prompt-selector-images-container").lastImageIdx = Object.keys(data).length-1;
+        Object.entries(data).forEach((d, i) => {
+            let promptGroupName = d[0];
+            let promptGroupData = d[1];
+
             selectorImagesDiv.append("div")
                 .attr("class", "prompt-selector-image-container prompt-selector-image-container-unselected")
                 .attr("id", `prompt-selector-image-container-${i}`)
@@ -24,13 +28,13 @@ d3.json("./assets/json/data.json").then(
                 .append("img")
                     .attr("class", "prompt-selector-image prompt-selector-image-unselected")
                     .attr("id", `prompt-selector-image-${i}`)
-                    .attr("src", `./assets/images/${d["thumbnail"]}`)
+                    .attr("src", `./assets/images/${promptGroupName}/${promptGroupData["thumbnail"]}`)
                     .attr("height", `60px`)
 
-            document.getElementById(`prompt-selector-image-container-${i}`).promptIdx = i;
+            document.getElementById(`prompt-selector-image-container-${i}`).promptGroupIdx = i;
             document.getElementById(`prompt-selector-image-container-${i}`).selected = false;
 
-            if (i == window.selectedPromptIdx) {
+            if (i == window.selectedPromptGroupIdx) {
                 document.getElementById(`prompt-selector-image-container-${i}`).selected = true;
                 d3.select(`#prompt-selector-image-${i}`).attr("class", "prompt-selector-image prompt-selector-image-selected")
                 d3.select(`#prompt-selector-image-container-${i}`).attr("class", "prompt-selector-image-container prompt-selector-image-container-selected")
@@ -59,13 +63,18 @@ d3.json("./assets/json/data.json").then(
                     .attr("id", "prompt-selector-right-scroll-button")
                     .attr("src", "./icons/right.svg")
 
-        let selectedData = data[window.selectedPromptIdx];
+        let selectedData = data[window.selectedPromptGroupName];
         selectorDiv.append("div")
-            .attr("id", "prompt-1")
-            .text(selectedData["prompts"][0])
+            .attr("id", "prompt-1-container")
+            .attr("class", "prompt-select")
+
+                
         selectorDiv.append("div")
-            .attr("id", "prompt-2")
-        window.selectedPrompt = selectedData["prompts"][0];
+            .attr("id", "prompt-2-container")
+            .attr("class", "prompt-select")
+        window.selectedPrompt1 = selectedData["prompts"][0];
+        window.selectedPrompt2 = selectedData["prompts"][1];
+        updatePromptList(selectedData["prompts"])
 
         let r = 7.5;
         let promptCompareDiv = selectorDiv.append("div")
@@ -201,7 +210,6 @@ d3.select(".controller-button-background#controller-button-play-background")
     .style("width", `${buttonBackgroundRadius*4}px`)
 d3.select(".controller-button#controller-button-play")
     .style("width", `${buttonBackgroundRadius*4}px`)
-
 
 let controllerTimestepDiv = controllerDiv.append("div")
     .attr("id", "controller-timestep")
