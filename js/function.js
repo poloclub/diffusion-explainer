@@ -70,7 +70,7 @@ function updatePrompt() {
         for (let i = 0 ; i < 51 ; i++){
             if (i==0) console.log(`#umap-node-${window.selectedPrompt1.replace(/ /g, "-").replace(/,/g, "")}-${i}`);
             d3.select(`#umap-node-${window.selectedPrompt1.replace(/ /g, "-").replace(/,/g, "")}-${i}`)
-                .attr("display", "")
+                .attr("display", "").attr("opacity", "1")
             if (!window.comparison)
                 umapSvg.select(`#umap-node-${prevSelectedPrompt1.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("display", "none") 
         }
@@ -92,7 +92,7 @@ function updatePrompt() {
         for (let i = 0 ; i < 51 ; i++){
             if (i==0) console.log(`#umap-node-${window.selectedPrompt2.replace(/ /g, "-").replace(/,/g, "")}-${i}`);
             d3.select(`#umap-node-${window.selectedPrompt2.replace(/ /g, "-").replace(/,/g, "")}-${i}`)
-                .attr("display", "")
+                .attr("display", "").attr("opacity", "1")
             if (!window.comparison)
                 umapSvg.select(`#umap-node-${prevSelectedPrompt2.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("display", "none") 
         }
@@ -148,6 +148,7 @@ function umapHighlightNodeHovered(e, promptNum) {
     for (let j = i+1 ; j < totalTimesteps ; j++)
         d3.select(`#umap-node-highlight-1-${j}`).style("opacity", 0)
 
+    console.log("hovered", promptNum)
     if (promptNum == 1)
         d3.select("#generated-image").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt1}_${i}_${seed}_${gs}.jpg`)
     else if (promptNum == 2)
@@ -387,7 +388,8 @@ function drawUmap(data) {
     let svgWidth = 220
     
     let selected = data[selectedPromptGroupName];
-    let prompt = selected["prompts"][0];
+    // let prompt = selected["prompts"][0];
+    let prompt = selectedPrompt1;
     window.totalTimesteps = selected["data"][prompt][seed][gs]["umap"].length
 
     let minX=1000000, maxX = -1000000;

@@ -2,7 +2,7 @@ import {seedChanged, gsChanged} from "./function.js"
 
 let architectureLineWidth = 2;
 // let architectureLineColor = "#e8e8e8ff"
-let architectureLineColor = "#e0e0e0"
+let architectureLineColor = "#b0b0b0"
 
 d3.select("#architecture-container")
     .append("div")
@@ -246,15 +246,16 @@ d3.select("#clip-unet-gradient")
     .append("stop")
         .attr("offset", "100%")
         .attr("stop-color", "#51B3D200")
-d3.select("#clip-unet-svg").append("rect").attr("rx", "2").attr("x", "28").attr("y", "20").attr("height", "7").attr("width", "11").attr("fill", "#51B3D2");
-d3.select("#clip-unet-svg").append("rect").attr("x", "42").attr("y", "20").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
-d3.select("#clip-unet-svg").append("rect").attr("rx", "2").attr("x", "22").attr("y", "29").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
-d3.select("#clip-unet-svg").append("rect").attr("x", "42").attr("y", "29").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
-d3.select("#clip-unet-svg").append("rect").attr("rx", "2").attr("x", "32").attr("y", "38").attr("height", "7").attr("width", "5").attr("fill", "#51B3D2");
-d3.select("#clip-unet-svg").append("rect").attr("x", "42").attr("y", "38").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
-d3.select("#clip-unet-svg").append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "51").attr("fill", "#51B3D2b0");
-d3.select("#clip-unet-svg").append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "57").attr("fill", "#51B3D2b0");
-d3.select("#clip-unet-svg").append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "63").attr("fill", "#51B3D2b0");
+let clipUnetTokenVectorG = d3.select("#clip-unet-svg").append("g").attr("id", "clip-unet-svg-token-vector-g")
+clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "21").attr("y", "20").attr("height", "7").attr("width", "11").attr("fill", "#51B3D2");
+clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "20").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
+clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "15").attr("y", "29").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
+clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "29").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
+clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "25").attr("y", "38").attr("height", "7").attr("width", "5").attr("fill", "#51B3D2");
+clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "38").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
+clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "53").attr("fill", "#51B3D2b0");
+clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "59").attr("fill", "#51B3D2b0");
+clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "65").attr("fill", "#51B3D2b0");
 
 d3.select("#architecture-container")
     .append("div")
@@ -272,7 +273,7 @@ d3.select("#architecture-container")
                     .attr("marker-end", "url(#architecture-arrow-head)")
                     // .attr("stroke", "black")
                     .attr("fill", "none")
-                    .attr("d", "M 107,65 L117,65 a5,5 0 0 0 5,-5 L122 10 a5,5 0 0 0 -5,-5 L7,5 a5,5 0 0 0 -5,5 L2,41 a5,5 0 0 0 5,5 L35,46")
+                    .attr("d", "M 122,68 L122 10 a5,5 0 0 0 -5,-5 L12,5 a5,5 0 0 0 -5,5 L7,49 a5,5 0 0 0 5,5 L35,54")
                     .style("animation-duration", "1s")
                     .style("animation-timing-function", "linear")
                     .style("animation-iteration-count", "infinite")
@@ -290,7 +291,7 @@ d3.select("#architecture-container")
                 .attr("id", "unet-rectangle")
                 .attr("class", "architecture-rectangle")
                 .attr("width", "50")
-                .attr("height", "65")
+                .attr("height", "120")
                 .attr("rx", "5")
                 .attr("ry", "5")
 d3.select("#unet-svg")
@@ -298,17 +299,17 @@ d3.select("#unet-svg")
         .attr("id", "unet-text")
         .attr("class", "architecture-text")
         .attr("x", "8")
-        .attr("y", "38")
+        .attr("y", "63")
         .text("UNet")   
 d3.select("#unet-container")
     .append("div")
         .attr("id", "unet-expl-container")
         .attr("class", "architecture-expl-text-container")
 d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-1").text("improves");
-d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-2").text("image summary");
+d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-2").text("latent");
 d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-3").text("by predicting");
 d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-4").text("noise to remove");
-d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-5").text("guided by text vectors");
+// d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-5").text("guided by text vectors");
 
 d3.select("#unet-container")
     .append("div")
@@ -384,8 +385,8 @@ d3.select("#architecture-container")
                 .attr("height", "24")
                 .attr("x", "0")
 d3.select("#unet-in-noise-container").append("div").attr("id", "unet-in-noise-expl-container").attr("class", "architecture-expl-text-container");
-d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-1").text("Image summary")
-d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-2").text("(latent)")
+// d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-1").text("Image summary")
+d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-2").text("Latent")
 d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-3").text("at current timestep")
 d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-4").text("(randomly initialized at step 0)")
 
@@ -502,8 +503,9 @@ d3.select("#decoder-container")
     .append("div")
         .attr("id", "decoder-expl-container")
         .attr("class", "architecture-expl-text-container")
-d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-1").text("converts improved")
-d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-2").text("image summary to")
+d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-1").text("converts latent to")
+// d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-2").text("image summary to")
+// d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-2").text("")
 d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-3").text("high res image")
 
 // d3.select("#architecture-container").append("div").attr("id", "decoder-generated-image-container") // animate arrow 
@@ -519,7 +521,6 @@ d3.json("./assets/json/data.json").then(
         let timestep = document.getElementById("controller").timestep;
         window.selectedPromptGroupName = Object.keys(data)[window.selectedPromptGroupIdx]
         let selectedData = data[window.selectedPromptGroupName];
-        
         console.log(selectedData);
 
         generatedImageContainerDiv.append("img")
