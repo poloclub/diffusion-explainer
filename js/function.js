@@ -11,13 +11,13 @@ function promptSelectorImageclicked () {
 
         // TODO: Change prompt and overall contents below
         window.gs = "7.0";
-        updatePromptList()
         
         // 2. change the umap
         d3.json("./assets/json/data.json").then(data => {
             window.selectedPromptGroupName = Object.keys(data)[window.selectedPromptGroupIdx]
             let selectedData = data[window.selectedPromptGroupName];
             window.selectedPrompt1 = selectedData["prompts"][0];
+            updatePromptList(selectedData["prompts"])
             updateStep(30);
             drawUmap(data)
         });
