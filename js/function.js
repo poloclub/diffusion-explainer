@@ -11,6 +11,7 @@ function promptSelectorImageclicked () {
 
         // TODO: Change prompt and overall contents below
         window.gs = "7.0";
+        updatePromptList()
         
         // 2. change the umap
         d3.json("./assets/json/data.json").then(data => {
@@ -75,7 +76,6 @@ function updatePrompt() {
                 umapSvg.select(`#umap-node-${prevSelectedPrompt1.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("display", "none") 
         }
         
-        // TODO: update highlighted umap
         d3.select("#umap-highlight-svg").html("");
         addUmapHighlightNodes(1)
     }
@@ -97,7 +97,6 @@ function updatePrompt() {
                 umapSvg.select(`#umap-node-${prevSelectedPrompt2.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("display", "none") 
         }
         
-        // TODO: update highlighted umap
         d3.select("#umap-highlight-svg-2").html("");
         addUmapHighlightNodes(2)
     }
