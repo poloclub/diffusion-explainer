@@ -430,10 +430,6 @@ body {
     display: inline-block;
 }
 
-#clip-expl-text-3 {
-    /* color: var(--blue); */
-}
-
 #clip-unet-container {
     width: 106px;
     left: 292px;
