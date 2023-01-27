@@ -8,15 +8,16 @@ def compress(dir, save_dir="./", filename=""):
         for folder_name in os.listdir(dir):
             if folder_name == ".DS_Store": continue
             print("Start compressing the folder", folder_name)
-            folder_path = os.path.join(dir, folder_name, "scheduled")
-            save_path = os.path.join(save_dir, folder_name, "scheduled")
+            folder_path = os.path.join(dir, folder_name, "unscheduled")
+            save_path = os.path.join(save_dir, folder_name, "unscheduled")
             if not os.path.exists(save_path): os.makedirs(save_path)
             else: continue 
             
             for f in os.listdir(folder_path):
-                file_name = os.path.join(folder_path, f)
-                save_name = os.path.join(save_path, f)
-                compressFile(file_name, save_name)
+                if f.split("_")[1] == "1":
+                    file_name = os.path.join(folder_path, f)
+                    save_name = os.path.join(save_path, f)
+                    compressFile(file_name, save_name)
 
     else:
         file_path = os.path.join(dir, filename)

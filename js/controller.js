@@ -72,6 +72,7 @@ d3.json("./assets/json/data.json").then(
         selectorDiv.append("div")
             .attr("id", "prompt-2-container")
             .attr("class", "prompt-select")
+        window.selectedPrompts = selectedData["prompts"];
         window.selectedPrompt1 = selectedData["prompts"][0];
         window.selectedPrompt2 = selectedData["prompts"][1];
         updatePromptList(selectedData["prompts"])
@@ -79,11 +80,29 @@ d3.json("./assets/json/data.json").then(
         let r = 7.5;
         let promptCompareDiv = selectorDiv.append("div")
             .attr("id", "prompt-compare")
-            .on("click", promptCompareClicked);
+        let promptCompareMinusButtonDiv = promptCompareDiv.append("div")
+            .attr("id", "prompt-compare-minus-button")
+            .style("height", `${2*r}px`)
+            .style("width", `${2*r}px`)
         let promptCompareAddButtonDiv = promptCompareDiv.append("div")
             .attr("id", "prompt-compare-add-button")
             .style("height", `${2*r}px`)
             .style("width", `${2*r}px`)
+            .on("click", promptCompareClicked);
+        promptCompareMinusButtonDiv.append("svg")
+            .attr("id", "prompt-compare-minus-button-circle")
+            .attr("height", 2*r)
+            .attr("width", 2*r)
+            .append("circle")
+                .attr("cx", r)
+                .attr("cy", r)
+                .attr("r", r)
+                .attr("fill", "#646464")
+        promptCompareMinusButtonDiv.append("div")
+            .text("-")
+            .attr("id", "prompt-compare-minus-button-minus")
+            .style("left", `${r*0.55}px`)
+            .style("top", `${-r*0.95}px`)
         promptCompareAddButtonDiv.append("svg")
             .attr("id", "prompt-compare-add-button-circle")
             .attr("height", 2*r)

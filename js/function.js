@@ -9,14 +9,15 @@ function promptSelectorImageclicked () {
         d3.select(`#prompt-selector-image-container-${this.promptGroupIdx}`).attr("class", "prompt-selector-image-container prompt-selector-image-container-selected");
         d3.select(`#prompt-selector-image-container-${this.promptGroupIdx} img`).attr("class", "prompt-selector-image prompt-selector-image-selected");
 
-        // TODO: Change prompt and overall contents below
         window.gs = "7.0";
+        document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 1
         
         // 2. change the umap
         d3.json("./assets/json/data.json").then(data => {
             window.selectedPromptGroupName = Object.keys(data)[window.selectedPromptGroupIdx]
             let selectedData = data[window.selectedPromptGroupName];
             window.selectedPrompt1 = selectedData["prompts"][0];
+            window.selectedPrompt2 = selectedData["prompts"][1];
             updatePromptList(selectedData["prompts"])
             updateStep(30);
             drawUmap(data)
@@ -55,13 +56,19 @@ function updatePromptList(prompts) {
 }
 
 function updatePrompt() {
-    console.log(this.parentElement.id);
     if (this.parentElement.id == "prompt-1-container") {
         let prevSelectedPrompt1 = window.selectedPrompt1;
         window.selectedPrompt1 = this.value;
         let timestep = document.getElementById("controller").timestep;
 
-        // TODO: If prompt1==prompt2, change the prompt2 to be different from prompt1
+        if (window.selectedPrompt1 == window.selectedPrompts[1] && !window.comparison) {
+            window.selectedPrompt2 = window.selectedPrompts[0]
+        }
+        else {
+            window.selectedPrompt2 = window.selectedPrompts[1]
+        }
+        
+        d3.select("#prompt-2-container").select("select").property("value", window.selectedPrompt2)
         
         // update generated image
         updateStep(timestep);
@@ -108,8 +115,9 @@ function addUmapHighlightNodes(promptNum) {
     let fadeColor = "#e0e0e0";
     let mainColor = (promptNum==1)?"#51B3D2":"#F6CC35";
     let umapHighlightSvg = (promptNum==1)?d3.select("#umap-highlight-svg"):d3.select("#umap-highlight-svg-2")
-    console.log(selectedPrompt, mainColor)
-    let selectedUmapColor = d3.scaleLinear().domain([-15,totalTimesteps]).range([fadeColor, mainColor]);
+    let selectedUmapColor = d3.scaleLinear().domain([-50,totalTimesteps]).range([fadeColor, mainColor]);
+    // let selectedUmapColor = d3.scaleLinear().domain([-50,totalTimesteps]).range([mainColor, mainColor]);
+    let fullOpacity = window.comparison?0.7:1
 
     umapHighlightSvg
         .selectAll("circle")
@@ -122,7 +130,7 @@ function addUmapHighlightNodes(promptNum) {
                 .attr("cy", i => d3.select(`#umap-node-${selectedPrompt.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("cy"))
                 .attr("r", i => d3.select(`#umap-node-${selectedPrompt.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("r"))
                 .attr("fill", i => selectedUmapColor(i))
-                .style("opacity", i => (i > timestep)?0:1)
+                .style("opacity", i => (i > timestep)?0:fullOpacity)
                 .style("cursor", "pointer")
                 .each(i => { document.getElementById(`umap-node-highlight-${promptNum}-${i}`).idx = i })
                 .on("mouseover", e => umapHighlightNodeHovered(e, promptNum))
@@ -131,52 +139,60 @@ function addUmapHighlightNodes(promptNum) {
 }
 
 function umapHighlightNodeHovered(e, promptNum) {
+    // TODO: When hover during comparison
     let i = document.getElementById(e.target.id).idx;
+    let fullOpacity = window.comparison?0.7:1
     document.getElementById("umap-highlight-svg").hovered = true;
 
-    d3.select(`#umap-node-highlight-1-${i}`).style("stroke", "black").style("stroke-width", "2px")
+    d3.select(`#umap-node-highlight-${promptNum}-${i}`).style("stroke", "black").style("stroke-width", "2px")
 
     let cursorX = e.offsetX;
     let cursorY = e.offsetY;
     let umapHighlightSvg = d3.select("#umap-highlight-svg")
     umapHighlightSvg.append("text").text(`Step ${i}`).attr("id", `highlight-hovered-text-step-${i}`).attr("x", cursorX+10).attr("y", cursorY+10)
-    umapHighlightSvg.append("use").attr("xlink:href", `#umap-node-highlight-1-${i}`).attr("id", `use-umap-node-highlight-1-${i}`).style("pointer-events", "none")
+    umapHighlightSvg.append("use").attr("xlink:href", `#umap-node-highlight-${promptNum}-${i}`).attr("id", `use-umap-node-highlight-${promptNum}-${i}`).style("pointer-events", "none")
 
-    for (let j=0 ; j <= i ; j++) 
-        d3.select(`#umap-node-highlight-1-${j}`).style("opacity", 1)
-    for (let j = i+1 ; j < totalTimesteps ; j++)
+    for (let j=0 ; j <= i ; j++) {
+        d3.select(`#umap-node-highlight-1-${j}`).style("opacity", fullOpacity)
+        if (window.comparison) d3.select(`#umap-node-highlight-2-${j}`).style("opacity", fullOpacity)
+    }
+    for (let j = i+1 ; j < totalTimesteps ; j++) {
         d3.select(`#umap-node-highlight-1-${j}`).style("opacity", 0)
+        if (window.comparison) d3.select(`#umap-node-highlight-2-${j}`).style("opacity", 0)
+    }
 
-    console.log("hovered", promptNum)
-    if (promptNum == 1)
-        d3.select("#generated-image").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt1}_${i}_${seed}_${gs}.jpg`)
-    else if (promptNum == 2)
-        d3.select("#generated-image").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt2}_${i}_${seed}_${gs}.jpg`)
+    d3.select("#generated-image").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt1}_${i}_${seed}_${gs}.jpg`)
+    d3.select("#generated-image-2").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt2}_${i}_${seed}_${gs}.jpg`)
 }
 
 function umapHighlightNodeMouseout (e, promptNum) {
     document.getElementById("umap-highlight-svg").hovered = false;
     let i = document.getElementById(e.target.id).idx;
+    let fullOpacity = window.comparison?0.7:1
     let timestep = document.getElementById("controller").timestep;
 
-    d3.select(`#umap-node-highlight-1-${i}`).style("stroke", "")
-    d3.select(`#umap-node-highlight-1-${i}`).style("stroke-width", "")
+    d3.select(`#umap-node-highlight-${promptNum}-${i}`).style("stroke", "")
+    d3.select(`#umap-node-highlight-${promptNum}-${i}`).style("stroke-width", "")
     
     let umapHighlightSvg = d3.select("#umap-highlight-svg")
     umapHighlightSvg.select("text").remove();
-    d3.select(`#use-umap-node-highlight-1-${i}`).remove()
+    d3.select(`#use-umap-node-highlight-${promptNum}-${i}`).remove()
     
-    for (let j=0 ; j <= timestep ; j++)
-        d3.select(`#umap-node-highlight-1-${j}`).style("opacity", 1)
-    for (let j=timestep+1 ; j < totalTimesteps ; j++)
+    for (let j=0 ; j <= timestep ; j++) {
+        d3.select(`#umap-node-highlight-1-${j}`).style("opacity", fullOpacity)
+        if (window.comparison) d3.select(`#umap-node-highlight-2-${j}`).style("opacity", fullOpacity)
+    }
+    for (let j=timestep+1 ; j < totalTimesteps ; j++) {
         d3.select(`#umap-node-highlight-1-${j}`).style("opacity", 0)
+        if (window.comparison) d3.select(`#umap-node-highlight-2-${j}`).style("opacity", 0)
+    }
     
     // change the displayed image back
-    if (promptNum == 1) d3.select("#generated-image").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt1}_${timestep}_${seed}_${gs}.jpg`)
-    else if (promptNum == 2) d3.select("#generated-image").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt2}_${timestep}_${seed}_${gs}.jpg`)
+    d3.select("#generated-image").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt1}_${timestep}_${seed}_${gs}.jpg`)
+    d3.select("#generated-image-2").attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${window.selectedPrompt2}_${timestep}_${seed}_${gs}.jpg`)
 }
 
-function umapHighlightNodeClicked (e, promptNum) {
+function umapHighlightNodeClicked (e) {
     let timestep = document.getElementById(e.target.id).idx;
     document.getElementById("controller").timestep = timestep
 
@@ -254,15 +270,52 @@ function promptSelectorRightScrollButtonClicked () {
 }
 
 function promptCompareClicked() {
+    window.comparison = true;
     d3.select("#prompt-2-container").style("display", "block")
-    d3.select("#prompt-compare").style("display", "none")
+    d3.select("#prompt-compare-add-button").style("display", "none")
+    d3.select("#prompt-compare-text").style("display", "none")
+    d3.select("#prompt-compare").style("top", "-24px")
+    d3.select("#prompt-compare-minus-button")
+        .style("display", "initial")
+        .style("opacity", "1")
+        .style("cursor", "pointer")
+        .style("left", "-20px")
+        .on("click", promptCompareOffed)
     d3.select("#umap-svg")
         .selectAll("circle")
-        .attr("display", "")
+            .attr("display", "")
+            .transition()
+                .duration(500)
+                .attr("opacity", 1)
+    d3.select("#generated-image-2")
+        .style("pointer-events", "initial")
         .transition()
-        .duration(500)
-        .attr("opacity", "1")
+            .duration(1000)
+            .style("opacity", "1")
+    d3.select("#generated-image")
+        .transition()
+            .duration(1000)
+            .style("margin-top", "45px")
+    d3.select("#unet-decoder-arrow")
+        .transition()
+            .duration(1000)
+            .attr("d", "M 3,137 L161,137 a5,5 0 0 0 5,-5 L166,85 a5,5 0 0 1 5,-5 L177,80")
+    d3.select("#unet-decoder-arrow-2")
+        .transition()
+            .duration(1000)
+            .attr("d", "M 3,143 L161,143 a5,5 0 0 1 5,5 L166,185 a5,5 0 0 0 5,5 L177,190")
+    // TODO: Add minus button to return back to non-comparison view
+    // TODO: Double all the arrows
+    
     addUmapHighlightNodes(2)
+}
+
+function promptCompareOffed() {
+    d3.select("#prompt-2-container").style("display", "none")
+    d3.select("#prompt-compare-add-button").style("display", "inline-block")
+    d3.select("#prompt-compare-text").style("display", "inline-block")
+    d3.select("#prompt-compare-minus-button").style("display", "none").style("opacity", "0")
+    d3.select("#prompt-compare").style("top", "")
 }
 
 function controllerButtonHovered() {
@@ -307,7 +360,7 @@ function controllerPlayerRepeatButtonClicked() {
 }
 
 function controllerPlayButtonClicked() {
-    animateUmapCycle();
+    animateArchCycle();
     
     d3.select("#controller-button-pause")
         .style("display", "inline-block");
@@ -335,8 +388,18 @@ function updateStep(timestep) {
     document.getElementById("controller-timestep-slider").value = timestep;
     d3.select("#generated-image")
         .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedPrompt1}_${timestep}_${seed}_${gs}.jpg`)
+    d3.select("#generated-image-2")
+        .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedPrompt2}_${timestep}_${seed}_${gs}.jpg`)
     if (!document.getElementById("umap-highlight-svg").hovered) {
         d3.select("#umap-highlight-svg")
+            .selectAll("circle")
+            .style("opacity", (d,i) => {
+                if (i > timestep) return 0;
+                return 1;
+            })
+    }
+    if (window.comparison && !document.getElementById("umap-highlight-svg-2").hovered) {
+        d3.select("#umap-highlight-svg-2")
             .selectAll("circle")
             .style("opacity", (d,i) => {
                 if (i > timestep) return 0;
@@ -361,6 +424,8 @@ function controllerPauseButtonClicked() {
         .style("animation-play-state", "paused")
     d3.select("#unet-decoder-arrow")
         .style("animation-play-state", "paused")
+    d3.select("#unet-decoder-arrow-2")
+        .style("animation-play-state", "paused")
 }
 
 function timestepSliderFunction(){
@@ -372,10 +437,12 @@ function timestepSliderFunction(){
     updateStep(timestep);
 }
 
-function animateUmapCycle() {
+function animateArchCycle() {
     d3.select("#unet-cycle")
         .style("animation-play-state", "")
     d3.select("#unet-decoder-arrow")
+        .style("animation-play-state", "")
+    d3.select("#unet-decoder-arrow-2")
         .style("animation-play-state", "")
 }
 
@@ -431,17 +498,20 @@ function drawUmap(data) {
             .attr("r", nodeRadius)
             .attr("fill", fadeColor)
             .attr("opacity", (d,i)=>{
-                if (selected["prompts"][Math.floor(i/totalTimesteps)] == prompt) return 1;
+                if (window.comparison) return 1
+                else if (selected["prompts"][Math.floor(i/totalTimesteps)] == prompt) return 1;
                 return 0;
             })
             .attr("display", (d,i)=>{
-                if (selected["prompts"][Math.floor(i/totalTimesteps)] == prompt) return "";
+                if (window.comparison) return "";
+                else if (selected["prompts"][Math.floor(i/totalTimesteps)] == prompt) return "";
                 return "none";
             })
 
     d3.select("#umap-svg").append("svg").attr("id", "umap-highlight-svg")
     d3.select("#umap-svg").append("svg").attr("id", "umap-highlight-svg-2")
     addUmapHighlightNodes(1)
+    if (window.comparison) addUmapHighlightNodes(2)
 }
 
 function seedChanged(e) {
@@ -464,9 +534,30 @@ function hyperparamChanged(e, newSeed, newGs) {
     // 1. change the image
     d3.select("#generated-image")
         .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedPrompt1}_${timestep}_${seed}_${gs}.jpg`)
+    d3.select("#generated-image-2")
+        .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedPrompt2}_${timestep}_${seed}_${gs}.jpg`)
     
     // 2. change the umap
     d3.json("./assets/json/data.json").then(data => drawUmap(data));
 }
 
-export {promptSelectorImageclicked, promptSelectorLeftScrollButtonClicked, promptSelectorRightScrollButtonClicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, updatePromptList};
+function generatedImageHovered(e){
+    if (this.id=="generated-image")
+        d3.select("#generated-image")
+            .attr("src", `./assets/images/${selectedPromptGroupName}/unscheduled/${selectedPrompt1}_1_${seed}_${gs}.jpg`)
+    else if (this.id=="generated-image-2")
+        d3.select("#generated-image-2")
+            .attr("src", `./assets/images/${selectedPromptGroupName}/unscheduled/${selectedPrompt2}_1_${seed}_${gs}.jpg`)
+}
+
+function generatedImageMouseOut(e){
+    let timestep = document.getElementById("controller").timestep;
+    if (this.id=="generated-image")
+        d3.select("#generated-image")
+            .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedPrompt1}_${timestep}_${seed}_${gs}.jpg`)
+    else if (this.id=="generated-image-2")
+        d3.select("#generated-image-2")
+            .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedPrompt2}_${timestep}_${seed}_${gs}.jpg`)
+}
+
+export {promptSelectorImageclicked, promptSelectorLeftScrollButtonClicked, promptSelectorRightScrollButtonClicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, updatePromptList, generatedImageHovered, generatedImageMouseOut};

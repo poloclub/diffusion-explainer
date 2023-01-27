@@ -1,4 +1,4 @@
-import {seedChanged, gsChanged} from "./function.js"
+import {seedChanged, gsChanged, generatedImageHovered, generatedImageMouseOut} from "./function.js"
 
 let architectureLineWidth = 2;
 // let architectureLineColor = "#e8e8e8ff"
@@ -37,6 +37,7 @@ d3.select("#hyperparameter-control-show-hide-container")
                 .style("opacity", 0)
             d3.select("#hyperparameter-control-show-hide-text")
                 .text("Show Hyperparameters Settings")
+                .style("padding-left", "1px")
         }
         else {
             d3.select("#unet-guidance-scale-control-container")
@@ -49,6 +50,7 @@ d3.select("#hyperparameter-control-show-hide-container")
                 .style("opacity", 1)
             d3.select("#hyperparameter-control-show-hide-text")
                 .text(" Hide Hyperparameters Settings")
+                .style("padding-left", "5px")
         }
     })
 d3.select("#hyperparameter-control-show-hide-container")
@@ -84,6 +86,7 @@ d3.select("#your-prompt-text")
 d3.select("#your-prompt-text")
     .append("div")
         .attr("id", "your-prompt-text-prompt")
+        .attr("class", "jargon-text")
         .text("prompt")
 
 d3.select("#your-prompt-container")
@@ -146,19 +149,17 @@ d3.select("#tokenizer-expl-container").append("div").attr("id", "tokenizer-expl-
 d3.select("#tokenizer-expl-container").append("div").attr("id", "tokenizer-expl-text-2")
 d3.select("#tokenizer-expl-text-1")
     .append("div")
-        .attr("id", "tokenizer-expl-text-converts")
-        .text("converts")
+        .attr("id", "tokenizer-expl-text-prompt")
+        .attr("class", "jargon-text")
+        .text("prompt")
 d3.select("#tokenizer-expl-text-1")
     .append("div")
-        .attr("id", "tokenizer-expl-text-prompt")
-        .text("prompt")
-d3.select("#tokenizer-expl-text-2")
-    .append("div")
-        .attr("id", "tokenizer-expl-text-into")
-        .text("into")
-d3.select("#tokenizer-expl-text-2")
+        .attr("id", "tokenizer-expl-text-to")
+        .text("to")
+d3.select("#tokenizer-expl-text-1")
     .append("div")
         .attr("id", "tokenizer-expl-text-tokens")
+        .attr("class", "jargon-text")
         .text("tokens")
 
 d3.select("#architecture-container").append("div").attr("id", "tokenizer-clip-container")
@@ -177,17 +178,23 @@ d3.select("#tokenizer-clip-container")
                 .attr("stroke", architectureLineColor)
                 .attr("stroke-width", architectureLineWidth)
                 .attr("marker-end", "url(#architecture-arrow-head)")
+d3.select("#tokenizer-clip-container")
+    .append("div")
+        .attr("id", "tokenizer-clip-text")
+        .attr("class", "jargon-text")
+        .text("tokens")
 
-d3.select("#tokenizer-clip-svg").append("rect").attr("rx", "2").attr("x", "17").attr("y", "20").attr("height", "7").attr("width", "11").attr("fill", "#51B3D2");
-d3.select("#tokenizer-clip-svg").append("rect").attr("rx", "2").attr("x", "30").attr("y", "20").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
-d3.select("#tokenizer-clip-svg").append("rect").attr("rx", "2").attr("x", "17").attr("y", "29").attr("height", "7").attr("width", "5").attr("fill", "#51B3D2");
-d3.select("#tokenizer-clip-svg").append("rect").attr("rx", "2").attr("x", "24").attr("y", "29").attr("height", "7").attr("width", "23").attr("fill", "#51B3D2");
-d3.select("#tokenizer-clip-svg").append("rect").attr("rx", "2").attr("x", "49").attr("y", "29").attr("height", "7").attr("width", "6").attr("fill", "#51B3D2");
-d3.select("#tokenizer-clip-svg").append("rect").attr("rx", "2").attr("x", "17").attr("y", "38").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
-d3.select("#tokenizer-clip-svg").append("rect").attr("rx", "2").attr("x", "35").attr("y", "38").attr("height", "7").attr("width", "8").attr("fill", "#51B3D2");
-d3.select("#tokenizer-clip-svg").append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "51").attr("fill", "#51B3D2b0");
-d3.select("#tokenizer-clip-svg").append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "57").attr("fill", "#51B3D2b0");
-d3.select("#tokenizer-clip-svg").append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "63").attr("fill", "#51B3D2b0");
+let tokenizerClipSvgG = d3.select("#tokenizer-clip-svg").append("g")
+tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "17").attr("y", "20").attr("height", "7").attr("width", "11").attr("fill", "#51B3D2");
+tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "30").attr("y", "20").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
+tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "17").attr("y", "29").attr("height", "7").attr("width", "5").attr("fill", "#51B3D2");
+tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "24").attr("y", "29").attr("height", "7").attr("width", "23").attr("fill", "#51B3D2");
+tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "49").attr("y", "29").attr("height", "7").attr("width", "6").attr("fill", "#51B3D2");
+tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "17").attr("y", "38").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
+tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "35").attr("y", "38").attr("height", "7").attr("width", "8").attr("fill", "#51B3D2");
+tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "51").attr("fill", "#51B3D2b0");
+tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "57").attr("fill", "#51B3D2b0");
+tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "63").attr("fill", "#51B3D2b0");
 // add 60px length arrow
 
 d3.select("#architecture-container")
@@ -213,11 +220,9 @@ d3.select("#clip-svg")
         .text("CLIP")
 
 d3.select("#clip-container").append("div").attr("id", "clip-expl-container").attr("class", "architecture-expl-text-container")
-d3.select("#clip-expl-container").append("div").attr("id", "clip-expl-text-1").text("converts")
-d3.select("#clip-expl-container").append("div").attr("id", "clip-expl-text-2")
-d3.select("#clip-expl-text-2").append("div").attr("id", "clip-expl-text-2-tokens").text("tokens");
-d3.select("#clip-expl-text-2").append("div").attr("id", "clip-expl-text-2-to").text("to");
-d3.select("#clip-expl-container").append("div").attr("id", "clip-expl-text-3").text("vectors")
+d3.select("#clip-expl-container").append("div").attr("id", "clip-expl-text-1").attr("class", "jargon-text").text("tokens")
+d3.select("#clip-expl-container").append("div").attr("id", "clip-expl-text-2").text("to");
+d3.select("#clip-expl-container").append("div").attr("id", "clip-expl-text-3").attr("class", "jargon-text").text("vectors")
 
 d3.select("#architecture-container")
     .append("div")
@@ -246,6 +251,12 @@ d3.select("#clip-unet-gradient")
     .append("stop")
         .attr("offset", "100%")
         .attr("stop-color", "#51B3D200")
+
+d3.select("#clip-unet-container")
+    .append("div")
+        .attr("id", "clip-unet-text")
+        .attr("class", "jargon-text")
+        .text("text vectors")
 let clipUnetTokenVectorG = d3.select("#clip-unet-svg").append("g").attr("id", "clip-unet-svg-token-vector-g")
 clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "21").attr("y", "20").attr("height", "7").attr("width", "11").attr("fill", "#51B3D2");
 clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "20").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
@@ -271,12 +282,8 @@ d3.select("#architecture-container")
                     .attr("stroke-width", architectureLineWidth)
                     .attr("stroke", architectureLineColor)
                     .attr("marker-end", "url(#architecture-arrow-head)")
-                    // .attr("stroke", "black")
                     .attr("fill", "none")
-                    .attr("d", "M 122,68 L122 10 a5,5 0 0 0 -5,-5 L12,5 a5,5 0 0 0 -5,5 L7,49 a5,5 0 0 0 5,5 L35,54")
-                    .style("animation-duration", "1s")
-                    .style("animation-timing-function", "linear")
-                    .style("animation-iteration-count", "infinite")
+                    .attr("d", "M 127,68 L127 10 a5,5 0 0 0 -5,-5 L12,5 a5,5 0 0 0 -5,5 L7,49 a5,5 0 0 0 5,5 L35,54")
                     .style("animation-name", "unet-cycle-animation")
                     .style("animation-play-state", "paused")
 
@@ -306,7 +313,7 @@ d3.select("#unet-container")
         .attr("id", "unet-expl-container")
         .attr("class", "architecture-expl-text-container")
 d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-1").text("improves");
-d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-2").text("latent");
+d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-2").attr("class", "jargon-text").text("latent");
 d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-3").text("by predicting");
 d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-4").text("noise to remove");
 // d3.select("#unet-expl-container").append("div").attr("id", "unet-expl-text-5").text("guided by text vectors");
@@ -347,6 +354,7 @@ d3.select("#unet-guidance-scale-control-container")
         .attr("id", "unet-guidance-scale-control-dropdown-container")
         .attr("class", "custom-select hyperparameter-dropdown-container")
             .append("select")
+                .attr("id", "unet-guidance-scale-control-dropdown-select")
                 .on("change", gsChanged)
                 .selectAll("option")
                     .data(["1.0","7.0","20.0"])
@@ -380,13 +388,15 @@ d3.select("#architecture-container")
             })
             .append("rect")
                 .attr("id", "in-noise")
-                .attr("fill", "#d05b5b")
+                // .attr("fill", "#d05b5b")
+                .attr("fill", "#d098e1")
+                .attr("fill", "#79b35e")
                 .attr("width", "24")
                 .attr("height", "24")
                 .attr("x", "0")
 d3.select("#unet-in-noise-container").append("div").attr("id", "unet-in-noise-expl-container").attr("class", "architecture-expl-text-container");
 // d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-1").text("Image summary")
-d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-2").text("Latent")
+d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-2").attr("class", "jargon-text").text("Latent")
 d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-3").text("at current timestep")
 d3.select("#unet-in-noise-expl-container").append("div").attr("id", "unet-in-noise-expl-text-4").text("(randomly initialized at step 0)")
 
@@ -435,27 +445,36 @@ d3.select("#architecture-container")
                 .attr("stroke-width", architectureLineWidth)
                 .attr("marker-end", "url(#architecture-arrow-head)")
 
-d3.select("#architecture-container").append("div").attr("id", "unet-decoder-container") // animate arrow
+d3.select("#architecture-container").append("div")
+    .attr("id", "unet-decoder-container") // animate arrow
     .attr("class", "architecture-component-container")
     .append("svg")
         .attr("id", "unet-decoder-svg")
         .attr("class", "architecture-svg")
         .append("g")
-            .append("line")
+            .append("path")
                 .attr("id", "unet-decoder-arrow")
                 .attr("class", "architecture-dashed")
-                .attr("x1", "3")
-                .attr("y1", "10")
-                .attr("x2", "177")
-                .attr("y2", "10")
+                .attr("fill", "none")
+                .attr("d", "M 3,140 L165,140 a0,0 0 0 0 0,0 L170,140 a0,0 0 0 1 0,0 L177,140")
                 .attr("stroke", architectureLineColor)
                 .attr("stroke-width", architectureLineWidth)
                 .attr("marker-end", "url(#architecture-arrow-head)")
-                .style("animation-duration", "1s")
-                .style("animation-timing-function", "linear")
-                .style("animation-iteration-count", "infinite")
                 .style("animation-name", "unet-decoder-arrow-animation")
                 .style("animation-play-state", "paused")
+
+d3.select("#unet-decoder-svg")
+    .select("g")
+        .append("path")
+            .attr("id", "unet-decoder-arrow-2")
+            .attr("class", "architecture-dashed")
+            .attr("fill", "none")
+            .attr("stroke", architectureLineColor)
+            .attr("stroke-width", architectureLineWidth)
+            .attr("marker-end", "url(#architecture-arrow-head)")
+            .style("animation-name", "unet-decoder-arrow-animation")
+            .style("animation-play-state", "paused")
+            .attr("d", "M 3,140 L165,140 a0,0 0 0 1 0,0 L170,140 a0,0 0 0 0 0,0 L177,140")
 
 d3.select("#architecture-container")
     .append("div")
@@ -466,7 +485,8 @@ d3.select("#architecture-container")
             .attr("class", "architecture-svg")
             .append("rect")
                 .attr("id", "out-noise")
-                .attr("fill", "#79b35e")
+                // .attr("fill", "#79b35e")
+                .attr("fill", "#a0a0a0")
                 .attr("width", "24")
                 .attr("height", "24")
                 .attr("x", "0")
@@ -503,18 +523,14 @@ d3.select("#decoder-container")
     .append("div")
         .attr("id", "decoder-expl-container")
         .attr("class", "architecture-expl-text-container")
-d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-1").text("converts latent to")
-// d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-2").text("image summary to")
-// d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-2").text("")
-d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-3").text("high res image")
-
-// d3.select("#architecture-container").append("div").attr("id", "decoder-generated-image-container") // animate arrow 
-// .attr("class", "architecture-component-container")
+d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-1").attr("class", "jargon-text").text("latent")
+d3.select("#decoder-expl-container").append("div").attr("id", "decoder-expl-text-2").text("to image")
 
 
-
-
-let generatedImageContainerDiv = d3.select("#architecture-container").append("div").attr("id", "generated-image-container").attr("class", "architecture-component-container");
+let generatedImageContainerDiv = d3.select("#architecture-container")
+    .append("div")
+        .attr("id", "generated-image-container")
+        .attr("class", "architecture-component-container")
 
 d3.json("./assets/json/data.json").then(
     function(data){
@@ -526,6 +542,12 @@ d3.json("./assets/json/data.json").then(
         generatedImageContainerDiv.append("img")
             .attr("id", "generated-image")
             .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedData["prompts"][0]}_${timestep}_${seed}_${gs}.jpg`)
-
+            .on("mouseover", generatedImageHovered)
+            .on("mouseout", generatedImageMouseOut)
+        generatedImageContainerDiv.append("img")
+            .attr("id", "generated-image-2")
+            .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedData["prompts"][1]}_${timestep}_${seed}_${gs}.jpg`)
+            .on("mouseover", generatedImageHovered)
+            .on("mouseout", generatedImageMouseOut)
     })
 
