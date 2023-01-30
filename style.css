@@ -310,6 +310,13 @@ body {
     box-sizing: border-box;
 }
 
+#stable-diffusion-description-text {
+    width: 768px;
+    text-align: center;
+    font-size: 15pt;
+    padding: 10px;
+}
+
 #hyperparameter-control-show-hide-container {
     position: absolute;
     left: 7px;
@@ -349,6 +356,12 @@ body {
     pointer-events: none;
 }
 
+#your-prompt-text-prompt {
+    color: var(--blue);
+    font-size: 9pt;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
 .jargon-text {
     color: var(--jargon);
     cursor: pointer;
@@ -365,7 +378,8 @@ body {
     color: var(--blue);
     padding-left: 12px;
     position: absolute;
-    top: 147px;
+    top: 135px;
+    width: 58px;
 }
 
 #your-prompt-text-your {
@@ -417,7 +431,7 @@ body {
 }
 
 #tokenizer-clip-text, #clip-unet-text {
-    /* display: none; */
+    display: none;
 }
 
 
@@ -454,6 +468,24 @@ body {
     top: 147px;
 }
 
+#tokenizer-clip-tokens-container {
+    box-sizing: border-box;
+    width: 80px;
+    padding: 0 5px;
+    position: relative;
+    top: 173px;
+}
+
+.tokenizer-clip-token {
+    border-radius: 5px;
+    border: 1px solid var(--blue);
+    color: var(--blue);
+    display: inline-block;
+    margin: 2px;
+    padding: 2px;
+    font-size: 8pt;
+}
+
 #tokenizer-clip-svg {
     height: 130px;
     width: 80px;
@@ -485,7 +517,8 @@ body {
 }
 
 #clip-unet-container {
-    width: 106px;
+    /* width: 106px; */
+    width: 130px;
     left: 292px;
     pointer-events: none;
 }
@@ -500,6 +533,53 @@ body {
     text-align: center;
     position: absolute;
     top: 147px;
+}
+
+#clip-unet-token-vectors-container {
+    top: 173px;
+    position: relative;
+    padding: 0 5px;
+}
+
+#clip-unet-tokens-container {
+    text-align: right;
+    display: inline-block;
+}
+
+#clip-unet-vectors-container {
+    text-align: left;
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.clip-unet-token{
+    border-radius: 5px;
+    border: 1px solid var(--blue);
+    color: var(--blue);
+    display: inline-block;
+    margin: 2px;
+    padding: 2px;
+    font-size: 8pt;    
+}
+
+.clip-unet-vector {
+    /* background-color: #acdae8; */
+    background-color: #51B3D2a0;
+    opacity: 1;
+    color: white;
+}
+
+.clip-unet-vector-cell {
+    display: inline-block;
+    font-size: 7pt;
+    border: 1px white solid;
+    height: 20px;
+    width: 20px;
+    margin-left: -1px;
+    font-family: "Roboto Condensed", sans-serif;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 20px;
 }
 
 #clip-unet-svg-token-vector-g {

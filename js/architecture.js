@@ -6,6 +6,11 @@ let architectureLineColor = "#b0b0b0"
 
 d3.select("#architecture-container")
     .append("div")
+    .attr("id", "stable-diffusion-description-text")
+    .text("Stable Diffusion is ...")
+
+d3.select("#architecture-container")
+    .append("div")
         .attr("id", "hyperparameter-control-show-hide-container")
 d3.select("#hyperparameter-control-show-hide-container")
         .append("img")
@@ -79,15 +84,13 @@ d3.select("#architecture-container")
         .attr("id", "your-prompt-container")
         .attr("class", "architecture-component-container")
 d3.select("#your-prompt-container").append("div").attr("id", "your-prompt-text")
-d3.select("#your-prompt-text")
-    .append("div")
-        .attr("id", "your-prompt-text-your")
-        .text("your")
+// d3.select("#your-prompt-text")
+//     .append("div")
+//         .attr("id", "your-prompt-text-your")
+//         .text("your")
 d3.select("#your-prompt-text")
     .append("div")
         .attr("id", "your-prompt-text-prompt")
-        .attr("class", "jargon-text")
-        .text("prompt")
 
 d3.select("#your-prompt-container")
     .append("svg")
@@ -185,17 +188,27 @@ d3.select("#tokenizer-clip-container")
         .text("tokens")
 
 let tokenizerClipSvgG = d3.select("#tokenizer-clip-svg").append("g")
-tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "17").attr("y", "20").attr("height", "7").attr("width", "11").attr("fill", "#51B3D2");
-tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "30").attr("y", "20").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
-tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "17").attr("y", "29").attr("height", "7").attr("width", "5").attr("fill", "#51B3D2");
-tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "24").attr("y", "29").attr("height", "7").attr("width", "23").attr("fill", "#51B3D2");
-tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "49").attr("y", "29").attr("height", "7").attr("width", "6").attr("fill", "#51B3D2");
-tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "17").attr("y", "38").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
-tokenizerClipSvgG.append("rect").attr("rx", "2").attr("x", "35").attr("y", "38").attr("height", "7").attr("width", "8").attr("fill", "#51B3D2");
-tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "51").attr("fill", "#51B3D2b0");
-tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "57").attr("fill", "#51B3D2b0");
-tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "63").attr("fill", "#51B3D2b0");
-// add 60px length arrow
+let tokenizerClipTokensContainer = d3.select("#tokenizer-clip-container").append("div").attr("id", "tokenizer-clip-tokens-container")
+
+d3.json("./assets/json/text.json").then(
+    function(data){
+        let tokens = data[selectedPromptGroupName]["token"][selectedPrompt1]
+        tokens[0] = "<start>"
+        for (let i = 0 ; i < tokens.length; i++){
+            tokenizerClipTokensContainer
+                .append("div")
+                .attr("class", "tokenizer-clip-token")
+                .text(tokens[i])
+            let height = window.getComputedStyle(document.getElementById("tokenizer-clip-tokens-container")).getPropertyValue('height')
+            if (+(height.slice(0,-2)) > 80) {
+                d3.selectAll("#tokenizer-clip-tokens-container div:last-of-type").remove()
+                break
+            }
+        }
+    })
+tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "90").attr("fill", "#51B3D2b0");
+tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "96").attr("fill", "#51B3D2b0");
+tokenizerClipSvgG.append("circle").attr("r", "1.5").attr("cx", "36").attr("cy", "102").attr("fill", "#51B3D2b0");
 
 d3.select("#architecture-container")
     .append("div")
@@ -258,15 +271,46 @@ d3.select("#clip-unet-container")
         .attr("class", "jargon-text")
         .text("text vectors")
 let clipUnetTokenVectorG = d3.select("#clip-unet-svg").append("g").attr("id", "clip-unet-svg-token-vector-g")
-clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "21").attr("y", "20").attr("height", "7").attr("width", "11").attr("fill", "#51B3D2");
-clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "20").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
-clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "15").attr("y", "29").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
-clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "29").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
-clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "25").attr("y", "38").attr("height", "7").attr("width", "5").attr("fill", "#51B3D2");
-clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "38").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
-clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "53").attr("fill", "#51B3D2b0");
-clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "59").attr("fill", "#51B3D2b0");
-clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "65").attr("fill", "#51B3D2b0");
+let clipUnetTokenVectorsContainer = d3.select("#clip-unet-container").append("div").attr("id", "clip-unet-token-vectors-container")
+clipUnetTokenVectorsContainer.append("div").attr("id", "clip-unet-tokens-container")
+clipUnetTokenVectorsContainer.append("div").attr("id", "clip-unet-vectors-container")
+
+d3.json("./assets/json/text.json").then(
+    function(data){
+        let tokens = data[selectedPromptGroupName]["token"][selectedPrompt1]
+        let vectors = data[selectedPromptGroupName]["vector"][selectedPrompt1]
+        console.log(vectors[0])
+        tokens[0] = "<start>"
+        let tokenNum = 3;
+        let vectorDim = 3;
+        for (let i = 0 ; i < tokenNum; i++){
+            d3.select("#clip-unet-tokens-container")
+                .append("div")
+                    .append("div")
+                    .attr("class", "clip-unet-token")
+                    .text(tokens[i])
+            d3.select("#clip-unet-vectors-container")
+                .append("div")
+                    .attr("class", "clip-unet-vector")
+                    .attr("id", `clip-unet-vector-${i}`)
+            for (let j = 0 ; j< vectorDim ; j++) {
+                d3.select(`#clip-unet-vector-${i}`)
+                    .append("div")
+                        .attr("class", "clip-unet-vector-cell")
+                        .text(Math.round(+(vectors[i][j])*100)/100)
+                        .style("left", `${21*j}px`)
+            }
+        }
+    })
+// clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "21").attr("y", "20").attr("height", "7").attr("width", "11").attr("fill", "#51B3D2");
+// clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "20").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
+// clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "15").attr("y", "29").attr("height", "7").attr("width", "16").attr("fill", "#51B3D2");
+// clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "29").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
+// clipUnetTokenVectorG.append("rect").attr("rx", "2").attr("x", "25").attr("y", "38").attr("height", "7").attr("width", "5").attr("fill", "#51B3D2");
+// clipUnetTokenVectorG.append("rect").attr("x", "35").attr("y", "38").attr("height", "7").attr("width", "50").attr("fill", "url(#clip-unet-gradient)");
+clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "90").attr("fill", "#51B3D2b0");
+clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "96").attr("fill", "#51B3D2b0");
+clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "53").attr("cy", "102").attr("fill", "#51B3D2b0");
 
 d3.select("#architecture-container")
     .append("div")
@@ -549,5 +593,8 @@ d3.json("./assets/json/data.json").then(
             .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedData["prompts"][1]}_${timestep}_${seed}_${gs}.jpg`)
             .on("mouseover", generatedImageHovered)
             .on("mouseout", generatedImageMouseOut)
+        let promptWordList = window.selectedPrompt1.split(" ")
+        d3.select("#your-prompt-text-prompt")
+            .text(`${promptWordList[0]} ${promptWordList[1]} ${promptWordList[2]}...`)
     })
 
