@@ -179,46 +179,6 @@ let clipUnetTokenVectorsContainer = d3.select("#generate-text-vector-denoise-lat
 clipUnetTokenVectorsContainer.append("div").attr("id", "generate-text-vector-denoise-latent-tokens-container")
 clipUnetTokenVectorsContainer.append("div").attr("id", "generate-text-vector-denoise-latent-vectors-container")
 
-d3.json("./assets/json/text.json").then(
-    function(data){
-        let tokens = data[selectedPromptGroupName]["token"][selectedPrompt1]
-        let vectors = data[selectedPromptGroupName]["vector"][selectedPrompt1]
-        console.log(vectors[0])
-        tokens[0] = "<start>"
-        let tokenNum = 3;
-        let vectorDim = 3;
-        for (let i = 0 ; i < tokenNum; i++){
-            d3.select("#generate-text-vector-denoise-latent-tokens-container")
-                .append("div")
-                    .append("div")
-                    .attr("class", "generate-text-vector-denoise-latent-token")
-                    .text(tokens[i])
-            d3.select("#generate-text-vector-denoise-latent-vectors-container")
-                .append("div")
-                    .attr("class", "generate-text-vector-denoise-latent-vector")
-                    .attr("id", `generate-text-vector-denoise-latent-vector-${i}`)
-            for (let j = 0 ; j< vectorDim ; j++) {
-                d3.select(`#generate-text-vector-denoise-latent-vector-${i}`)
-                    .append("div")
-                        .attr("class", "generate-text-vector-denoise-latent-vector-cell")
-                        .text(Math.round(+(vectors[i][j])*100)/100)
-                        .style("left", `${21*j}px`)
-            }
-            d3.select(`#generate-text-vector-denoise-latent-vector-${i}`)
-                .append("div")
-                    .attr("class", "generate-text-vector-denoise-latent-vector-cell generate-text-vector-denoise-latent-vector-cell-last")
-                    .style("left", `${21*vectorDim}px`)
-                    
-            d3.select(`#generate-text-vector-denoise-latent-vector-${i}`)
-                .append("svg")
-                    .attr("class", "generate-text-vector-denoise-latent-vector-horizontal-dots-svg")
-                    .attr("id", `generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`)
-            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","16").attr("cy", "10").attr("class", "dots")
-            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","22").attr("cy", "10").attr("class", "dots")
-            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","28").attr("cy", "10").attr("class", "dots")
-        }
-    })
-
 clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "69").attr("cy", "94").attr("class", "dots");
 clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "69").attr("cy", "100").attr("class", "dots")
 clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "69").attr("cy", "106").attr("class", "dots")
@@ -464,3 +424,45 @@ d3.json("./assets/json/data.json").then(
         d3.select("#your-prompt-text-prompt")
             .text(`${promptWordList[0]} ${promptWordList[1]} ${promptWordList[2]}...`)
     })
+    .then(
+d3.json("./assets/json/text.json").then(
+    function(data){
+        let tokens = data[window.selectedPromptGroupName]["token"][selectedPrompt1]
+        let vectors = data[window.selectedPromptGroupName]["vector"][selectedPrompt1]
+        console.log(vectors[0])
+        tokens[0] = "<start>"
+        let tokenNum = 3;
+        let vectorDim = 3;
+        for (let i = 0 ; i < tokenNum; i++){
+            d3.select("#generate-text-vector-denoise-latent-tokens-container")
+                .append("div")
+                    .append("div")
+                    .attr("class", "generate-text-vector-denoise-latent-token")
+                    .text(tokens[i])
+            d3.select("#generate-text-vector-denoise-latent-vectors-container")
+                .append("div")
+                    .attr("class", "generate-text-vector-denoise-latent-vector")
+                    .attr("id", `generate-text-vector-denoise-latent-vector-${i}`)
+            for (let j = 0 ; j< vectorDim ; j++) {
+                d3.select(`#generate-text-vector-denoise-latent-vector-${i}`)
+                    .append("div")
+                        .attr("class", "generate-text-vector-denoise-latent-vector-cell")
+                        .text(Math.round(+(vectors[i][j])*100)/100)
+                        .style("left", `${21*j}px`)
+            }
+            d3.select(`#generate-text-vector-denoise-latent-vector-${i}`)
+                .append("div")
+                    .attr("class", "generate-text-vector-denoise-latent-vector-cell generate-text-vector-denoise-latent-vector-cell-last")
+                    .style("left", `${21*vectorDim}px`)
+                    
+            d3.select(`#generate-text-vector-denoise-latent-vector-${i}`)
+                .append("svg")
+                    .attr("class", "generate-text-vector-denoise-latent-vector-horizontal-dots-svg")
+                    .attr("id", `generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`)
+            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","16").attr("cy", "10").attr("class", "dots")
+            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","22").attr("cy", "10").attr("class", "dots")
+            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","28").attr("cy", "10").attr("class", "dots")
+        }
+    })
+
+    )
