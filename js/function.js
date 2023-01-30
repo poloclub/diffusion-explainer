@@ -409,7 +409,6 @@ function updateStep(timestep) {
 }
 
 function controllerPauseButtonClicked() {
-    console.log("pause button clicked")
     d3.select("#controller-button-pause")
         .style("display", "none");
     d3.select("#controller-button-play")
@@ -420,11 +419,11 @@ function controllerPauseButtonClicked() {
         clearInterval(document.getElementById("controller").playingInterval);
     }
 
-    d3.select("#unet-cycle")
+    d3.select("#denoise-latent-cycle")
         .style("animation-play-state", "paused")
-    d3.select("#unet-decoder-arrow")
+    d3.select("#denoise-latent-decoder-arrow")
         .style("animation-play-state", "paused")
-    d3.select("#unet-decoder-arrow-2")
+    d3.select("#decoder-generated-image-arrow")
         .style("animation-play-state", "paused")
 }
 
@@ -438,11 +437,11 @@ function timestepSliderFunction(){
 }
 
 function animateArchCycle() {
-    d3.select("#unet-cycle")
+    d3.select("#denoise-latent-cycle")
         .style("animation-play-state", "")
-    d3.select("#unet-decoder-arrow")
+    d3.select("#denoise-latent-decoder-arrow")
         .style("animation-play-state", "")
-    d3.select("#unet-decoder-arrow-2")
+    d3.select("#decoder-generated-image-arrow")
         .style("animation-play-state", "")
 }
 
