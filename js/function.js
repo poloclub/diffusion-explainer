@@ -201,74 +201,6 @@ function umapHighlightNodeClicked (e) {
     updateStep(timestep)
 }
 
-function promptSelectorLeftScrollButtonClicked () {
-    let imageContainerList = Array.from(document.querySelectorAll("#prompt-selector-images-container .prompt-selector-image-container"));
-    let imagePerScreen = document.getElementById("prompt-selector-images-container").imagePerScreen;
-    let leftmostImageIdx = document.getElementById("prompt-selector-images-container").leftmostImageIdx
-    let leftmost = false;
-
-    leftmostImageIdx -= imagePerScreen;
-    if (leftmostImageIdx <= 0) {
-        leftmost = true;
-        leftmostImageIdx = 0;
-    }
-    
-    imageContainerList[leftmostImageIdx].scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
-    document.getElementById("prompt-selector-images-container").leftmostImageIdx = leftmostImageIdx;
-    
-    if (d3.select("#prompt-selector-images-container-cover-right").style("opacity") == "0") {
-        d3.select("#prompt-selector-images-container-cover-right")
-            .transition()
-            .style("display", "")
-            .transition()
-            .duration(500)
-            .style("opacity", "100%");
-    }
-    if (leftmost) {
-        d3.select("#prompt-selector-images-container-cover-left")
-            .transition()
-            .duration(500)
-            .style("opacity", "0")
-            .transition()
-            .delay(500)
-            .style("display", "none")
-    }
-}
-
-function promptSelectorRightScrollButtonClicked () {
-    let imageContainerList = Array.from(document.querySelectorAll("#prompt-selector-images-container .prompt-selector-image-container"));
-    let imagePerScreen = document.getElementById("prompt-selector-images-container").imagePerScreen;
-    let leftmostImageIdx = document.getElementById("prompt-selector-images-container").leftmostImageIdx
-    let lastImageIdx =  document.getElementById("prompt-selector-images-container").lastImageIdx
-    let rightmost = false;
-
-    leftmostImageIdx += imagePerScreen;
-    if (leftmostImageIdx + imagePerScreen >= lastImageIdx) {
-        rightmost = true;
-        leftmostImageIdx = lastImageIdx - imagePerScreen;
-    }
-    
-    imageContainerList[leftmostImageIdx].scrollIntoView({behavior: "smooth", block: "start", inline: "start"});
-    document.getElementById("prompt-selector-images-container").leftmostImageIdx = leftmostImageIdx;
-    
-    if (d3.select("#prompt-selector-images-container-cover-left").style("opacity") == "0") {
-        d3.select("#prompt-selector-images-container-cover-left")
-            .style("display", "block")
-            .transition()
-            .duration(500)
-            .style("opacity", "100%");
-    }
-    if (rightmost) {
-        d3.select("#prompt-selector-images-container-cover-right")
-            .transition()
-            .duration(500)
-            .style("opacity", "0")
-            .transition()
-            .delay(500)
-            .style("display", "none")
-    }
-}
-
 function promptCompareClicked() {
     window.comparison = true;
     d3.select("#prompt-2-container").style("display", "block")
@@ -320,7 +252,7 @@ function promptCompareOffed() {
 
 function controllerButtonHovered() {
     if (this.id.includes("play")) d3.select(`#${this.id} svg`).style("opacity", "100%")
-    else d3.select(`#${this.id} svg`).style("opacity", "50%") 
+    else d3.select(`#${this.id} svg`).style("opacity", "20%") 
 }
 
 function controllerButtonMouseout() {
@@ -386,6 +318,8 @@ function updateStep(timestep) {
     document.getElementById("controller").timestep = timestep 
     d3.select("#controller-timestep-number").text(timestep);
     document.getElementById("controller-timestep-slider").value = timestep;
+    d3.select("#denoise-latent-out-noise-img")
+        .attr("src", `./assets/latents/${selectedPromptGroupName}/${selectedPrompt1}_${Math.min(timestep+1,49)}_${seed}_${gs}.jpg`)
     d3.select("#generated-image")
         .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedPrompt1}_${timestep}_${seed}_${gs}.jpg`)
     d3.select("#generated-image-2")
@@ -406,6 +340,14 @@ function updateStep(timestep) {
                 return 1;
             })
     }
+    d3.select("#denoise-latent-l2-expl-prev-latent-timestep")
+        .text(timestep<50?timestep:49)
+    d3.select("#denoise-latent-l2-expl-prev-latent-text")
+        .text(`Latent from timestep ${timestep<50?timestep:49}`)
+    d3.select("#denoise-latent-out-latent-timestep")
+        .text(timestep<50?timestep+1:50)
+    d3.select("#denoise-latent-l2-expl-prev-latent-img")
+        .attr("src", `./assets/latents/${selectedPromptGroupName}/${selectedPrompt1}_${Math.min(timestep,49)}_${seed}_${gs}.jpg`)
 }
 
 function controllerPauseButtonClicked() {
@@ -446,7 +388,6 @@ function animateArchCycle() {
 }
 
 function drawUmap(data) {
-    console.log("draw umap", seed, gs)
     let umapSvg = d3.select("#umap-svg").html("");
 
     let svgHeight = 220
@@ -523,6 +464,67 @@ function gsChanged(e) {
     // when guidance scale is changed
     let newGs = d3.select(this).property('value');
     hyperparamChanged(e, window.seed, newGs);
+    // TODO: change the slider position of l3 expl + if slider position changed, call gsChanged
+    let sliderWidth = 120;
+    let sliderHeight = 120;
+    let partitions = [0,0.25,0.55,1.]
+    let borderColors = ["#C8E4F0FF","#A5D2E4FF","#6CB2D0FF"]
+    let points = {
+        1: [partitions[1]*sliderWidth, (1-partitions[1])*sliderHeight],
+        7: [partitions[2]*sliderWidth, (1-partitions[2])*sliderHeight],
+        20: [partitions[3]*sliderWidth, (1-partitions[3])*sliderHeight],
+    }
+    if (newGs == 1) {
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
+            .attr("x1", points[1][0])
+            .attr("y1", points[1][1])
+            .attr("x2", points[1][0])
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
+            .attr("cx", points[1][0])
+            .attr("cy", points[1][1])
+        d3.select("#denoise-latent-l2-expl-noise-img")
+            .style("border-color", borderColors[0])
+        if (window.latentDenoiserL3Expanded) {
+            d3.select("#denoise-latent-l2-expl-noise-img")
+                .style("left", `${defaultNoiseLeftValue+points[1][0]-points[7][0]}px`)
+            d3.select("#denoise-latent-l2-expl-noise-text")
+                .style("left", `${defaultNoiseLeftValue+points[1][0]-points[7][0]-4}px`)
+        }
+    }
+    else if (newGs == 20) {
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
+            .attr("x1", points[20][0])
+            .attr("y1", points[20][1])
+            .attr("x2", points[20][0])
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
+            .attr("cx", points[20][0])
+            .attr("cy", points[20][1])
+        d3.select("#denoise-latent-l2-expl-noise-img")
+            .style("border-color", borderColors[1])
+        if (window.latentDenoiserL3Expanded) {
+            d3.select("#denoise-latent-l2-expl-noise-img")
+                .style("left", `${defaultNoiseLeftValue+points[20][0]-points[7][0]}px`)
+            d3.select("#denoise-latent-l2-expl-noise-text")
+                .style("left", `${defaultNoiseLeftValue+points[20][0]-points[7][0]-4}px`)
+        }
+    }
+    else {
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
+            .attr("x1", points[7][0])
+            .attr("y1", points[7][1])
+            .attr("x2", points[7][0])
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
+            .attr("cx", points[7][0])
+            .attr("cy", points[7][1])
+        d3.select("#denoise-latent-l2-expl-noise-img")
+            .style("border-color", borderColors[1])
+        if (window.latentDenoiserL3Expanded) {
+            d3.select("#denoise-latent-l2-expl-noise-img")
+                .style("left", `${defaultNoiseLeftValue}px`)
+            d3.select("#denoise-latent-l2-expl-noise-text")
+                .style("left", `${defaultNoiseLeftValue-4}px`)
+        }
+    }
 }
 
 function hyperparamChanged(e, newSeed, newGs) {
@@ -538,6 +540,12 @@ function hyperparamChanged(e, newSeed, newGs) {
     
     // 2. change the umap
     d3.json("./assets/json/data.json").then(data => drawUmap(data));
+
+    // 3. change improved latent, noise images in latent denoiser
+    d3.select("#denoise-latent-l2-expl-prev-latent-img")
+        .attr("src", `./assets/latents/${selectedPromptGroupName}/${selectedPrompt1}_${Math.min(timestep,49)}_${seed}_${gs}.jpg`)
+    d3.select("#denoise-latent-out-noise-img")
+        .attr("src", `./assets/latents/${selectedPromptGroupName}/${selectedPrompt1}_${Math.min(timestep,50)}_${seed}_${gs}.jpg`)
 }
 
 function generatedImageHovered(e){
@@ -559,4 +567,643 @@ function generatedImageMouseOut(e){
             .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedPrompt2}_${timestep}_${seed}_${gs}.jpg`)
 }
 
-export {promptSelectorImageclicked, promptSelectorLeftScrollButtonClicked, promptSelectorRightScrollButtonClicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, updatePromptList, generatedImageHovered, generatedImageMouseOut};
+function textVectorGeneratorClicked(e) {
+    window.textVectorGeneratorL2Expanded = true;
+    let textVectorGeneratorRectExpandedWidth = 500
+    let textVectorGeneratorRectExpandedHeight = 214
+    let textVectorGeneratorRectOrigWidth = +(getComputedStyle(this).width.slice(0,-2))
+    let animationDuration = 1000
+    d3.interrupt(d3.select("#generate-text-vector-l2-expl-container"))
+    d3.select("#generate-text-vector-l2-expl-container")
+        .style("display", "block")
+        .style("pointer-events", "initial")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#generate-text-vector-container")
+        .transition()
+            .duration(animationDuration)
+            .style("top", "126px")
+    d3.select("#generate-text-vector-svg")
+        .transition()
+            .duration(animationDuration)
+            .style("width", `${textVectorGeneratorRectExpandedWidth}px`)
+    d3.select("#generate-text-vector-rectangle")
+        .style("fill", "#ffffff")
+        .style("cursor", "default")
+        .transition()
+            .duration(animationDuration)
+            .attr("width", textVectorGeneratorRectExpandedWidth)
+            .attr("height", textVectorGeneratorRectExpandedHeight)
+    d3.select("#denoise-latent-cycle-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "722px")
+    d3.select("#denoise-latent-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "786px")
+    d3.select("#unet-in-noise-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "750px")
+    d3.select("#denoise-latent-decoder-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "928px")
+    d3.select("#denoise-latent-out-noise-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "955px")
+    d3.select("#decoder-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "1020px")
+    d3.select("#decoder-generated-image-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "1097px")
+    d3.select("#generated-image-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "1128px")
+    d3.select("#generate-text-vector-text")
+        .transition()
+        .duration(animationDuration)
+            .style("width", `${textVectorGeneratorRectExpandedWidth}px`)
+            .style("top", "14px")
+            .style("font-size", "20px")
+    d3.select("#generate-text-vector-denoise-latent-container")
+        .transition()
+        .duration(animationDuration)
+            .style("left","454px")
+    d3.select("#generate-text-vector-denoise-latent-guide-text")
+        .transition()
+        .duration(animationDuration)
+            .style("left","174px")
+    d3.select("#generate-text-vector-denoise-latent-arrow")
+        .transition()
+        .duration(animationDuration)
+            .attr("x2", "322")
+    d3.select("#generate-text-vector-l2-cover")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+}
+
+function reduceTextVectorGenerator(e) {
+    window.textVectorGeneratorL2Expanded = false;
+    let textVectorGeneratorRectReducedWidth = 100
+    let textVectorGeneratorRectReducedHeight = 50
+    let animationDuration = 1000
+    d3.select("#generate-text-vector-l2-expl-container")
+        .style("pointer-events", "none")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "0")
+        .on("interrupt", function() {
+            d3.select(this).style("display", "block")
+        })
+    d3.select("#generate-text-vector-container")
+        .transition()
+            .duration(animationDuration)
+            .style("top", "202px")
+    d3.select("#generate-text-vector-svg")
+        .transition()
+            .duration(animationDuration)
+            .style("width", `${textVectorGeneratorRectReducedWidth}px`)
+    d3.select("#generate-text-vector-rectangle")
+        .style("fill", "none")
+        .style("cursor", "pointer")
+        .transition()
+            .duration(animationDuration)
+            .attr("width", textVectorGeneratorRectReducedWidth)
+            .attr("height", textVectorGeneratorRectReducedHeight)
+    d3.select("#denoise-latent-cycle-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "322px")
+    d3.select("#denoise-latent-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "386px")
+    d3.select("#unet-in-noise-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "350px")
+    d3.select("#denoise-latent-decoder-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "528px")
+    d3.select("#denoise-latent-out-noise-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "555px")
+    d3.select("#decoder-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "620px")
+    d3.select("#decoder-generated-image-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "697px")
+    d3.select("#generated-image-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "728px")
+    d3.select("#generate-text-vector-text")
+        .transition()
+        .duration(animationDuration)
+            .style("width", `${textVectorGeneratorRectReducedWidth}px`)
+            .style("top", "10px")
+            .style("font-size", "16px")
+    d3.select("#generate-text-vector-denoise-latent-container")
+        .transition()
+        .duration(animationDuration)
+            .style("left","224px")
+    d3.select("#generate-text-vector-denoise-latent-guide-text")
+        .transition()
+        .duration(animationDuration)
+            .style("left","0")
+    d3.select("#generate-text-vector-denoise-latent-arrow")
+        .transition()
+        .duration(animationDuration)
+            .attr("x2", "152")
+    d3.select("#generate-text-vector-l2-cover")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0%")
+    
+}
+
+function latentDenoiserClicked(e) {
+    window.latentDenoiserL2Expanded = true;
+    let latentDenoiserExpandedWidth = 500;
+    let latentDenoiserExpandedHeight = 263;
+    // let latentDenoiserGeneratorOrigWidth =+(getComputedStyle(this).width.slice(0,-2))
+    let latentDenoiserGeneratorOrigWidth = 140;
+    let animationDuration = 1000
+
+    d3.interrupt(d3.select(this))
+    d3.interrupt(d3.select("#denoise-latent-l2-expl-container"))
+    d3.interrupt(d3.select("#unet-guidance-scale-control-container"))
+
+    d3.select("#denoise-latent-l2-expl-container")
+        .style("pointer-events", "initial")
+        .style("display", "block")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#denoise-latent-container")
+        .style("cursor", "default")
+        .transition()
+            .duration(animationDuration)
+            .style("width", latentDenoiserExpandedWidth)
+            .style("height", latentDenoiserExpandedHeight)
+            .style("left", `${386-(latentDenoiserExpandedWidth-latentDenoiserGeneratorOrigWidth)/2}px`)
+            .style("top", "137px")
+    d3.select("#denoise-latent-rectangle")
+        .style("fill", "none")
+        .style("cursor", "default")
+        .transition()
+            .duration(animationDuration)
+            .attr("width", latentDenoiserExpandedWidth)
+            .attr("height", latentDenoiserExpandedHeight)
+    d3.select("#denoise-latent-svg")
+        .transition()
+            .duration(animationDuration)
+            .style("width", `${latentDenoiserExpandedWidth}px`)
+    d3.select("#your-prompt-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `-150px`)
+    d3.select("#generate-text-vector-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `-58px`)
+    d3.select("#generate-text-vector-denoise-latent-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `44px`)
+            .style("top", `134px`)
+    d3.select("#denoise-latent-cycle-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `142px`)
+            .style("opacity", "0.2")
+    d3.select("#unet-in-noise-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `350px`)
+    d3.select("#denoise-latent-decoder-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `528px`)
+            .style("opacity", "0%")
+    d3.select("#denoise-latent-out-noise-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `735px`)
+    d3.select("#decoder-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `800px`)
+    d3.select("#decoder-generated-image-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `877px`)
+    d3.select("#generated-image-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `908px`)
+    d3.select("#denoise-latent-cycle-container svg g path")
+        .transition()
+            .duration(animationDuration)
+            .attr("d", `M ${257+latentDenoiserExpandedWidth-latentDenoiserGeneratorOrigWidth},128.5 l0 -75 a5,5 0 0 0 -5,-5 l${-245-latentDenoiserExpandedWidth+latentDenoiserGeneratorOrigWidth-10},0 a5,5 0 0 0 -5,5 l0,75 a5,5 0 0 0 5,5 l47,0`)
+    d3.select("#denoise-latent-cycle-latent-text")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "0%")
+    d3.select("#generate-text-vector-denoise-latent-arrow")
+        .transition()
+            .duration(animationDuration)
+            .attr("x2", "354.5")
+    d3.select("#denoise-latent-text")
+        .transition()
+        .duration(animationDuration)
+        .style("width", `${latentDenoiserExpandedWidth}px`)
+        .style("top", "12px")
+        .style("font-size", "20px")
+    d3.select("#unet-guidance-scale-control-container")
+        .style("display", "block")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "100%")
+            .style("top", "181px")
+            .style("left", "173px")
+    d3.select("#predict-noise")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity","0%")
+    d3.select("#remove-noise")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity","0%")
+    d3.select("#denoise-latent-l2-left-cover")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#denoise-latent-l2-right-cover")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#denoise-latent-out-latent-timestep")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#denoise-latent-l2-expl-text-vectors-arrow-svg")
+        .transition()
+        .delay(animationDuration)
+        .duration(animationDuration*0.5)
+            .style("opacity","100%")
+}
+
+function reduceLatentDenoiser () {
+    window.latentDenoiserL2Expanded = false;
+    let animationDuration = 1000
+
+    d3.select("#denoise-latent-l2-expl-container")
+        .style("pointer-events", "none")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "0")
+        .transition()
+            .style("display", "none")
+        .on("interrupt", function() {
+            d3.select(this).style("display", "block")
+        })
+    d3.select("#denoise-latent-container")
+        .style("cursor", "pointer")
+        .transition()
+            .duration(animationDuration)
+            .style("width", "140px")
+            .style("height", "105px")
+            .style("left", "386px")
+            .style("top", "155px")
+    d3.select("#denoise-latent-rectangle")
+        .style("fill", "none")
+        .style("cursor", "")
+        .transition()
+        .duration(animationDuration)
+            .attr("width", "140")
+            .attr("height", "105")
+    d3.select("#denoise-latent-svg")
+        .transition()
+            .duration(animationDuration)
+            .style("width", "140px")
+            .style("top", "0px")
+    d3.select("#your-prompt-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `30px`)
+    d3.select("#generate-text-vector-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `122px`)
+    d3.select("#generate-text-vector-denoise-latent-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `224px`)
+            .style("top", "67px")
+    d3.select("#denoise-latent-cycle-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `322px`)
+            .style("opacity", "1.0")
+    d3.select("#unet-in-noise-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `350px`)
+    d3.select("#denoise-latent-decoder-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `528px`)
+    d3.select("#denoise-latent-out-noise-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `555px`)
+    d3.select("#decoder-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `620px`)
+    d3.select("#decoder-generated-image-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `697px`)
+    d3.select("#generated-image-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `728px`)
+    d3.select("#denoise-latent-cycle-container svg g path")
+        .transition()
+            .duration(animationDuration)
+            .attr("d", `M 257,128.5 l0 -55.5 a5,5 0 0 0 -5,-5 l-245,0 a5,5 0 0 0 -5,5 l0,41 a5,5 0 0 0 5,5 l47,0`)
+    d3.select("#denoise-latent-cycle-latent-text")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#generate-text-vector-denoise-latent-arrow")
+        .transition()
+            .duration(animationDuration)
+            .attr("x2", "152")
+    d3.select("#denoise-latent-text")
+        .transition()
+        .duration(animationDuration)
+            .style("width", "140px")
+            .style("top", "12px")
+            .style("font-size", "16px")
+    d3.select("#unet-guidance-scale-control-container")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "0%")  // TODO: FIX: Depending on hyperparameter show/hide
+            .style("top", "200px")
+            .style("left", "9px")
+        .transition()
+            .style("display", "none")
+        .on("interrupt", function() {
+            d3.select(this).style("display", "block")
+        })
+    d3.select("#predict-noise")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#remove-noise")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#denoise-latent-l2-left-cover")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0%")
+    d3.select("#denoise-latent-l2-right-cover")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0%")
+    d3.select("#denoise-latent-decoder-container")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#denoise-latent-out-latent-timestep")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0%")
+    d3.select("#denoise-latent-l2-expl-text-vectors-arrow-svg")
+        .transition()
+        .duration(animationDuration*0.5)
+            .style("opacity","0%")
+}
+
+function expandLatentDenoiserL3 () {
+    window.latentDenoiserL3Expanded = true;
+    let animationDuration = 1000
+    d3.select("#latent-denoiser-l3-expl-container")    
+        .style("display", "block")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#denoise-latent-rectangle")
+        .transition()
+        .duration(animationDuration)
+            .attr("height", "326")
+            .attr("width", "520")
+    d3.select("#denoise-latent-l2-expl-central-line-svg")
+        .select("line")
+            .transition()
+            .duration(animationDuration)
+                .attr("x2", "542")
+    d3.select("#denoise-latent-l2-expl-central-line-svg")
+        .select("text")
+            .transition()
+            .duration(animationDuration)
+                .attr("x", "514")
+    d3.select("#denoise-latent-l2-expl-central-line-svg")
+        .select("circle")
+            .transition()
+            .duration(animationDuration)
+                .attr("cx", "518")
+    d3.select("#denoise-latent-l2-expl-weaken-expl")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "-46px")
+    d3.select("#denoise-latent-out-noise-container")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "755px")
+    d3.select("#decoder-container")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "820px")
+    d3.select("#denoise-latent-cycle")
+        .transition()
+        .duration(animationDuration)
+            .attr("d", "M 637,128.5 l0 -75 a5,5 0 0 0 -5,-5 l-635,0 a5,5 0 0 0 -5,5 l0,75 a5,5 0 0 0 5,5 l47,0")
+    // move text noise
+    d3.select("#denoise-latent-l2-expl-noise-text")
+        .transition()
+        .duration(animationDuration)
+            .style("top", "-28px")
+            .style("left", window.gs==1?"22px":(window.gs==7?"58px":"112px"))
+    // add noise border, border color: function of guidance scale
+    let borderColors = ["#C8E4F0FF","#A5D2E4FF","#6CB2D0FF"]
+    d3.select("#denoise-latent-l2-expl-noise-img")
+        .transition()
+        .duration(animationDuration)
+            .style("border-width", `3px`)
+            .style("border-color", `${borderColors[1]}`)
+            .style("left", window.gs==1?"26px":(window.gs==7?"62px":"116px"))
+    // hide guidance scale expl ...
+    d3.select("#unet-guidance-scale-control-dropdown-container")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0%")
+        .transition()
+            .style("display","none")
+    d3.select("#denoise-latent-l2-expl-guidance-scale-expl-container")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0%")
+        .transition()
+            .style("display","none")
+    // move the text Guidance Scale
+    d3.select("#unet-guidance-scale-control-text-container")
+        .transition()
+        .duration(animationDuration)
+            .style("width", "50px")
+            .style("left", "240px")
+            .style("top", "-12px")
+    // move text weaken and arrow
+    d3.select("#denoise-latent-l2-expl-weaken-text")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "152px")
+    d3.select("#denoise-latent-l2-expl-weaken-arrow-svg")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "170px")
+    // elongate unet-minus connecting line 
+    d3.select("#denoise-latent-l2-expl-noise-arrow")
+        .transition()
+        .duration(animationDuration)
+            .attr("d", "M0 0 l200 0 a 10 10 81.46923439005187 0 0 9.889363528682974 -8.516595470697553 l9 -60 a 10 10 81.46923439005187 0 1 9.889363528682974 -8.516595470697553 l 3 0")
+    d3.select("#denoise-latent-l2-expl-question-mark")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0%")
+        .transition()
+            .style("display", "none")
+}
+
+function reduceLatentDenoiserL3 () {
+    window.latentDenoiserL3Expanded = false;
+    let animationDuration = 1000
+    // TODO: add interrupt 
+
+    // Hide L3 Explanations
+    d3.select("#latent-denoiser-l3-expl-container")    
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0%")
+        .transition()
+            .style("display", "none")
+    d3.select("#denoise-latent-rectangle")
+        .transition()
+        .duration(animationDuration)
+            .attr("height", "263")
+            .attr("width", "500")
+    d3.select("#denoise-latent-l2-expl-central-line-svg")
+        .select("line")
+            .transition()
+            .duration(animationDuration)
+                .attr("x2", "522")
+    d3.select("#denoise-latent-l2-expl-central-line-svg")
+        .select("text")
+            .transition()
+            .duration(animationDuration)
+                .attr("x", "494")
+    d3.select("#denoise-latent-l2-expl-central-line-svg")
+        .select("circle")
+            .transition()
+            .duration(animationDuration)
+                .attr("cx", "498")
+    d3.select("#denoise-latent-l2-expl-weaken-expl")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "-66px")
+    d3.select("#denoise-latent-out-noise-container")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "735px")
+    d3.select("#decoder-container")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "800px")
+    d3.select("#denoise-latent-cycle")
+        .transition()
+        .duration(animationDuration)
+            .attr("d", "M 617,128.5 l0 -75 a5,5 0 0 0 -5,-5 l-615,0 a5,5 0 0 0 -5,5 l0,75 a5,5 0 0 0 5,5 l47,0")
+    // move noise text
+    d3.select("#denoise-latent-l2-expl-noise-text")
+        .transition()
+        .duration(animationDuration)
+            .style("top", "14px")
+            .style("left", "25px")
+    // add noise border, border color: function of guidance scale
+    d3.select("#denoise-latent-l2-expl-noise-img")
+        .transition()
+        .duration(animationDuration)
+            .style("border-width", `0px`)
+            .style("border-color", `#ffffff00`)
+            .style("left", "29px")
+    d3.select("#unet-guidance-scale-control-dropdown-container")
+        .transition()
+            .style("display","inline-block")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+    d3.select("#denoise-latent-l2-expl-guidance-scale-expl-container")
+        .transition()
+            .style("display","block")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+    // move the text Guidance Scale
+    d3.select("#unet-guidance-scale-control-text-container")
+        .transition()
+            .style("width", "84px")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "0px")
+            .style("top", "0px")
+    // move text weaken and arrow
+    d3.select("#denoise-latent-l2-expl-weaken-text")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "93px")
+    d3.select("#denoise-latent-l2-expl-weaken-arrow-svg")
+        .transition()
+        .duration(animationDuration)
+            .style("left", "112px")
+    // elongate unet-minus connecting line 
+    d3.select("#denoise-latent-l2-expl-noise-arrow")
+        .transition()
+        .duration(animationDuration)
+            .attr("d", "M0 0 l180 0 a 10 10 81.46923439005187 0 0 9.889363528682974 -8.516595470697553 l9 -60 a 10 10 81.46923439005187 0 1 9.889363528682974 -8.516595470697553 l 3 0")
+    d3.select("#denoise-latent-l2-expl-question-mark")
+        .transition()
+            .style("display", "block")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "100%")
+}
+
+export {promptSelectorImageclicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, updatePromptList, generatedImageHovered, generatedImageMouseOut, textVectorGeneratorClicked, reduceTextVectorGenerator, latentDenoiserClicked, reduceLatentDenoiser, expandLatentDenoiserL3,reduceLatentDenoiserL3, hyperparamChanged};

@@ -1,13 +1,18 @@
-import {seedChanged, gsChanged, generatedImageHovered, generatedImageMouseOut} from "./function.js"
+import {seedChanged, gsChanged, generatedImageHovered, generatedImageMouseOut, textVectorGeneratorClicked, latentDenoiserClicked} from "./function.js"
 
 let architectureLineWidth = 2;
 // let architectureLineColor = "#e8e8e8ff"
 let architectureLineColor = "#b0b0b0"
 
+window.textVectorGeneratorL2Expanded = false;
+window.textVectorGeneratorL3Expanded = false;
+window.latentDenoiserL2Expanded = false;
+window.latentDenoiserL3Expanded = false;
+
 d3.select("#architecture-container")
     .append("div")
     .attr("id", "stable-diffusion-description-text")
-    .text("Stable Diffusion is ...")
+    .text("Guided by the vectors for text prompt, randomly initialized low-dimensional latent vector is denoised over timesteps. Decoder scales up the latent vector to generate a high-resolution image.")
 
 d3.select("#architecture-container")
     .append("div")
@@ -41,7 +46,7 @@ d3.select("#hyperparameter-control-show-hide-container")
                 .duration(300)
                 .style("opacity", 0)
             d3.select("#hyperparameter-control-show-hide-text")
-                .text("Show Hyperparameters Settings")
+                .text(" Show Hyperparameters")
                 .style("padding-left", "1px")
         }
         else {
@@ -54,14 +59,14 @@ d3.select("#hyperparameter-control-show-hide-container")
                 .duration(300)
                 .style("opacity", 1)
             d3.select("#hyperparameter-control-show-hide-text")
-                .text(" Hide Hyperparameters Settings")
+                .text(" Hide Hyperparameters")
                 .style("padding-left", "5px")
         }
     })
 d3.select("#hyperparameter-control-show-hide-container")
     .append("div")
     .attr("id", "hyperparameter-control-show-hide-text")
-    .text("Show Hyperparameters Settings")
+    .text("Show Hyperparameters")
 
 d3.select("#architecture-container")
     .append("svg")
@@ -82,7 +87,7 @@ d3.select("#architecture-container")
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "your-prompt-container")
-        .attr("class", "architecture-component-container")
+        .attr("class", "architecture-component-container denoise-latent-expand-move-to-left")
 d3.select("#your-prompt-container")
     .append("div")
         .attr("id", "your-prompt-text")
@@ -124,28 +129,35 @@ d3.select("#your-prompt-svg")
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "generate-text-vector-container")
-        .attr("class", "architecture-component-container")
+        .attr("class", "architecture-component-container denoise-latent-expand-move-to-left")
+        .on("mouseover", () => {
+            if (!window.textVectorGeneratorL2Expanded) d3.select("#generate-text-vector-rectangle").style("fill", "#e0e0e0")
+        })
+        .on("mouseout", () => {
+            d3.select("#generate-text-vector-rectangle").style("fill", "none")
+        })
+        .on("click", textVectorGeneratorClicked)
         .append("svg")
             .attr("id", "generate-text-vector-svg")
             .attr("class", "architecture-svg")
             .append("rect")
                 .attr("id", "generate-text-vector-rectangle")
                 .attr("class", "architecture-rectangle")
-                .attr("width", "88")
-                .attr("height", "40")
+                .attr("width", "100")
+                .attr("height", "50")
                 .attr("rx", "5")
                 .attr("ry", "5")
 d3.select("#generate-text-vector-container")
     .append("div")
     .attr("id", "generate-text-vector-text")
     .attr("class", "architecture-text")
-    .text("Generate Text Vector")
+    .text("Text Vector Generator")
 
 
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "generate-text-vector-denoise-latent-container")
-        .attr("class", "architecture-component-container")
+        .attr("class", "architecture-component-container denoise-latent-expand-move-to-left")
             .append("svg")
                 .attr("id", "generate-text-vector-denoise-latent-svg")
                 .attr("class", "architecture-svg")
@@ -154,14 +166,14 @@ d3.select("#architecture-container")
                         .attr("id", "generate-text-vector-denoise-latent-arrow")
                         .attr("x1", "0")
                         .attr("y1", "10")
-                        .attr("x2", "142")
+                        .attr("x2", "152")
                         .attr("y2", "10")
                         .attr("stroke", architectureLineColor)
                         .attr("stroke-width", architectureLineWidth)
                         .attr("marker-end", "url(#architecture-arrow-head)")
 d3.select("#generate-text-vector-denoise-latent-container")
     .append("div")
-    .text("Guide")
+    .text("Text Vectors")
     .attr("id", "generate-text-vector-denoise-latent-guide-text")
 
 d3.select("#generate-text-vector-denoise-latent-svg").append("defs").append("linearGradient").attr("id", "generate-text-vector-denoise-latent-gradient").attr("gradientUnits", "userSpaceOnUse").attr("x1", "42").attr("y1", "0").attr("x2", "100").attr("y2", "0")
@@ -179,14 +191,14 @@ let clipUnetTokenVectorsContainer = d3.select("#generate-text-vector-denoise-lat
 clipUnetTokenVectorsContainer.append("div").attr("id", "generate-text-vector-denoise-latent-tokens-container")
 clipUnetTokenVectorsContainer.append("div").attr("id", "generate-text-vector-denoise-latent-vectors-container")
 
-clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "69").attr("cy", "94").attr("class", "dots");
 clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "69").attr("cy", "100").attr("class", "dots")
 clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "69").attr("cy", "106").attr("class", "dots")
+clipUnetTokenVectorG.append("circle").attr("r", "1.5").attr("cx", "69").attr("cy", "112").attr("class", "dots")
 
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "denoise-latent-cycle-container")
-        .attr("class", "architecture-component-container")
+        .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right")
         .append("svg")
             .attr("id", "denoise-latent-cycle-svg")
             .attr("class", "architecture-svg")
@@ -198,7 +210,7 @@ d3.select("#architecture-container")
                     .attr("stroke", architectureLineColor)
                     .attr("marker-end", "url(#architecture-arrow-head)")
                     .attr("fill", "none")
-                    .attr("d", "M 237,123.5 l0 -50.5 a5,5 0 0 0 -5,-5 l-225,0 a5,5 0 0 0 -5,5 l0,30 a5,5 0 0 0 5,5 l46,0")
+                    .attr("d", "M 257,128.5 l0 -55.5 a5,5 0 0 0 -5,-5 l-245,0 a5,5 0 0 0 -5,5 l0,41 a5,5 0 0 0 5,5 l47,0")
                     .style("animation-name", "unet-cycle-animation")
                     .style("animation-play-state", "paused")
 d3.select("#denoise-latent-cycle-container")
@@ -209,22 +221,32 @@ d3.select("#denoise-latent-cycle-container")
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "denoise-latent-container")
-        .attr("class", "architecture-component-container")
+        .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right")
+        .on("mouseover", () => {
+            if (!window.latentDenoiserL2Expanded) d3.select("#denoise-latent-rectangle").style("fill", "#e0e0e0")
+        })
+        .on("mouseout", () => {
+            d3.select("#denoise-latent-rectangle").style("fill", "none")
+        })
+        .on("click", function (e) {
+            if (!latentDenoiserL2Expanded) latentDenoiserClicked(e);
+        })
         .append("svg")
             .attr("id", "denoise-latent-svg")
             .attr("class", "architecture-svg")
             .append("rect")
                 .attr("id", "denoise-latent-rectangle")
                 .attr("class", "architecture-rectangle")
-                .attr("width", "125")
-                .attr("height", "95")
+                .attr("width", "140")
+                .attr("height", "105")
                 .attr("rx", "5")
                 .attr("ry", "5")
+
 d3.select("#denoise-latent-container")
     .append("div")
         .attr("id", "denoise-latent-text")
         .attr("class", "architecture-text")
-        .text("Denoise Latent")
+        .text("Latent Denoiser")
 d3.select("#denoise-latent-container")
     .append("div")
         .attr("id", "predict-noise")
@@ -234,37 +256,18 @@ d3.select("#denoise-latent-container")
         .attr("id", "remove-noise")
         .text("Remove Noise")
 
+// TODO: Fix unet guidance scale control container
 d3.select("#denoise-latent-container")
     .append("div")
         .attr("id", "unet-guidance-scale-control-container")
         .attr("class", "hyperparameter")
 d3.select("#unet-guidance-scale-control-container")
     .append("div")
-        .attr("id", "unet-guidance-scale-control-info-container")
-            .append("img")
-                .attr("id", "guidance-scale-control-info-svg")
-                .attr("src", "./icons/info.svg")
-                .on("mouseover", (e) => {
-                    d3.select("#unet-guidance-scale-expl-window").style("display", "block")
-                })
-                .on("mouseout", (e) => {
-                    d3.select("#unet-guidance-scale-expl-window").style("display", "none")
-                })
-d3.select("#unet-guidance-scale-control-info-container")
-    .append("div")
-        .attr("id", "unet-guidance-scale-expl-window")
-        .text("Guidance scale controls how much UNet is guided by the text prompt. Higher guidance scale generates images closer to the text prompt but less creative.")
-d3.select("#unet-guidance-scale-control-container")
-    .append("div")
         .attr("id", "unet-guidance-scale-control-text-container")
 d3.select("#unet-guidance-scale-control-text-container")
     .append("div")
-        .attr("id", "unet-guidance-scale-control-text-1")
+        .attr("id", "unet-guidance-scale-control-text")
         .text("Guidance Scale")
-d3.select("#unet-guidance-scale-control-text-container")
-    .append("div")
-        .attr("id", "unet-guidance-scale-control-text-2")
-        .text("of text vector:")
 d3.select("#unet-guidance-scale-control-container")
     .append("div")
         .attr("id", "unet-guidance-scale-control-dropdown-container")
@@ -283,7 +286,7 @@ d3.select("#unet-guidance-scale-control-container")
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "unet-in-noise-container")
-        .attr("class", "architecture-component-container")
+        .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right")
         .append("svg")
             .attr("id", "unet-in-noise-svg")
             .attr("class", "architecture-svg")
@@ -318,7 +321,7 @@ d3.select("#unet-in-noise-seed-control-container")
 
 d3.select("#architecture-container").append("div")
     .attr("id", "denoise-latent-decoder-container") // animate arrow
-    .attr("class", "architecture-component-container")
+    .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right denoise-latent-expand-move-to-right")
     .append("svg")
         .attr("id", "denoise-latent-decoder-svg")
         .attr("class", "architecture-svg")
@@ -328,7 +331,7 @@ d3.select("#architecture-container").append("div")
                 .attr("class", "architecture-dashed")
                 .attr("x1", "0")
                 .attr("y1", "10")
-                .attr("x2", "69")
+                .attr("x2", "83")
                 .attr("y2", "10")
                 .attr("stroke", architectureLineColor)
                 .attr("stroke-width", architectureLineWidth)
@@ -339,19 +342,14 @@ d3.select("#architecture-container").append("div")
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "denoise-latent-out-noise-container")
-        .attr("class", "architecture-component-container")
-        .append("svg")
-            .attr("id", "denoise-latent-out-noise-svg")
-            .attr("class", "architecture-svg")
-            .append("rect")
-                .attr("id", "out-noise")
-                .attr("width", "24")
-                .attr("height", "24")
-                .attr("x", "0")
+        .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right  denoise-latent-expand-move-to-right")
+        .append("img")
+            .attr("id", "denoise-latent-out-noise-img")
+
+                
 d3.select("#denoise-latent-out-noise-container")
     .append("div")
         .attr("id", "denoise-latent-out-noise-expl-container")
-        .attr("class", "architecture-expl-text-container")
 d3.select("#denoise-latent-out-noise-expl-container").append("div").attr("id", "denoise-latent-out-noise-expl-text-1").text("Improved")
 d3.select("#denoise-latent-out-noise-expl-container").append("div").attr("id", "denoise-latent-out-noise-expl-text-2").text("Latent")
 
@@ -359,15 +357,15 @@ d3.select("#denoise-latent-out-noise-expl-container").append("div").attr("id", "
 d3.select("#architecture-container")
 .append("div")
     .attr("id", "decoder-container") // almost same as tokenizer
-    .attr("class", "architecture-component-container")
+    .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right  denoise-latent-expand-move-to-right")
     .append("svg")
         .attr("id", "decoder-svg")
         .attr("class", "architecture-svg")
         .append("rect")
             .attr("id", "decoder-rectangle")
             .attr("class", "architecture-rectangle")
-            .attr("width", "72")
-            .attr("height", "25")
+            .attr("width", "75")
+            .attr("height", "33")
             .attr("rx", "5")
             .attr("ry", "5")
 d3.select("#decoder-svg")
@@ -375,12 +373,12 @@ d3.select("#decoder-svg")
         .attr("id", "decoder-text")
         .attr("class", "architecture-text")
         .attr("x", "8")
-        .attr("y", "18")
-        .text("Decoder")
+        .attr("y", "22")
+        .text("Upscaler")
 
 d3.select("#architecture-container").append("div")
     .attr("id", "decoder-generated-image-container")
-    .attr("class", "architecture-component-container")
+    .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right  denoise-latent-expand-move-to-right")
     .append("svg")
         .attr("id", "decoder-generated-image-svg")
         .attr("class", "architecture-svg")
@@ -390,7 +388,7 @@ d3.select("#architecture-container").append("div")
                 .attr("class", "architecture-dashed")
                 .attr("x1", "0")
                 .attr("y1", "10")
-                .attr("x2", "26")
+                .attr("x2", "21")
                 .attr("y2", "10")
                 .attr("stroke", architectureLineColor)
                 .attr("stroke-width", architectureLineWidth)
@@ -401,15 +399,27 @@ d3.select("#architecture-container").append("div")
 let generatedImageContainerDiv = d3.select("#architecture-container")
     .append("div")
         .attr("id", "generated-image-container")
-        .attr("class", "architecture-component-container")
+        .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right  denoise-latent-expand-move-to-right")
 
-d3.json("./assets/json/data.json").then(
-    function(data){
+// d3.json("./assets/json/data.json").then(
+Promise.all([
+    d3.json("./assets/json/data.json"),
+    d3.json("./assets/json/text.json")
+]).then(
+    function(files){
+        let data = files[0]
+        // texts = files[1]
         let timestep = document.getElementById("controller").timestep;
         window.selectedPromptGroupName = Object.keys(data)[window.selectedPromptGroupIdx]
         let selectedData = data[window.selectedPromptGroupName];
         console.log(selectedData);
 
+        d3.select("#denoise-latent-out-noise-img")
+            .attr("src", `./assets/latents/${selectedPromptGroupName}/${selectedData["prompts"][0]}_${timestep}_${seed}_${gs}.jpg`)
+        d3.select("#denoise-latent-out-noise-container")
+                .append("div")
+                    .attr("id", "denoise-latent-out-latent-timestep")
+                    .text("31")
         generatedImageContainerDiv.append("img")
             .attr("id", "generated-image")
             .attr("src", `./assets/images/${selectedPromptGroupName}/scheduled/${selectedData["prompts"][0]}_${timestep}_${seed}_${gs}.jpg`)
@@ -423,14 +433,13 @@ d3.json("./assets/json/data.json").then(
         let promptWordList = window.selectedPrompt1.split(" ")
         d3.select("#your-prompt-text-prompt")
             .text(`${promptWordList[0]} ${promptWordList[1]} ${promptWordList[2]}...`)
-    })
-    .then(
-d3.json("./assets/json/text.json").then(
-    function(data){
+
+        // TEXT TOKENS
+        data = files[1];
         let tokens = data[window.selectedPromptGroupName]["token"][selectedPrompt1]
         let vectors = data[window.selectedPromptGroupName]["vector"][selectedPrompt1]
-        console.log(vectors[0])
         tokens[0] = "<start>"
+        window.tokens = tokens
         let tokenNum = 3;
         let vectorDim = 3;
         for (let i = 0 ; i < tokenNum; i++){
@@ -459,10 +468,35 @@ d3.json("./assets/json/text.json").then(
                 .append("svg")
                     .attr("class", "generate-text-vector-denoise-latent-vector-horizontal-dots-svg")
                     .attr("id", `generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`)
-            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","16").attr("cy", "10").attr("class", "dots")
-            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","22").attr("cy", "10").attr("class", "dots")
-            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","28").attr("cy", "10").attr("class", "dots")
+            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","16").attr("cy", "11").attr("class", "dots")
+            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","22").attr("cy", "11").attr("class", "dots")
+            d3.select(`#generate-text-vector-denoise-latent-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","28").attr("cy", "11").attr("class", "dots")
         }
+
+        d3.select("#generate-text-vector-l2-tokenizer-encoder-container")
+            .append("div")
+            .attr("id", "generate-text-vector-l2-tokenizer-encoder-tokens-container")
+
+        for (let i = 0 ; i < window.tokens.length ; i ++) {
+            let containerId = "generate-text-vector-l2-tokenizer-encoder-tokens-container"
+            d3.select(`#${containerId}`)
+                .append("div")
+                    .attr("class", "generate-text-vector-denoise-latent-token")
+                    .text(window.tokens[i])
+            if (+getComputedStyle(document.getElementById(containerId))["height"].slice(0,-2) > 70) {
+                document.getElementById(containerId).lastChild.remove();
+                break;
+            }
+        }
+
+        d3.select(`#generate-text-vector-l2-tokenizer-encoder-container`).append("svg").attr("id", "generate-text-vector-l2-tokenizer-encoder-token-dots-svg")
+        d3.select("#generate-text-vector-l2-tokenizer-encoder-token-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "8").attr("class", "dots")
+        d3.select("#generate-text-vector-l2-tokenizer-encoder-token-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "14").attr("class", "dots")
+        d3.select("#generate-text-vector-l2-tokenizer-encoder-token-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "20").attr("class", "dots")
+
+        // INPUT LATENTS
+        d3.select("#denoise-latent-l2-expl-prev-latent-img")
+            .attr("src", `./assets/latents/${selectedPromptGroupName}/${selectedData["prompts"][0]}_${timestep}_${seed}_${gs}.jpg`)
     })
 
-    )
+

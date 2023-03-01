@@ -1,4 +1,4 @@
-import {promptSelectorImageclicked, promptSelectorLeftScrollButtonClicked, promptSelectorRightScrollButtonClicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updatePromptList} from "./function.js";
+import {promptSelectorImageclicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updatePromptList} from "./function.js";
 
 let selectorDiv = d3.select("#prompt-selector")
 selectorDiv.append("div")
@@ -40,29 +40,7 @@ d3.json("./assets/json/data.json").then(
                 d3.select(`#prompt-selector-image-container-${i}`).attr("class", "prompt-selector-image-container prompt-selector-image-container-selected")
             }
         });
-        selectorImagesDiv.append("div")
-            .attr("class", "prompt-selector-images-container-cover")
-            .attr("id", "prompt-selector-images-container-cover-left")
-            .append("div")
-                .attr("class", "prompt-selector-images-container-scroll-container")
-                .attr("id", "prompt-selector-images-container-left-scroll-container")
-                .on("click", promptSelectorLeftScrollButtonClicked)
-                .append("img")
-                    .attr("class", "prompt-selector-scroll-button")
-                    .attr("id", "prompt-selector-left-scroll-button")
-                    .attr("src", "./icons/left.svg")
-        selectorImagesDiv.append("div")
-            .attr("class", "prompt-selector-images-container-cover")
-            .attr("id", "prompt-selector-images-container-cover-right")
-            .append("div")
-                .attr("class", "prompt-selector-images-container-scroll-container")
-                .attr("id", "prompt-selector-images-container-right-scroll-container")
-                .on("click", promptSelectorRightScrollButtonClicked)
-                .append("img")
-                    .attr("class", "prompt-selector-scroll-button")
-                    .attr("id", "prompt-selector-right-scroll-button")
-                    .attr("src", "./icons/right.svg")
-
+        
         let selectedData = data[window.selectedPromptGroupName];
         selectorDiv.append("div")
             .attr("id", "prompt-1-container")
@@ -97,12 +75,10 @@ d3.json("./assets/json/data.json").then(
                 .attr("cx", r)
                 .attr("cy", r)
                 .attr("r", r)
-                .attr("fill", "#646464")
+                .attr("fill", "#d0d0d0")
         promptCompareMinusButtonDiv.append("div")
             .text("-")
             .attr("id", "prompt-compare-minus-button-minus")
-            .style("left", `${r*0.55}px`)
-            .style("top", `${-r*0.95}px`)
         promptCompareAddButtonDiv.append("svg")
             .attr("id", "prompt-compare-add-button-circle")
             .attr("height", 2*r)
@@ -111,11 +87,10 @@ d3.json("./assets/json/data.json").then(
                 .attr("cx", r)
                 .attr("cy", r)
                 .attr("r", r)
-                .attr("fill", "#646464")
+                .attr("fill", "#d0d0d0")
         promptCompareAddButtonDiv.append("div")
             .text("+")
             .attr("id", "prompt-compare-add-button-plus")
-            .style("left", `${r/2}px`)
         promptCompareDiv.append("div")
             .attr("id", "prompt-compare-text")
             .text("Compare with other text prompts")
