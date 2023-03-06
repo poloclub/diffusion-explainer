@@ -644,7 +644,7 @@ function textVectorGeneratorClicked(e) {
     d3.select("#generate-text-vector-denoise-latent-arrow")
         .transition()
         .duration(animationDuration)
-            .attr("x2", "322")
+            .attr("x2", "215")
     d3.select("#generate-text-vector-l2-cover")
         .transition()
         .duration(animationDuration)
@@ -652,7 +652,12 @@ function textVectorGeneratorClicked(e) {
 }
 
 function reduceTextVectorGenerator(e) {
+    if (window.textVectorGeneratorL3Expanded) {
+        d3.select("#generate-text-vector-l3-expl-container").style("display", "none")
+        window.textVectorGeneratorL3Expanded = false;
+    }
     window.textVectorGeneratorL2Expanded = false;
+    
     let textVectorGeneratorRectReducedWidth = 100
     let textVectorGeneratorRectReducedHeight = 50
     let animationDuration = 1000
@@ -738,7 +743,7 @@ function reduceTextVectorGenerator(e) {
 
 function latentDenoiserClicked(e) {
     window.latentDenoiserL2Expanded = true;
-    let latentDenoiserExpandedWidth = 500;
+    let latentDenoiserExpandedWidth = 323;
     let latentDenoiserExpandedHeight = 263;
     // let latentDenoiserGeneratorOrigWidth =+(getComputedStyle(this).width.slice(0,-2))
     let latentDenoiserGeneratorOrigWidth = 140;
@@ -761,7 +766,7 @@ function latentDenoiserClicked(e) {
             .style("width", latentDenoiserExpandedWidth)
             .style("height", latentDenoiserExpandedHeight)
             .style("left", `${386-(latentDenoiserExpandedWidth-latentDenoiserGeneratorOrigWidth)/2}px`)
-            .style("top", "137px")
+            .style("top", "152px")
     d3.select("#denoise-latent-rectangle")
         .style("fill", "none")
         .style("cursor", "default")
@@ -769,10 +774,6 @@ function latentDenoiserClicked(e) {
             .duration(animationDuration)
             .attr("width", latentDenoiserExpandedWidth)
             .attr("height", latentDenoiserExpandedHeight)
-    d3.select("#denoise-latent-svg")
-        .transition()
-            .duration(animationDuration)
-            .style("width", `${latentDenoiserExpandedWidth}px`)
     d3.select("#your-prompt-container")
         .transition()
             .duration(animationDuration)
@@ -784,12 +785,12 @@ function latentDenoiserClicked(e) {
     d3.select("#generate-text-vector-denoise-latent-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `44px`)
+            .style("left", `132px`)
             .style("top", `134px`)
     d3.select("#denoise-latent-cycle-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `142px`)
+            .style("left", `235px`)
             .style("opacity", "0.2")
     d3.select("#unet-in-noise-container")
         .transition()
@@ -803,19 +804,19 @@ function latentDenoiserClicked(e) {
     d3.select("#denoise-latent-out-noise-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `735px`)
+            .style("left", `652px`)
     d3.select("#decoder-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `800px`)
+            .style("left", `717px`)
     d3.select("#decoder-generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `877px`)
+            .style("left", `794px`)
     d3.select("#generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `908px`)
+            .style("left", `825px`)
     d3.select("#denoise-latent-cycle-container svg g path")
         .transition()
             .duration(animationDuration)
@@ -827,7 +828,7 @@ function latentDenoiserClicked(e) {
     d3.select("#generate-text-vector-denoise-latent-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("x2", "354.5")
+            .attr("x2", "213")
     d3.select("#denoise-latent-text")
         .transition()
         .duration(animationDuration)
@@ -839,8 +840,8 @@ function latentDenoiserClicked(e) {
         .transition()
             .duration(animationDuration)
             .style("opacity", "100%")
-            .style("top", "181px")
-            .style("left", "173px")
+            .style("top", "324px")
+            .style("left", "390px")
     d3.select("#predict-noise")
         .transition()
             .duration(animationDuration)
@@ -869,7 +870,9 @@ function latentDenoiserClicked(e) {
 }
 
 function reduceLatentDenoiser () {
+    if (window.latentDenoiserL3Expanded) reduceLatentDenoiserL3();
     window.latentDenoiserL2Expanded = false;
+    window.latentDenoiserL3Expanded = false;
     let animationDuration = 1000
 
     d3.select("#denoise-latent-l2-expl-container")
@@ -966,8 +969,10 @@ function reduceLatentDenoiser () {
         .transition()
             .duration(animationDuration)
             .style("opacity", "0%")  // TODO: FIX: Depending on hyperparameter show/hide
-            .style("top", "200px")
-            .style("left", "9px")
+            .style("top", "324px")
+            .style("left", "390px")
+            // .style("top", "200px")
+            // .style("left", "9px")
         .transition()
             .style("display", "none")
         .on("interrupt", function() {
@@ -1006,6 +1011,9 @@ function reduceLatentDenoiser () {
 function expandLatentDenoiserL3 () {
     window.latentDenoiserL3Expanded = true;
     let animationDuration = 1000
+    // ADD Interrupt
+    d3.interrupt(d3.select("#latent-denoiser-l3-expl-container"))    
+
     d3.select("#latent-denoiser-l3-expl-container")    
         .style("display", "block")
         .transition()
@@ -1015,44 +1023,6 @@ function expandLatentDenoiserL3 () {
         .transition()
         .duration(animationDuration)
             .attr("height", "326")
-            .attr("width", "520")
-    d3.select("#denoise-latent-l2-expl-central-line-svg")
-        .select("line")
-            .transition()
-            .duration(animationDuration)
-                .attr("x2", "542")
-    d3.select("#denoise-latent-l2-expl-central-line-svg")
-        .select("text")
-            .transition()
-            .duration(animationDuration)
-                .attr("x", "514")
-    d3.select("#denoise-latent-l2-expl-central-line-svg")
-        .select("circle")
-            .transition()
-            .duration(animationDuration)
-                .attr("cx", "518")
-    d3.select("#denoise-latent-l2-expl-weaken-expl")
-        .transition()
-        .duration(animationDuration)
-            .style("left", "-46px")
-    d3.select("#denoise-latent-out-noise-container")
-        .transition()
-        .duration(animationDuration)
-            .style("left", "755px")
-    d3.select("#decoder-container")
-        .transition()
-        .duration(animationDuration)
-            .style("left", "820px")
-    d3.select("#denoise-latent-cycle")
-        .transition()
-        .duration(animationDuration)
-            .attr("d", "M 637,128.5 l0 -75 a5,5 0 0 0 -5,-5 l-635,0 a5,5 0 0 0 -5,5 l0,75 a5,5 0 0 0 5,5 l47,0")
-    // move text noise
-    d3.select("#denoise-latent-l2-expl-noise-text")
-        .transition()
-        .duration(animationDuration)
-            .style("top", "-28px")
-            .style("left", window.gs==1?"22px":(window.gs==7?"58px":"112px"))
     // add noise border, border color: function of guidance scale
     let borderColors = ["#C8E4F0FF","#A5D2E4FF","#6CB2D0FF"]
     d3.select("#denoise-latent-l2-expl-noise-img")
@@ -1060,7 +1030,6 @@ function expandLatentDenoiserL3 () {
         .duration(animationDuration)
             .style("border-width", `3px`)
             .style("border-color", `${borderColors[1]}`)
-            .style("left", window.gs==1?"26px":(window.gs==7?"62px":"116px"))
     // hide guidance scale expl ...
     d3.select("#unet-guidance-scale-control-dropdown-container")
         .transition()
@@ -1068,45 +1037,37 @@ function expandLatentDenoiserL3 () {
             .style("opacity", "0%")
         .transition()
             .style("display","none")
+        .on("interrupt", function () {
+            d3.select(this).style("display", "block")
+        })
     d3.select("#denoise-latent-l2-expl-guidance-scale-expl-container")
         .transition()
         .duration(animationDuration)
             .style("opacity", "0%")
         .transition()
             .style("display","none")
+        .on("interrupt", function () {
+            d3.select(this).style("display", "block")
+        })
     // move the text Guidance Scale
     d3.select("#unet-guidance-scale-control-text-container")
         .transition()
         .duration(animationDuration)
-            .style("width", "50px")
-            .style("left", "240px")
-            .style("top", "-12px")
-    // move text weaken and arrow
-    d3.select("#denoise-latent-l2-expl-weaken-text")
-        .transition()
-        .duration(animationDuration)
-            .style("left", "152px")
-    d3.select("#denoise-latent-l2-expl-weaken-arrow-svg")
-        .transition()
-        .duration(animationDuration)
-            .style("left", "170px")
-    // elongate unet-minus connecting line 
-    d3.select("#denoise-latent-l2-expl-noise-arrow")
-        .transition()
-        .duration(animationDuration)
-            .attr("d", "M0 0 l200 0 a 10 10 81.46923439005187 0 0 9.889363528682974 -8.516595470697553 l9 -60 a 10 10 81.46923439005187 0 1 9.889363528682974 -8.516595470697553 l 3 0")
-    d3.select("#denoise-latent-l2-expl-question-mark")
-        .transition()
-        .duration(animationDuration)
             .style("opacity", "0%")
         .transition()
-            .style("display", "none")
+            .style("display","none")
+        .on("interrupt", function() {
+            d3.select(this).style("display", "block")
+        })
 }
 
 function reduceLatentDenoiserL3 () {
     window.latentDenoiserL3Expanded = false;
     let animationDuration = 1000
-    // TODO: add interrupt 
+    // ADD interrupt 
+    d3.interrupt(d3.select("#unet-guidance-scale-control-dropdown-container"))
+    d3.interrupt(d3.select("#denoise-latent-l2-expl-guidance-scale-expl-container"))
+    d3.interrupt(d3.select("#denoise-latent-l2-expl-question-mark"))
 
     // Hide L3 Explanations
     d3.select("#latent-denoiser-l3-expl-container")    
@@ -1115,6 +1076,9 @@ function reduceLatentDenoiserL3 () {
             .style("opacity", "0%")
         .transition()
             .style("display", "none")
+        .on("interrupt", function () {
+            d3.select(this).style("display", "block")
+        })
     d3.select("#denoise-latent-rectangle")
         .transition()
         .duration(animationDuration)
