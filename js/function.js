@@ -931,7 +931,7 @@ function reduceLatentDenoiserL2 () {
         .style("cursor", "pointer")
         .transition()
             .duration(animationDuration)
-            .style("width", "150px")
+            .style("width", "145px")
             .style("height", "80px")
             .style("left", "542px")
             .style("top", "0px")
@@ -991,7 +991,7 @@ function reduceLatentDenoiserL2 () {
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("d", `M 0 10 L 30 10 C 42,10 50,24 62,24 L 90 24`)
+            .attr("d", `M 0 10 L 30 10 C 42,10 55,24 67,24 L 95 24`)
     // Text position
     d3.select("#text-vector-generator-latent-denoiser-text")
         .transition()
