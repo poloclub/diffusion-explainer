@@ -106,11 +106,11 @@ d3.select("#prompt-selector-dropdown-container")
             .on("mouseover", function () {
                 let p = d3.select(`#${this.id}`).text()
                 d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
-                d3.select("#generated-image").attr("src", `./assets/img_orig/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#generated-image").attr("src", `./assets/img/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
             })
             .on("mouseout", () => {
                 d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
-                d3.select("#generated-image").attr("src", `./assets/img_orig/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
             })
             .on("click", promptChanged)
 d3.select(`#prompt-selector-dropdown-option-${selectedPromptGroupIdx}`).style("display","none")
@@ -298,7 +298,7 @@ d3.select("#architecture-container")
         .attr("class", "architecture-component-container text-vector-generator-expand-move-to-right  denoise-latent-expand-move-to-right")
         .append("img")
             .attr("id", "generated-image")
-            .attr("src", `./assets/img_orig/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+            .attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
 
 // Guidance scale controller
 d3.select("#architecture-container")

@@ -7,7 +7,7 @@ function promptChanged() {
     d3.select("#improved-latent-img")
         .attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
     d3.select("#generated-image")
-        .attr("src", `./assets/img_orig/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+        .attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
     // collapse dropdown
     window.promptDropdownExpanded = false
     d3.select("#prompt-selector-dropdown").style("display", "none")
@@ -18,6 +18,8 @@ function promptChanged() {
     // change dropdown's display
     d3.select("#prompt-selector-dropdown").selectAll("p").style("display", "block")
     d3.select(`#prompt-selector-dropdown-option-${i}`).style("display","none")
+    // change tokens in text representation generator
+    drawTokens();
 }
 
 function addUmapHighlightNodes(promptNum) {
@@ -183,7 +185,7 @@ function updateStep(timestep) {
     d3.select("#improved-latent-img")
         .attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
     d3.select("#generated-image")
-        .attr("src", `./assets/img_orig/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
+        .attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
 
     // TODO: Comparison view, UMAP update
     // d3.select("#generated-image-2")
@@ -383,7 +385,7 @@ function hyperparamChanged(e, newSeed, newGs) {
     // 1. change the image
     d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${p}/${newSeed}_${newGs}_${timestep}.jpg`)
     d3.select("#denoise-latent-l2-expl-prev-latent-img").attr("src", `./assets/latent_viz/${p}/${newSeed}_${newGs}_${timestep-1}.jpg`)
-    d3.select("#generated-image").attr("src", `./assets/img_orig/${p}/${newSeed}_${newGs}_${timestep}.jpg`)
+    d3.select("#generated-image").attr("src", `./assets/img/${p}/${newSeed}_${newGs}_${timestep}.jpg`)
     
     // 2. change the umap
     // TODO
@@ -393,6 +395,8 @@ function hyperparamChanged(e, newSeed, newGs) {
 function drawTokens() {
     let tokenList = window.selectedPrompt.split(" ")
     let containerId = "text-vector-generator-l2-tokens-container"
+    d3.selectAll("#text-vector-generator-l2-tokens-container > *").remove()
+    d3.select("#text-vector-generator-l2-expl-container").style("display", "block")
     
     d3.select(`#${containerId}`)
         .append("div")
@@ -404,6 +408,8 @@ function drawTokens() {
                 .attr("class", "text-vector-generator-token")
                 .text(tokenList[i])
         let height = +getComputedStyle(document.getElementById(containerId))["height"].slice(0,-2)
+        console.log(getComputedStyle(document.getElementById(containerId))["height"])
+        console.log(height)
         if (height > 70) {
             document.getElementById(containerId).lastChild.remove();
             break;
@@ -718,7 +724,7 @@ function expandLatentDenoiserL2(e) {
     let latentDenoiserExpandedWidth = 323;
     let latentDenoiserExpandedHeight = 263;
     // let latentDenoiserGeneratorOrigWidth =+(getComputedStyle(this).width.slice(0,-2))
-    let latentDenoiserGeneratorOrigWidth = 150;
+    let latentDenoiserGeneratorOrigWidth = 145;
     let animationDuration = 1000
     let movePx = (latentDenoiserExpandedWidth-latentDenoiserGeneratorOrigWidth)/2
     // movePx += 5;
@@ -831,11 +837,11 @@ function expandLatentDenoiserL2(e) {
         .transition()
             .duration(animationDuration)
             .style("top", `${-110}px`)
-            .style("left", `458px`)
+            .style("left", `461px`)
     d3.select("#latent-denoiser-cycle")
         .transition()
             .duration(animationDuration)
-            .attr("d", "M 356.5 135 l 0,0 l0 -55.5 a5,5 0 0 0 -5,-5 l-399,0 a5,5 0 0 0 -5,5 l0,50.5 a5,5 0 0 0 5,5 l0,0")
+            .attr("d", "M 356.5 135 l 0,0 l0 -55.5 a5,5 0 0 0 -5,-5 l-393,0 a5,5 0 0 0 -5,5 l0,50.5 a5,5 0 0 0 5,5 l0,0")
 
     // Change arrow from text vector generator to UNet
     d3.select("#text-vector-generator-latent-denoiser-arrow")

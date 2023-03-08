@@ -383,7 +383,7 @@ svg {
     position: absolute;
     right: 15px;
     width: 100px;
-    top: -16px;
+    top: -25px;
 }
 
 #timestep-0-random-noise-expl-1-1 {
@@ -406,7 +406,7 @@ svg {
     opacity: 0;
     position: absolute;
     left: 427px;
-    top: -49px;
+    top: -56px;
 }
 
 #seed-control-text {
@@ -722,7 +722,9 @@ svg {
 
 #text-vector-generator-l2-tokenizer-out-detailed-expl-text {
     position: relative;
-    top: -48px;
+    top: -39px;
+    left: 50px;
+    font-style: italic;
 }
 
 #text-vector-generator-l2-tokens-container {
