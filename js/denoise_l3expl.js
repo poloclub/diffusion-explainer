@@ -1,9 +1,20 @@
-import {reduceLatentDenoiserL3, hyperparamChanged} from "./function.js"
+import {reduceLatentDenoiserL2, reduceLatentDenoiserL3, hyperparamChanged} from "./function.js"
 
 document.addEventListener("keydown", (e) => {
     if (window.latentDenoiserL3Expanded && e.key == "Escape") reduceLatentDenoiserL3();
 })
 
+document.addEventListener("mouseup", (e) => {
+    if (window.latentDenoiserL2Expanded && window.latentDenoiserL3Expanded) {
+        let latentDenoiserBox = document.getElementById("latent-denoiser-container").getBoundingClientRect()
+        let left = latentDenoiserBox.x
+        let right = latentDenoiserBox.x + latentDenoiserBox.width
+        let top = latentDenoiserBox.y
+        let bottom = latentDenoiserBox.y + latentDenoiserBox.height
+        if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else {reduceLatentDenoiserL3(); reduceLatentDenoiserL2();}
+    }
+})
 let sliderWidth = 250;
 let sliderHeight = 0;
 let tickLength = 15;
@@ -37,13 +48,13 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
     .append("defs")
     .append("linearGradient")
         .attr("id", "latent-denoiser-l3-expl-vis-slider-gradient")
-        .attr("x1", "0%")
+        .attr("x1", "0")
         .attr("y1", "0%")
-        .attr("x2", "100%")
+        .attr("x2", "250")
         .attr("y2", "0%")
         .attr("gradientUnits", "userSpaceOnUse")
         .selectAll("stop")
-        .data([["#d9d9d9", "0%"],["#CBE4EE", "15%"],["#6BB1CF","100%"]])
+        .data([["#b0b0b0", "0%"],["var(--text1)", "10%"],["var(--text2)","40%"],["var(--text3)","100%"]])
         .enter()
             .append("stop")
             .attr("offset", d=>d[1])
@@ -52,13 +63,13 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
     .append("defs")
     .append("linearGradient")
         .attr("id", "latent-denoiser-l3-expl-vis-slider-end-gradient")
-        .attr("x1", "0%")
+        .attr("x1", "250")
         .attr("y1", "0%")
-        .attr("x2", "100%")
+        .attr("x2", "275")
         .attr("y2", "0%")
         .attr("gradientUnits", "userSpaceOnUse")
         .selectAll("stop")
-        .data([["#6BB1CF","0%"],["#FFFFFF","100%"]])
+        .data([["#4d9221ff","0%"],["#4d922100","100%"]])
         .enter()
             .append("stop")
             .attr("offset", d=>d[1])
@@ -68,7 +79,7 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
     .append("g")
     .attr("id", "latent-denoiser-l3-expl-vis-tick-g")
     .selectAll("line")
-        .data([[0,"#D9D9D9"],[1,"#CEDFE6"],[7,"#B3D9E9"],[20,"#6BB1CF"]])
+        .data([[0,"#a0a0a0"],[1,"var(--text1)"],[7,"var(--text2)"],[20,"var(--text3)"]])
         .enter()
         .append("circle")
             .attr("cx", (d,i) => partitions[i]*sliderWidth)
@@ -80,34 +91,31 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
 
 // Drag Functions
 function dragStarted() {
-    d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "#909090")
-    d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#a0a0a0")
+    // d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#a0a0a0")
 }
 function dragged(e) {
     // should move Noise, change border color as well!
-    let borderColors = ["#C8E4F0FF","#A5D2E4FF","#6CB2D0FF"]
     let points = {
         0: [partitions[0]*sliderWidth, (1-partitions[0])*sliderHeight],
         1: [partitions[1]*sliderWidth, (1-partitions[1])*sliderHeight],
         7: [partitions[2]*sliderWidth, (1-partitions[2])*sliderHeight],
         20: [partitions[3]*sliderWidth, (1-partitions[3])*sliderHeight],
     }
-    let defaultNoiseLeftValue = 62
     if ((e.x-points[0][0])**2+(e.y-points[0][1])**2 < (e.x-points[1][0])**2+(e.y-points[1][1])**2) {
         // put circle and line on 0
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
             .attr("x1", points[0][0])
             .attr("y1", points[0][1])
             .attr("x2", points[0][0])
+            .attr("stroke", "#a0a0a0")
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
             .attr("cx", points[0][0])
             .attr("cy", points[0][1])
-        d3.select("#denoise-latent-l2-expl-noise-img")
-            .style("border-color", borderColors[0])
+            .attr("fill", "#a0a0a0")
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
             .attr("d", "M0 0 l 0 -15 C 0 -30, 15.2 -31, 30.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70")
         // TODO: Implement when gs=0
-        hyperparamChanged(e, window.seed, "1.0");  
+        hyperparamChanged(e, window.seed, "0.0");  
         document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 0
     }
     else if ((e.x-points[1][0])**2+(e.y-points[1][1])**2 < (e.x-points[7][0])**2+(e.y-points[7][1])**2) {
@@ -116,11 +124,13 @@ function dragged(e) {
             .attr("x1", points[1][0])
             .attr("y1", points[1][1])
             .attr("x2", points[1][0])
+            .attr("stroke", "var(--text1)")
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
             .attr("cx", points[1][0])
             .attr("cy", points[1][1])
-        d3.select("#denoise-latent-l2-expl-noise-img")
-            .style("border-color", borderColors[0])
+            .attr("fill", "var(--text1)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
+            .attr("d", "M25 0 l 0 -15 C 25 -30, 40.2 -31, 55.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70")
         hyperparamChanged(e, window.seed, "1.0");
         document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 0
     }
@@ -130,11 +140,13 @@ function dragged(e) {
             .attr("x1", points[20][0])
             .attr("y1", points[20][1])
             .attr("x2", points[20][0])
+            .attr("stroke", "var(--text3)")
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
             .attr("cx", points[20][0])
             .attr("cy", points[20][1])
-        d3.select("#denoise-latent-l2-expl-noise-img")
-            .style("border-color", borderColors[2])
+            .attr("fill", "var(--text3)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
+            .attr("d", "M250 0 l 0 -20 C 250 -25, 242.2 -31.5, 237 -32.5 L165 -37.5 C 159.8 -38.5, 152 -40, 152 -45 L152 -70")
         hyperparamChanged(e, window.seed, "20.0");
         document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 2
     }
@@ -144,19 +156,40 @@ function dragged(e) {
             .attr("x1", points[7][0])
             .attr("y1", points[7][1])
             .attr("x2", points[7][0])
+            .attr("stroke", "var(--text2)")
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
             .attr("cx", points[7][0])
             .attr("cy", points[7][1])
-        d3.select("#denoise-latent-l2-expl-noise-img")
-            .style("border-color", borderColors[1])
-        d3.select("#unet-guidance-scale-control-dropdown-select")
+            .attr("fill", "var(--text2)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
+            .attr("d", "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70")
         hyperparamChanged(e, window.seed, "7.0");
         document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 1
     }
 }
 function dragEnded() {
-    d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "#b0b0b0")
-    d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#c0c0c0")
+    let points = {
+        0: [partitions[0]*sliderWidth, (1-partitions[0])*sliderHeight],
+        1: [partitions[1]*sliderWidth, (1-partitions[1])*sliderHeight],
+        7: [partitions[2]*sliderWidth, (1-partitions[2])*sliderHeight],
+        20: [partitions[3]*sliderWidth, (1-partitions[3])*sliderHeight],
+    }
+    if ((e.x-points[0][0])**2+(e.y-points[0][1])**2 < (e.x-points[1][0])**2+(e.y-points[1][1])**2) {
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#a0a0a0")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "#a0a0a0")
+    }
+    else if ((e.x-points[1][0])**2+(e.y-points[1][1])**2 < (e.x-points[7][0])**2+(e.y-points[7][1])**2) {
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#var(--text1)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "var(--text1)")
+    }
+    else if ((e.x-points[20][0])**2+(e.y-points[20][1])**2 < (e.x-points[7][0])**2+(e.y-points[7][1])**2) {
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#var(--text3)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "var(--text3)")
+    }
+    else {
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "var(--text2)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "var(--text2)")
+    }
 }
 let drag = d3.drag()
     .on("start", dragStarted)
@@ -174,7 +207,7 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
             // .attr("d", `M${x0} 0 l 0 -${30-r*2} c 0 -${r}, ${(destX-x0)*0.15} -31.5, ${(destX-x0)/4} -32.5 L 139 -37.5  L152 -40 L${destX} ${destY}`)
             .attr("d", "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70")
             .attr("fill", "none")
-            .attr("stroke", "#c0c0c0")
+            .attr("stroke", "var(--text2)")
             .attr("stroke-width", "2px")
             .call(drag)
 d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-g")
@@ -183,7 +216,7 @@ d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-g")
         .attr("cx", sliderWidth*partitions[2])
         .attr("cy", sliderHeight*(1-partitions[2]))
         .attr("r", "5.5")
-        .attr("fill", "#b0b0b0")
+        .attr("fill", "var(--text2)")
         .attr("stroke", "white")
         .attr("stroke-width", "2.5px")
         .style("cursor", "pointer")
@@ -192,7 +225,7 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
     .append("g")
         .attr("id", "latent-denoiser-l3-expl-vis-tick-label-g")
         .selectAll("text")
-        .data([[0,"#a9a9a9"],[1,"#C8E4F0"],[7,"#A5D2E4"],[20,"#6CB2D0"]])
+        .data([[0,"#a0a0a0"],[1,"var(--text1)"],[7,"var(--text2)"],[20,"var(--text3)"]])
         .enter()
         .append("text")
             .text(d=>d[0])

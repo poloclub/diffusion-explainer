@@ -1,22 +1,34 @@
-import {reduceLatentDenoiser,expandLatentDenoiserL3} from "./function.js"
+import {reduceLatentDenoiserL2,expandLatentDenoiserL3} from "./function.js"
 
 document.addEventListener("keydown", (e) => {
-    if (window.latentDenoiserL2Expanded && !window.latentDenoiserL3Expanded && e.key == "Escape") reduceLatentDenoiser();
+    if (window.latentDenoiserL2Expanded && !window.latentDenoiserL3Expanded && e.key == "Escape") reduceLatentDenoiserL2();
+})
+
+document.addEventListener("mouseup", (e) => {
+    if (window.latentDenoiserL2Expanded && !window.latentDenoiserL3Expanded) {
+        let latentDenoiserBox = document.getElementById("latent-denoiser-container").getBoundingClientRect()
+        let left = latentDenoiserBox.x
+        let right = latentDenoiserBox.x + latentDenoiserBox.width
+        let top = latentDenoiserBox.y
+        let bottom = latentDenoiserBox.y + latentDenoiserBox.height
+        if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else reduceLatentDenoiserL2();
+    }
 })
 
 // reduce button
 d3.select("#architecture-container")
     .append("div")
-    .attr("id", "denoise-latent-l2-expl-container")
+    .attr("id", "latent-denoiser-l2-expl-container")
         .append("img")
         .attr("id", "denoise-latent-l2-expl-reduce-button")
         .attr("src", "./icons/reduce.svg")
         .attr("alt", "Reduce SVG")
         .attr("height", `20px`)
-        .on("click", reduceLatentDenoiser)
+        .on("click", reduceLatentDenoiserL2)
 
 // TODO: ADD latent images after loading d3.json data
-d3.select("#denoise-latent-l2-expl-container")
+d3.select("#latent-denoiser-l2-expl-container")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-prev-latent-container")
         .append("div")
@@ -25,14 +37,15 @@ d3.select("#denoise-latent-l2-expl-container")
             .on("mouseout", () => d3.select("#denoise-latent-l2-expl-central-line-timestep-expl-text").style("display", "none"))
             .append("img")
                 .attr("id", "denoise-latent-l2-expl-prev-latent-img")
+                .attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep-1}.jpg`)
 d3.select("#denoise-latent-l2-expl-prev-latent-image-container")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-prev-latent-timestep")
-        .text("30")
+        .text(window.timestep-1)
 d3.select("#denoise-latent-l2-expl-prev-latent-container")
         .append("div")
             .attr("id", "denoise-latent-l2-expl-prev-latent-text")
-            .text("Latent from timestep 30")
+            .text(`Representation of timestep ${window.timestep-1}`)
 
 
 // latent to UNet arrow
@@ -42,30 +55,26 @@ let dy = 24
 let dx = 6
 let angle = Math.atan(dx/dy);
 let r = 10
-d3.select("#denoise-latent-l2-expl-container")
+d3.select("#latent-denoiser-l2-expl-container")
     .append("svg")
         .attr("id", "denoise-latent-l2-expl-latent-unet-arrow-svg")
         .append("g")
         .append("path")
             .attr("id", "denoise-latent-l2-expl-latent-unet-arrow")
+            .attr("class", "architecture-arrow-img")
+            .attr("marker-end", "url(#architecture-arrow-img-head)")
             .attr("d", `M0 0 l20 0 a ${r} ${r} ${90-angle*180/Math.PI} 0 1 ${r*Math.cos(angle)} ${r-r*Math.sin(angle)} l${dx} ${dy} a ${r} ${r} ${90-angle*180/Math.PI} 0 0 ${r*Math.cos(angle)} ${r-r*Math.sin(angle)} l 3 0`)
-            .attr("fill", "none")
-            .attr("stroke", architectureLineColor)
-            .attr("stroke-width", architectureLineWidth)
-            .attr("marker-end", "url(#architecture-arrow-head)")
 
 // UNet
-d3.select("#denoise-latent-l2-expl-container")
+d3.select("#latent-denoiser-l2-expl-container")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-unet-container")
         .append("svg")
             .attr("id", "denoise-latent-l2-expl-unet-svg")
             .append("rect")
                 .attr("id", "denoise-latent-l2-expl-unet-rect")
-                .attr("class", "architecture-rectangle")
                 .attr("width", "85")
                 .attr("height", "85")
-                .attr("fill", "#f4f4f4")
                 .attr("rx", "5")
                 .attr("ry", "5")
 d3.select("#denoise-latent-l2-expl-unet-container")
@@ -87,7 +96,7 @@ let depth = 4;
 let lineAngle = Math.atan(x_/y_)
 let dx_=depth*Math.sin(lineAngle)
 let dy_=-depth*Math.cos(lineAngle)
-d3.select("#denoise-latent-l2-expl-container")
+d3.select("#latent-denoiser-l2-expl-container")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-guidance-scale-expl-container")
         .append("svg")
@@ -103,7 +112,7 @@ d3.select("#denoise-latent-l2-expl-guidance-scale-expl-container")
         .attr("id", "denoise-latent-l2-expl-guidance-scale-expl-text")
 d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
     .append("div")
-        .text("controls how well the denoised latent")
+        .text("controls how well the image representation")
 d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
     .append("div")
         .text("adheres to your text prompt.")
@@ -120,7 +129,7 @@ d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
 dy = 50
 dx = 7
 angle = Math.atan(dx/dy);
-d3.select("#denoise-latent-l2-expl-container")
+d3.select("#latent-denoiser-l2-expl-container")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-noise-container")
         .append("svg")
@@ -176,7 +185,7 @@ d3.select("#denoise-latent-l2-expl-noise-container")
                 .attr("y1", "0%")
                 .attr("y2", "0%")
                 .selectAll("stop")
-                .data([["0%", "#b0b0b0"], ["30%", "#b0b0b0"], ["100%", "#f9f9f9"]])
+                .data([["0%", "var(--img2)"], ["30%", "var(--img2)"], ["100%", "#de77ae10"]])
                 .enter()
                 .append("stop")
                 .attr("offset", d => d[0])
@@ -188,8 +197,8 @@ d3.select("#denoise-latent-l2-expl-noise-container")
 
 // central branch
 let centralLineWidth = 5;
-let centralLineColor = "#808080";
-d3.select("#denoise-latent-l2-expl-container")
+let centralLineColor = "var(--img4)";
+d3.select("#latent-denoiser-l2-expl-container")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-central-line-container")
         .append("svg")
@@ -197,7 +206,7 @@ d3.select("#denoise-latent-l2-expl-container")
             .append("line")
                 .attr("x1", "0")
                 .attr("y1", "10")
-                .attr("x2", "342")
+                .attr("x2", "336")
                 .attr("y2", "10")
                 .attr("stroke-width", `${centralLineWidth}px`)
                 .attr("stroke", `${centralLineColor}`)
@@ -209,7 +218,7 @@ d3.select("#denoise-latent-l2-expl-central-line-svg")
         .attr("cy", "10")
         .attr("fill", "white")
         .attr("stroke-width", `${centralLineWidth}px`)
-        .attr("stroke", `#dadada`)
+        .attr("stroke", `var(--img1)`)
 d3.select("#denoise-latent-l2-expl-central-line-svg")
     .append("text")
     .attr("id", "denoise-latent-l2-expl-central-line-minus-text")
@@ -244,12 +253,12 @@ d3.select("#denoise-latent-l2-expl-central-line-timestep-expl-text")
         .attr("id", "denoise-latent-l2-expl-central-line-timestep-expl-text-3")
         .text("that the latent has more noise.")
 
-d3.select("#denoise-latent-l2-expl-container")
+d3.select("#latent-denoiser-l2-expl-container")
     .append("svg")
         .attr("id", "denoise-latent-l2-expl-text-vectors-arrow-svg")
-    .append("use")
-        .attr("href", "#generate-text-vector-denoise-latent-arrow")
-        .attr("id", "denoise-latent-l2-expl-text-vectors-arrow-use")
+        .append("use")
+            .attr("href", "#text-vector-generator-latent-denoiser-arrow")
+            .attr("id", "denoise-latent-l2-expl-text-vectors-arrow-use")
 
 d3.select("#architecture-container")
     .append("div")

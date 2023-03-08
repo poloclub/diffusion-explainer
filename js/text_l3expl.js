@@ -4,20 +4,21 @@ document.addEventListener("keydown", (e) => {
         window.textVectorGeneratorL3Expanded = false;
 })
 
-d3.select("#generate-text-vector-l2-encoder-container")
-    .on("mouseover", function() {
-        d3.select("#generate-text-vector-l2-encoder-rect").attr("fill", "#d0d0d0")
-    })
-    .on("mouseout", function() {
-        d3.select("#generate-text-vector-l2-encoder-rect").attr("fill", "#f4f4f4")
-    })
-    .on("click", function(e) {
-        window.textVectorGeneratorL3Expanded = true;
-        d3.select("#generate-text-vector-l3-expl-container")
-            .style("display", "block")
-            .style("left", `${e.x+22}px`)
-            .style("top", `${e.y-323}px`)
-    })
+document.addEventListener("mouseup", (e) => {
+    if (window.textVectorGeneratorL2Expanded && window.textVectorGeneratorL3Expanded) {
+        let textVectorGeneratorBox = document.getElementById("generate-text-vector-l3-expl-container").getBoundingClientRect()
+        let left = textVectorGeneratorBox.x
+        let right = textVectorGeneratorBox.x + textVectorGeneratorBox.width
+        let top = textVectorGeneratorBox.y
+        let bottom = textVectorGeneratorBox.y + textVectorGeneratorBox.height
+        if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else {
+            d3.select("#generate-text-vector-l3-expl-container").style("display", "none")
+            window.textVectorGeneratorL3Expanded = false;
+        }
+    }
+})
+
 
 d3.select("#architecture-container")
     .append("div")

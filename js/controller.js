@@ -1,110 +1,12 @@
-import {promptSelectorImageclicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updatePromptList} from "./function.js";
-
-let selectorDiv = d3.select("#prompt-selector")
-selectorDiv.append("div")
-    .text("What text prompt do you want to use?")
-    .attr("id", "prompt-selector-text")
-
-let selectorImagesDiv = selectorDiv.append("div").attr("id", "prompt-selector-images-container")
-document.getElementById("prompt-selector-images-container").leftmostImageIdx = 0;
-document.getElementById("prompt-selector-images-container").imagePerScreen = 4;
-window.selectedPromptGroupIdx = 0;
-window.seed = 0;
-window.gs = "7.0";
-window.comparison = false;
-
-d3.json("./assets/json/data.json").then(
-    function (data) {
-        window.selectedPromptGroupName = Object.keys(data)[selectedPromptGroupIdx]
-        document.getElementById("prompt-selector-images-container").lastImageIdx = Object.keys(data).length-1;
-        Object.entries(data).forEach((d, i) => {
-            let promptGroupName = d[0];
-            let promptGroupData = d[1];
-
-            selectorImagesDiv.append("div")
-                .attr("class", "prompt-selector-image-container prompt-selector-image-container-unselected")
-                .attr("id", `prompt-selector-image-container-${i}`)
-                .on("click", promptSelectorImageclicked)
-                .append("img")
-                    .attr("class", "prompt-selector-image prompt-selector-image-unselected")
-                    .attr("id", `prompt-selector-image-${i}`)
-                    .attr("src", `./assets/images/${promptGroupName}/${promptGroupData["thumbnail"]}`)
-                    .attr("height", `60px`)
-
-            document.getElementById(`prompt-selector-image-container-${i}`).promptGroupIdx = i;
-            document.getElementById(`prompt-selector-image-container-${i}`).selected = false;
-
-            if (i == window.selectedPromptGroupIdx) {
-                document.getElementById(`prompt-selector-image-container-${i}`).selected = true;
-                d3.select(`#prompt-selector-image-${i}`).attr("class", "prompt-selector-image prompt-selector-image-selected")
-                d3.select(`#prompt-selector-image-container-${i}`).attr("class", "prompt-selector-image-container prompt-selector-image-container-selected")
-            }
-        });
-        
-        let selectedData = data[window.selectedPromptGroupName];
-        selectorDiv.append("div")
-            .attr("id", "prompt-1-container")
-            .attr("class", "prompt-select")
-
-                
-        selectorDiv.append("div")
-            .attr("id", "prompt-2-container")
-            .attr("class", "prompt-select")
-        window.selectedPrompts = selectedData["prompts"];
-        window.selectedPrompt1 = selectedData["prompts"][0];
-        window.selectedPrompt2 = selectedData["prompts"][1];
-        updatePromptList(selectedData["prompts"])
-
-        let r = 7.5;
-        let promptCompareDiv = selectorDiv.append("div")
-            .attr("id", "prompt-compare")
-        let promptCompareMinusButtonDiv = promptCompareDiv.append("div")
-            .attr("id", "prompt-compare-minus-button")
-            .style("height", `${2*r}px`)
-            .style("width", `${2*r}px`)
-        let promptCompareAddButtonDiv = promptCompareDiv.append("div")
-            .attr("id", "prompt-compare-add-button")
-            .style("height", `${2*r}px`)
-            .style("width", `${2*r}px`)
-            .on("click", promptCompareClicked);
-        promptCompareMinusButtonDiv.append("svg")
-            .attr("id", "prompt-compare-minus-button-circle")
-            .attr("height", 2*r)
-            .attr("width", 2*r)
-            .append("circle")
-                .attr("cx", r)
-                .attr("cy", r)
-                .attr("r", r)
-                .attr("fill", "#d0d0d0")
-        promptCompareMinusButtonDiv.append("div")
-            .text("-")
-            .attr("id", "prompt-compare-minus-button-minus")
-        promptCompareAddButtonDiv.append("svg")
-            .attr("id", "prompt-compare-add-button-circle")
-            .attr("height", 2*r)
-            .attr("width", 2*r)
-            .append("circle")
-                .attr("cx", r)
-                .attr("cy", r)
-                .attr("r", r)
-                .attr("fill", "#d0d0d0")
-        promptCompareAddButtonDiv.append("div")
-            .text("+")
-            .attr("id", "prompt-compare-add-button-plus")
-        promptCompareDiv.append("div")
-            .attr("id", "prompt-compare-text")
-            .text("Compare with other text prompts")
-    });
+import {timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked} from "./function.js";
 
 let controllerDiv = d3.select("#controller")
-document.getElementById("controller").timestep = 30;
-document.getElementById("controller").playing = true;  // TODO: change to true (auto-play)
+let controllerButtonsDiv = controllerDiv.append("div").attr("id", "controller-buttons")
 
-let controllerButtonsDiv = controllerDiv.append("div")
-    .attr("id", "controller-buttons")
-let buttonBackgroundRadius = 19;
-let buttonBackgroundColor = "#646464";
-let buttonHeight = 24;
+let buttonBackgroundRadius = 12;
+let buttonBackgroundColor = "#d0d0d0";
+let buttonHeight = 16;
+
 controllerButtonsDiv.append("div")
     .attr("id", "controller-button-backward-container")
     .attr("class", "controller-button-container")
@@ -112,10 +14,15 @@ controllerButtonsDiv.append("div")
         .attr("id", "controller-button-backward-background")
         .attr("class", "controller-button-background")
         .append("circle")
+            .attr("id", "controller-button-backward-circle")
+            .attr("class", "controller-button-circle")
             .attr("fill", buttonBackgroundColor)
             .attr("r", buttonBackgroundRadius)
             .attr("cx", buttonBackgroundRadius)
             .attr("cy", buttonBackgroundRadius)
+            .on("mouseover", controllerButtonHovered)
+            .on("mouseout", controllerButtonMouseout)
+            .on("click", controllerButtonClicked)
 d3.select("#controller-button-backward-container")
     .append("img")
         .attr("class", "controller-button")
@@ -129,11 +36,18 @@ controllerButtonsDiv.append("div")
     .append("svg")
         .attr("id", "controller-button-play-background")
         .attr("class", "controller-button-background")
+        .style("left", `4.5px`)
+        .style("top", `4.5px`)
         .append("circle")
+            .attr("id", "controller-button-play-circle")
+            .attr("class", "controller-button-circle")
             .attr("fill", buttonBackgroundColor)
-            .attr("r", buttonBackgroundRadius*2)
-            .attr("cx", buttonBackgroundRadius*2)
-            .attr("cy", buttonBackgroundRadius*2)
+            .attr("r", buttonBackgroundRadius*1.5)
+            .attr("cx", buttonBackgroundRadius*1.5)
+            .attr("cy", buttonBackgroundRadius*1.5)
+            .on("mouseover", controllerButtonHovered)
+            .on("mouseout", controllerButtonMouseout)
+            .on("click", controllerButtonClicked)
 d3.select("#controller-button-play-container")
     .append("img")
         .attr("class", "controller-button")
@@ -156,10 +70,15 @@ controllerButtonsDiv.append("div")
         .attr("id", "controller-button-forward-background")
         .attr("class", "controller-button-background")
         .append("circle")
+            .attr("id", "controller-button-forward-circle")
+            .attr("class", "controller-button-circle")
             .attr("fill", buttonBackgroundColor)
             .attr("r", buttonBackgroundRadius)
             .attr("cx", buttonBackgroundRadius)
             .attr("cy", buttonBackgroundRadius)
+            .on("mouseover", controllerButtonHovered)
+            .on("mouseout", controllerButtonMouseout)
+            .on("click", controllerButtonClicked)
 d3.select("#controller-button-forward-container")
     .append("img")
         .attr("class", "controller-button")
@@ -167,30 +86,9 @@ d3.select("#controller-button-forward-container")
         .attr("alt", "Forward Step SVG")
         .attr("height", `${buttonHeight}px`)
 
-controllerButtonsDiv.append("div")
-    .attr("id", "controller-button-repeat-container")
-    .attr("class", "controller-button-container")
-    .append("svg")
-        .attr("id", "controller-button-forward-background")
-        .attr("class", "controller-button-background")
-        .append("circle")
-            .attr("fill", buttonBackgroundColor)
-            .attr("r", buttonBackgroundRadius)
-            .attr("cx", buttonBackgroundRadius)
-            .attr("cy", buttonBackgroundRadius)
-d3.select("#controller-button-repeat-container")
-    .append("img")
-        .attr("class", "controller-button")
-        .attr("src", "./icons/replay.svg")
-        .attr("alt", "Replay SVG")
-        .attr("height", `${buttonHeight}px`)
-
 d3.selectAll(".controller-button-container")
     .style("height", `${buttonBackgroundRadius*2}px`)
     .style("width", `${buttonBackgroundRadius*2}px`)
-    .on("mouseover", controllerButtonHovered)
-    .on("mouseout", controllerButtonMouseout)
-    .on("click", controllerButtonClicked)
 d3.selectAll(".controller-button-background")
     .style("height", `${buttonBackgroundRadius*2}px`)
     .style("width", `${buttonBackgroundRadius*2}px`)
@@ -217,10 +115,9 @@ controllerTimestepDiv.append("div")
     .attr("id", "controller-timestep-slider-container")
     .append("input")
         .attr("type", "range")
-        .attr("min", "0")
+        .attr("min", "1")
         .attr("max", "50")
         .attr("value", "30")
         .attr("id", "controller-timestep-slider")
         .on("input", timestepSliderFunction)
-
 // controllerPlayButtonClicked();  // TODO: UNCOMMENT

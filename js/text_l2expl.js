@@ -1,100 +1,125 @@
-import {reduceTextVectorGenerator} from "./function.js"
+import {reduceTextVectorGeneratorL2, drawTokens, drawTextVectors} from "./function.js"
 
 document.addEventListener("keydown", (e) => {
-    if (window.textVectorGeneratorL2Expanded && !window.textVectorGeneratorL3Expanded && e.key == "Escape") reduceTextVectorGenerator();
+    if (window.textVectorGeneratorL2Expanded && !window.textVectorGeneratorL3Expanded && e.key == "Escape") reduceTextVectorGeneratorL2();
+})
+
+document.addEventListener("mouseup", (e) => {
+    if (window.textVectorGeneratorL2Expanded && !window.textVectorGeneratorL3Expanded) {
+        let textVectorGeneratorBox = document.getElementById("text-vector-generator-container").getBoundingClientRect()
+        let left = textVectorGeneratorBox.x
+        let right = textVectorGeneratorBox.x + textVectorGeneratorBox.width
+        let top = textVectorGeneratorBox.y
+        let bottom = textVectorGeneratorBox.y + textVectorGeneratorBox.height
+        if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else {reduceTextVectorGeneratorL2();}
+    }
 })
 
 let textGeneratorL2ExplDiv = d3.select("#architecture-container")
     .append("div")
-    .attr("id", "generate-text-vector-l2-expl-container")
+    .attr("id", "text-vector-generator-l2-expl-container")
 
-d3.select("#generate-text-vector-l2-expl-container")
+// leave button
+textGeneratorL2ExplDiv
     .append("img") 
-        .attr("id", "generate-text-vector-l2-expl-reduce-button")
+        .attr("id", "text-vector-generator-l2-expl-reduce-button")
         .attr("src", "./icons/reduce.svg")
         .attr("alt", "Reduce SVG")
         .attr("height", `20px`)
-        .on("click", reduceTextVectorGenerator)
+        .on("click", reduceTextVectorGeneratorL2)
 
-let textGeneratorL2ExplTokenizerDiv = textGeneratorL2ExplDiv.append("div")
-    .attr("id", "generate-text-vector-l2-tokenizer-container")
-textGeneratorL2ExplTokenizerDiv.append("svg")
-    .append("rect")
-        .attr("class", "architecture-rect")
-        .attr("width", "85")
-        .attr("height", "33")
-        .attr("fill", "#f4f4f4")
-        .attr("rx", "5")
-        .attr("ry", "5")
-textGeneratorL2ExplTokenizerDiv.append("div")
-.text("Tokenizer")
-    .attr("id", "generate-text-vector-l2-tokenizer-text")
-    .attr("class", "architecture-text")
+// tokenizer
+textGeneratorL2ExplDiv.append("div")
+    .attr("id", "text-vector-generator-l2-tokenizer-container")
+    .text("Tokenizer")
 
-let textGeneratorL2ExplTokenizerEncoderDiv = textGeneratorL2ExplDiv.append("div")
-    .attr("id", "generate-text-vector-l2-tokenizer-encoder-container")
-textGeneratorL2ExplTokenizerEncoderDiv
-    .append("svg")
-    .attr("id", "generate-text-vector-l2-tokenizer-encoder-token-arrow-svg")
-    .append("g")
-    .append("line")
-        .attr("id", "generate-text-vector-l2-tokenizer-encoder-arrow")
-        .attr("x1", "0")
-        .attr("x2", "136")
-        .attr("y1", "10")
-        .attr("y2", "10")
-        .attr("marker-end", "url(#architecture-arrow-head)")
-        .attr("stroke-width", "2")
-        .attr("stroke", "#b0b0b0")
-textGeneratorL2ExplTokenizerEncoderDiv
+textGeneratorL2ExplDiv
     .append("div")
-    .attr("id", "generate-text-vector-l2-tokenizer-encoder-expl-container")
-d3.select("#generate-text-vector-l2-tokenizer-encoder-expl-container")
-    .append("svg")
-        .attr("id", "generate-text-vector-l2-tokenizer-encoder-expl-arrow")
-        .append("g")
-        .append("path")
-            .attr("d", "M 15 10 C 20 17, 35 17, 40 10")
-            .attr("stroke", "#bdbdbd")
-            .attr("fill", "transparent")
-d3.select("#generate-text-vector-l2-tokenizer-encoder-expl-arrow g")
+        .attr("id", "text-vector-generator-l2-tokenizer-text-encoder-arrow-container")
+        .append("svg")
+            .attr("id", "text-vector-generator-l2-tokenizer-text-encoder-arrow-svg")
+            .append("g")
+            .append("line")
+                .attr("id", "text-vector-generator-l2-tokenizer-text-encoder-arrow")
+                .attr("class", "architecture-arrow-text")
+                .attr("x1", "0")
+                .attr("x2", "128")
+                .attr("y1", "10")
+                .attr("y2", "10")
+                .attr("marker-end", "url(#architecture-arrow-text-head)")
+textGeneratorL2ExplDiv
+    .append("div")
+        .attr("id", "text-vector-generator-l2-tokenizer-out-expl-text")
+        .text("77 tokens")
+
+// Arrow and explain truncate/padding
+textGeneratorL2ExplDiv
+    .append("div")
+        .attr("id", "text-vector-generator-l2-tokenizer-out-detailed-expl-container")
+        .append("svg")
+            .attr("id", "text-vector-generator-l2-tokenizer-out-detailed-expl-arrow")
+            .append("g")
+            .append("path")
+                .attr("d", "M 15 10 C 20 17, 35 17, 40 10")
+                .attr("stroke", "#bdbdbd")
+                .attr("fill", "transparent")
+d3.select("#text-vector-generator-l2-tokenizer-out-detailed-expl-arrow g")
     .append("path")
-    .attr("d", "M 15 10 l 3.5 -1")
+    .attr("d", "M 40 10 l -3.5 1")
     .attr("stroke", "#bdbdbd")
     .attr("fill", "transparent")
-d3.select("#generate-text-vector-l2-tokenizer-encoder-expl-arrow g")
+d3.select("#text-vector-generator-l2-tokenizer-out-detailed-expl-arrow g")
     .append("path")
-    .attr("d", "M 15 10 l 1 4")
+    .attr("d", "M 40 10 l -1 4")
     .attr("stroke", "#bdbdbd")
     .attr("fill", "transparent")
-d3.select("#generate-text-vector-l2-tokenizer-encoder-expl-container")
+d3.select("#text-vector-generator-l2-tokenizer-out-detailed-expl-container")
     .append("div")
-    .attr("id", "generate-text-vector-l2-tokenizer-encoder-expl-text")
-    .text("77 tokens")
-d3.select("#generate-text-vector-l2-tokenizer-encoder-expl-container")
+        .attr("id", "text-vector-generator-l2-tokenizer-out-detailed-expl-text")
+        .text("Truncate if prompt consists of more than 77 tokens Pad with <end> if less than 77 tokens")
+
+// Add tokens (implement this at function and import)
+textGeneratorL2ExplDiv
     .append("div")
-    .attr("id", "generate-text-vector-l2-tokenizer-encoder-expl-text-details")
-    .text("Truncate if prompt consists of more than 77 tokens Pad with <end> if less than 77 tokens")
+    .attr("id", "text-vector-generator-l2-tokens-container")
+drawTokens()
 
-let textGeneratorL2ExplEncoderDiv = textGeneratorL2ExplDiv.append("div")
-    .attr("id", "generate-text-vector-l2-encoder-container")
-textGeneratorL2ExplEncoderDiv.append("svg")
-    .append("rect")
-        .attr("class", "architecture-rect")
-        .attr("id", "generate-text-vector-l2-encoder-rect")
-        .attr("width", "85")
-        .attr("height", "50")
-        .attr("fill", "#f4f4f4")
-        .attr("rx", "5")
-        .attr("ry", "5")
-textGeneratorL2ExplEncoderDiv.append("div")
-    .text("Token Encoder")
-        .attr("id", "generate-text-vector-l2-encoder-text")
-        .attr("class", "architecture-text")
-
-d3.select("#generate-text-vector-l2-expl-container")
+// Text Encoder
+textGeneratorL2ExplDiv.append("div")
+    .attr("id", "text-vector-generator-l2-text-encoder-container")
+    .text("Text Encoder")
+    .on("mouseover", () => {
+        d3.select(`#text-vector-generator-l2-text-encoder-container`).style("background-color", "var(--text1)")
+    })
+    .on("mouseout", () => {
+        d3.select(`#text-vector-generator-l2-text-encoder-container`).style("background-color", "var(--text0)")
+    })
+    .on("click", (e) => {
+        window.textVectorGeneratorL3Expanded = true;
+        console.log(e.x, e.y)
+        d3.select("#generate-text-vector-l3-expl-container")
+            .style("display", "block")
+            .style("left", `${e.x-235}px`)
+            .style("top", `${e.y-210}px`)
+    })
+textGeneratorL2ExplDiv
     .append("div")
-    .attr("id", "generate-text-vector-l2-encoder-expl-text")
-    .text("768D vector for each token")
+        .attr("id", "text-vector-generator-l2-text-encoder-expl-text")
+        .text("768D vector for each token")
+textGeneratorL2ExplDiv
+    .append("div")
+        .attr("id", "text-vector-generator-l2-vectors-container")
+drawTextVectors()
 
-d3.select("#architecture-container").append("div").attr("id", "generate-text-vector-l2-cover")
+textGeneratorL2ExplDiv
+    .append("svg")
+        .attr("id", "text-vector-generator-l2-expl-prompt-text-vector-arrow-svg")
+        .append("use")
+            .attr("href", "#prompt-text-vector-generator-arrow")
+            .attr("id", "text-vector-generator-l2-expl-prompt-text-vector-arrow-use")
+
+// covers
+d3.select("#architecture-container").append("div").attr("id", "text-vector-generator-l2-left-cover")
+d3.select("#architecture-container").append("div").attr("id", "text-vector-generator-l2-right-cover")
+
