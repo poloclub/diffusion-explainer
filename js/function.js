@@ -20,6 +20,7 @@ function promptChanged() {
     d3.select(`#prompt-selector-dropdown-option-${i}`).style("display","none")
     // change tokens in text representation generator
     drawTokens();
+    drawTextVectors();
 }
 
 function addUmapHighlightNodes(promptNum) {
@@ -169,7 +170,7 @@ function controllerPlayButtonClicked() {
 
 function increaseStep() {
     let timestep = window.timestep + 1;
-    if (timestep > 50) timestep = 0;
+    if (timestep > 50) timestep = 1;
     updateStep(timestep);
 }
 
@@ -209,7 +210,7 @@ function updateStep(timestep) {
 
     // Latent denoiser l2 expl update
     d3.select("#denoise-latent-l2-expl-prev-latent-timestep").text(timestep-1)
-    d3.select("#denoise-latent-l2-expl-prev-latent-text").text(`Latent from timestep ${timestep-1}`)
+    d3.select("#denoise-latent-l2-expl-prev-latent-text").text(`Representation of timestep ${window.timestep-1}`)
     d3.select("#improved-latent-timestep").text(timestep)
     d3.select("#denoise-latent-l2-expl-prev-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep-1}.jpg`)
 }
@@ -223,6 +224,9 @@ function controllerPauseButtonClicked() {
     window.playing = false;
     d3.select("#latent-denoiser-cycle")
         .style("animation-play-state", "paused")
+    d3.select("#denoise-latent-l2-expl-central-line-arrow")
+        .style("animation-play-state", "paused")
+    //     .attr("stroke", "var(--img4)")
 }
 
 function timestepSliderFunction(){
@@ -233,6 +237,9 @@ function timestepSliderFunction(){
 
 function animateArchCycle() {
     d3.select("#latent-denoiser-cycle").style("animation-play-state", "")
+    d3.select("#denoise-latent-l2-expl-central-line-arrow")
+        .style("animation-play-state", "")
+        // .attr("stroke", "url(#denoise-latent-l2-expl-central-line-arrow-lineargradient)")
 }
 
 function drawUmap(data) {
@@ -312,68 +319,40 @@ function seedChanged(e) {
 function gsChanged(e) {
     // when guidance scale is changed
     let newGs = d3.select(this).property('value');
+    console.log(newGs)
     hyperparamChanged(e, window.seed, newGs);
-    // TODO: change the slider position of l3 expl + if slider position changed, call gsChanged
-    let sliderWidth = 120;
-    let sliderHeight = 120;
-    let partitions = [0,0.25,0.55,1.]
-    let borderColors = ["#C8E4F0FF","#A5D2E4FF","#6CB2D0FF"]
+    // TODO: change the slider position of l3 expl 
+    let sliderWidth = 250;
+    let sliderHeight = 0;
+    let partitions = [0,0.1,0.4,1.]
+    let colors = {0: "#a0a0a0", 1: "var(--text1)", 7: "var(--text2)", 20: "var(--text3)"}
+    let path = {
+        0: "M0 0 l 0 -15 C 0 -30, 15.2 -31, 30.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
+        1: "M25 0 l 0 -15 C 25 -30, 40.2 -31, 55.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
+        7: "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70", 
+        20: "M250 0 l 0 -20 C 250 -25, 242.2 -31.5, 237 -32.5 L165 -37.5 C 159.8 -38.5, 152 -40, 152 -45 L152 -70"
+    }
     let points = {
+        0: [partitions[0]*sliderWidth, (1-partitions[0])*sliderHeight],
         1: [partitions[1]*sliderWidth, (1-partitions[1])*sliderHeight],
         7: [partitions[2]*sliderWidth, (1-partitions[2])*sliderHeight],
         20: [partitions[3]*sliderWidth, (1-partitions[3])*sliderHeight],
     }
-    if (newGs == 1) {
+    function moveThumb(gs) {
+        gs = +(gs)
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("x1", points[1][0])
-            .attr("y1", points[1][1])
-            .attr("x2", points[1][0])
+            .attr("x1", points[gs][0])
+            .attr("y1", points[gs][1])
+            .attr("x2", points[gs][0])
+            .attr("stroke", colors[gs])
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
-            .attr("cx", points[1][0])
-            .attr("cy", points[1][1])
-        d3.select("#denoise-latent-l2-expl-noise-img")
-            .style("border-color", borderColors[0])
-        if (window.latentDenoiserL3Expanded) {
-            d3.select("#denoise-latent-l2-expl-noise-img")
-                .style("left", `${defaultNoiseLeftValue+points[1][0]-points[7][0]}px`)
-            d3.select("#denoise-latent-l2-expl-noise-text")
-                .style("left", `${defaultNoiseLeftValue+points[1][0]-points[7][0]-4}px`)
-        }
-    }
-    else if (newGs == 20) {
+            .attr("cx", points[gs][0])
+            .attr("cy", points[gs][1])
+            .attr("fill", colors[gs])
         d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("x1", points[20][0])
-            .attr("y1", points[20][1])
-            .attr("x2", points[20][0])
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
-            .attr("cx", points[20][0])
-            .attr("cy", points[20][1])
-        d3.select("#denoise-latent-l2-expl-noise-img")
-            .style("border-color", borderColors[1])
-        if (window.latentDenoiserL3Expanded) {
-            d3.select("#denoise-latent-l2-expl-noise-img")
-                .style("left", `${defaultNoiseLeftValue+points[20][0]-points[7][0]}px`)
-            d3.select("#denoise-latent-l2-expl-noise-text")
-                .style("left", `${defaultNoiseLeftValue+points[20][0]-points[7][0]-4}px`)
-        }
+            .attr("d", path[gs])
     }
-    else {
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("x1", points[7][0])
-            .attr("y1", points[7][1])
-            .attr("x2", points[7][0])
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
-            .attr("cx", points[7][0])
-            .attr("cy", points[7][1])
-        d3.select("#denoise-latent-l2-expl-noise-img")
-            .style("border-color", borderColors[1])
-        if (window.latentDenoiserL3Expanded) {
-            d3.select("#denoise-latent-l2-expl-noise-img")
-                .style("left", `${defaultNoiseLeftValue}px`)
-            d3.select("#denoise-latent-l2-expl-noise-text")
-                .style("left", `${defaultNoiseLeftValue-4}px`)
-        }
-    }
+    moveThumb(newGs)
 }
 
 function hyperparamChanged(e, newSeed, newGs) {
@@ -398,6 +377,7 @@ function drawTokens() {
     d3.selectAll("#text-vector-generator-l2-tokens-container > *").remove()
     d3.select("#text-vector-generator-l2-expl-container").style("display", "block")
     
+    let full = false;
     d3.select(`#${containerId}`)
         .append("div")
             .attr("class", "text-vector-generator-token")
@@ -408,22 +388,37 @@ function drawTokens() {
                 .attr("class", "text-vector-generator-token")
                 .text(tokenList[i])
         let height = +getComputedStyle(document.getElementById(containerId))["height"].slice(0,-2)
-        console.log(getComputedStyle(document.getElementById(containerId))["height"])
-        console.log(height)
         if (height > 70) {
             document.getElementById(containerId).lastChild.remove();
+            full = true;
             break;
+        }
+    }
+    if (!full) {
+        while (true) {
+            d3.select(`#${containerId}`)
+                .append("div")
+                    .attr("class", "text-vector-generator-token")
+                    .text("<end>")
+            let height = +getComputedStyle(document.getElementById(containerId))["height"].slice(0,-2)
+            if (height > 70) {
+                document.getElementById(containerId).lastChild.remove();
+                full = true;
+                break;
+            }
         }
     }
     d3.select("#text-vector-generator-l2-expl-container").style("display", "none")
     d3.select(`#${containerId}`).append("svg").attr("id", "text-vector-generator-l2-tokens-dots-svg")
-    d3.select("#text-vector-generator-l2-tokens-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "8").attr("class", "text-dot")
-    d3.select("#text-vector-generator-l2-tokens-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "14").attr("class", "text-dot")
-    d3.select("#text-vector-generator-l2-tokens-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "20").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-tokens-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "10").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-tokens-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "17").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-tokens-dots-svg").append("circle").attr("r", "1.5").attr("cx","68").attr("cy", "24").attr("class", "text-dot")
 }
 
 function drawTextVectors() {
     // TEXT TOKENS
+    let containerId = "text-vector-generator-l2-vectors-container"
+    d3.selectAll(`#${containerId} > *`).remove()
     let tokenList = window.selectedPrompt.split(" ")
     // let vectors = data[window.selectedPromptGroupName]["vector"][selectedPrompt1]
     let tokenNum = 3;
@@ -445,8 +440,9 @@ function drawTextVectors() {
             d3.select(`#text-vector-generator-l2-vector-${i}`)
                 .append("div")
                     .attr("class", "text-vector-generator-l2-vector-cell")
+                    .attr("id", `text-vector-generator-l2-vector-cell-${i}-${j}`)
                     // .text(Math.round(+(vectors[i][j])*100)/100)
-                    .text("0.00")
+                    // .text("0.00")
                     .style("left", `${21*j}px`)
         }
         d3.select(`#text-vector-generator-l2-vector-${i}`)
@@ -463,17 +459,33 @@ function drawTextVectors() {
         d3.select(`#text-vector-generator-l2-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","28").attr("cy", "11").attr("class", "text-dot")
     }
     d3.select(`#text-vector-generator-l2-vectors-container`).append("svg").attr("id", "text-vector-generator-l2-vectors-vertical-dots-svg")
-    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "8").attr("class", "text-dot")
-    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "14").attr("class", "text-dot")
-    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "20").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "10").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "17").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "24").attr("class", "text-dot")
+    d3.json("./assets/json/text_vector.json")
+        .then(function(d){
+            for (let i = 0 ; i< tokenNum ; i++) {
+                for (let j = 0 ; j< vectorDim ; j++) {
+                    d3.select(`#text-vector-generator-l2-vector-cell-${i}-${j}`)
+                        .text(Number(d[window.selectedPrompt][i][j]).toFixed(2))
+                    // .text(Math.round(+(vectors[i][j])*100)/100)
+                }
+            }
+        })
 }
 
 function expandTextVectorGeneratorL2(e) {
     if (window.textVectorGeneratorL2Expanded) return;
-    if (window.latentDenoiserL2Expanded) reduceLatentDenoiserL2();
+    if (window.latentDenoiserL3Expanded) {
+        reduceLatentDenoiserL3(); 
+        reduceLatentDenoiserL2();
+    }
+    else if (window.latentDenoiserL2Expanded) {
+        reduceLatentDenoiserL2();
+    }
     window.textVectorGeneratorL2Expanded = true;
-    let textVectorGeneratorRectExpandedWidth = 530
-    let textVectorGeneratorRectExpandedHeight = 214
+    let textVectorGeneratorRectExpandedWidth = 550
+    let textVectorGeneratorRectExpandedHeight = 230
     let textVectorGeneratorRectOrigWidth = 145
     let animationDuration = 1000
     let movePx = (textVectorGeneratorRectExpandedWidth-textVectorGeneratorRectOrigWidth) / 2
@@ -490,6 +502,7 @@ function expandTextVectorGeneratorL2(e) {
     
     // Resize text vector generator
     d3.select("#text-vector-generator-container")
+        .style("background-color", "var(--text00)")
         .style("cursor", "default")
         .transition()
             .duration(animationDuration)
@@ -497,30 +510,46 @@ function expandTextVectorGeneratorL2(e) {
             .style("height", `${textVectorGeneratorRectExpandedHeight}px`)
             .style("left", `${290-movePx}px`)
             .style("top", "-69px")
-            .style("background-color", "var(--text00)")
+            .style("padding", "15px 0")
+
+    // Change the height of main
+    d3.select("#main-wrapper")
+        .transition()
+            .duration(animationDuration)
+            .style("height", "300px")
 
     // Move other things to left
+    let ph = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     d3.select("#your-text-prompt")
         .transition()
             .duration(animationDuration)
             .style("left", `${-movePx}px`)
+            .style("top", `${20.5-ph/2}px`)
     d3.select("#prompt-text-vector-generator-container")
         .transition()
             .duration(animationDuration)
             .style("left", `${250-movePx}px`)
+            .style("top", `30px`)
     // Move other things to right
     d3.select("#text-vector-generator-latent-denoiser-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${437+movePx-8}px`)
+            .style("left", `${437+movePx-7.5}px`)
+            .style("top", `${30}px`)
     d3.select("#latent-denoiser-container")
+        .style("cursor", "pointer")
         .transition()
             .duration(animationDuration)
             .style("left", `${542+movePx+20}px`)
+            .style("width", "145px")
+            .style("height", "80px")
+            .style("top", "0px")
+            .style("background-color", "var(--img00)")
     d3.select("#latent-denoiser-cycle-container")
         .transition()
             .duration(animationDuration)
             .style("left", `${457+movePx+20}px`)
+            .style("top", `30px`)
     d3.select("#improved-latent-container")
         .transition()
             .duration(animationDuration)
@@ -537,23 +566,42 @@ function expandTextVectorGeneratorL2(e) {
         .transition()
             .duration(animationDuration)
             .style("left", `${514+movePx+20}px`)
+            .style("top", `37px`)
     d3.select("#guidance-scale-control-container")
         .transition()
             .duration(animationDuration)
             .style("left", `${546+movePx+20}px`)
+            .style("top", "95px")
+            .style("opacity", window.gsControlDisplayed?"1":"0")
+        .transition()
+            .style("display", window.gsControlDisplayed?"block":"none")
+        .on("interrupt", function() {
+            d3.select(this).style("display", "block")
+        })
     d3.select("#guidance-scale-expl-container")
+        .style("display", window.gsControlDisplayed?"block":"none")
         .transition()
             .duration(animationDuration)
             .style("left", `${347+movePx+20}px`)
+            .style("opacity", window.gsControlDisplayed?"1":"0")
     d3.select("#seed-control-container")
+        .style("display", window.seedControlDisplayed?"block":"none")
         .transition()
             .duration(animationDuration)
             .style("left", `${427+movePx+20}px`)
+            .style("opacity", window.seedControlDisplayed?"1":"0")
     d3.select("#timestep-0-random-noise-container")
+        .style("display", "block")
         .transition()
             .duration(animationDuration)
             .style("left", `${507+movePx+20}px`)
+            .style("opacity", "1")
 
+    // Set the cycle back
+    d3.select("#latent-denoiser-cycle")
+        .transition()
+            .duration(animationDuration)
+            .attr("d", `M 230 10 l 43,0 l0 -53 a5,5 0 0 0 -5,-5 l-213,0 a5,5 0 0 0 -5,5 l0,34 a5,5 0 0 0 5,5 l20,0`)
 
     // Extend the arrow to latent denoiser
     d3.select("#prompt-text-vector-generator-arrow")
@@ -563,13 +611,14 @@ function expandTextVectorGeneratorL2(e) {
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("d", "M -166 10 L 40 10 C 50,10 50,24 60,24 L 122 24")
+            .attr("d", "M -178 10 L 40 10 C 50,10 50,10 60,10 L 122 10")
 
     // Move Text
     d3.select("#text-vector-generator-latent-denoiser-text")
         .transition()
             .duration(animationDuration)
             .style("left", "16px")
+            .style("font-size", "13px")
     
     // cover
     d3.select("#text-vector-generator-l2-left-cover")
@@ -621,7 +670,14 @@ function reduceTextVectorGeneratorL2(e) {
             .style("cursor", "pointer")
             .style("width", `${textVectorGeneratorRectOrigWidth}px`)
             .style("height", `${textVectorGeneratorRectOrigHeight}px`)
+            .style("padding", "11.5px 0")
             
+    // Change the height of main
+    d3.select("#main-wrapper")
+        .transition()
+            .duration(animationDuration)
+            .style("height", "270px")
+
     // Move things back
     d3.select("#your-text-prompt")
     .transition()
@@ -655,10 +711,6 @@ function reduceTextVectorGeneratorL2(e) {
         .transition()
             .duration(animationDuration)
             .style("left", "810px")
-    d3.select("#controller")
-        .transition()
-            .duration(animationDuration)
-            .style("left", "514px")
     d3.select("#guidance-scale-control-container")
         .transition()
             .duration(animationDuration)
@@ -667,14 +719,18 @@ function reduceTextVectorGeneratorL2(e) {
         .transition()
             .duration(animationDuration)
             .style("left", `${347}px`)
-    d3.select("#seed-control-container")
-        .transition()
-            .duration(animationDuration)
-            .style("left", `${427}px`)
     d3.select("#timestep-0-random-noise-container")
         .transition()
             .duration(animationDuration)
             .style("left", `${507}px`)
+    d3.select("#seed-control-container")
+        .transition()
+            .duration(animationDuration)
+            .style("left", `${427}px`)
+    d3.select("#controller")
+        .transition()
+            .duration(animationDuration)
+            .style("left", "514px")
 
     // Move Text
     d3.select("#text-vector-generator-latent-denoiser-text")
@@ -686,7 +742,7 @@ function reduceTextVectorGeneratorL2(e) {
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
         .duration(animationDuration)
-            .attr("d", "M 0 10 L 30 10 C 42,10 55,24 67,24 L 95 24")
+            .attr("d", "M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10")
     d3.select("#prompt-text-vector-generator-arrow")
         .transition()
             .duration(animationDuration)
@@ -723,8 +779,9 @@ function expandLatentDenoiserL2(e) {
     window.latentDenoiserL2Expanded = true;
     let latentDenoiserExpandedWidth = 323;
     let latentDenoiserExpandedHeight = 263;
-    // let latentDenoiserGeneratorOrigWidth =+(getComputedStyle(this).width.slice(0,-2))
     let latentDenoiserGeneratorOrigWidth = 145;
+    let textVectorGeneratorRectOrigWidth = 145
+    let textVectorGeneratorRectOrigHeight = 80
     let animationDuration = 1000
     let movePx = (latentDenoiserExpandedWidth-latentDenoiserGeneratorOrigWidth)/2
     // movePx += 5;
@@ -753,6 +810,7 @@ function expandLatentDenoiserL2(e) {
         .transition()
             .duration(animationDuration)
             .style("opacity", "0")
+            .style("left", `${507}px`)
         .transition()
             .style("display", "none")
         .on("interrupt", function(){
@@ -762,6 +820,7 @@ function expandLatentDenoiserL2(e) {
         .transition()
             .duration(animationDuration)
             .style("opacity", "0")
+            .style("left", `${347}px`)
         .transition()
             .style("display", "none")
         .on("interrupt", function(){
@@ -771,6 +830,7 @@ function expandLatentDenoiserL2(e) {
         .transition()
             .duration(animationDuration)
             .style("opacity", "0")
+            .style("left", `${427}px`)
         .transition()
             .style("display", "none")
         .on("interrupt", function(){
@@ -786,16 +846,21 @@ function expandLatentDenoiserL2(e) {
             .duration(animationDuration)
             .style("width", `${latentDenoiserExpandedWidth}px`)
             .style("height", `${latentDenoiserExpandedHeight}px`)
-            .style("left", `${537-movePx}px`)
+            .style("left", `${542-movePx}px`)
             .style("top", "-13px")
     
+    // Change the height of main
+    d3.select("#main-wrapper")
+        .transition()
+            .duration(animationDuration)
+            .style("height", "400px")
+
     // Move other things to left
     let ph = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     d3.select("#your-text-prompt")
         .transition()
             .duration(animationDuration)
             .style("left", `-${movePx+20}px`)
-            // .style("top", `66px`)
             .style("top", `${101.5-ph/2}px`)
     d3.select("#prompt-text-vector-generator-container")
         .transition()
@@ -807,6 +872,11 @@ function expandLatentDenoiserL2(e) {
             .duration(animationDuration)
             .style("left", `${290-movePx-20}px`)
             .style("top", `87px`)
+            .style("background-color", "var(--text00)")
+            .style("cursor", "pointer")
+            .style("width", `${textVectorGeneratorRectOrigWidth}px`)
+            .style("height", `${textVectorGeneratorRectOrigHeight}px`)
+            .style("padding", "11.5px 0")
     d3.select("#text-vector-generator-latent-denoiser-container")
         .transition()
             .duration(animationDuration)
@@ -829,8 +899,7 @@ function expandLatentDenoiserL2(e) {
     d3.select("#controller")
         .transition()
             .duration(animationDuration)
-            .style("top", `17px`)
-    
+            .style("top", `19px`)
     
     // Change the cycle to fit the new box
     d3.select("#latent-denoiser-cycle-container")
@@ -841,7 +910,7 @@ function expandLatentDenoiserL2(e) {
     d3.select("#latent-denoiser-cycle")
         .transition()
             .duration(animationDuration)
-            .attr("d", "M 356.5 135 l 0,0 l0 -55.5 a5,5 0 0 0 -5,-5 l-393,0 a5,5 0 0 0 -5,5 l0,50.5 a5,5 0 0 0 5,5 l0,0")
+            .attr("d", "M 356.5 135 l 0,0 l0 -58.5 a5,5 0 0 0 -5,-5 l-393,0 a5,5 0 0 0 -5,5 l0,53.5 a5,5 0 0 0 5,5 l0,0")
 
     // Change arrow from text vector generator to UNet
     d3.select("#text-vector-generator-latent-denoiser-arrow")
@@ -914,18 +983,6 @@ function reduceLatentDenoiserL2 () {
         .transition()
             .duration(animationDuration)
             .style("opacity", "1")
-    if (window.gsControlDisplayed)
-        d3.select("#guidance-scale-expl-container")
-            .style("display", "block")
-            .transition()
-                .duration(animationDuration)
-                .style("opacity", "1")
-    if (window.seedControlDisplayed)
-        d3.select("#seed-control-container")
-            .style("display", "block")
-            .transition()
-                .duration(animationDuration)
-                .style("opacity", "1")
     // resize latent denoiser
     d3.select("#latent-denoiser-container")
         .style("cursor", "pointer")
@@ -936,6 +993,12 @@ function reduceLatentDenoiserL2 () {
             .style("left", "542px")
             .style("top", "0px")
             .style("background-color", "var(--img00)")
+
+    // Change the height of main
+    d3.select("#main-wrapper")
+        .transition()
+            .duration(animationDuration)
+            .style("height", "270px")
 
     // Move other things back
     let ph = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
@@ -958,7 +1021,7 @@ function reduceLatentDenoiserL2 () {
         .transition()
             .duration(animationDuration)
             .style("left", `${437}px`)
-            .style("top", `${30}px`)
+            .style("top", `${35}px`)
     d3.select("#improved-latent-container")
         .transition()
             .duration(animationDuration)
@@ -975,7 +1038,7 @@ function reduceLatentDenoiserL2 () {
     d3.select("#controller")
         .transition()
             .duration(animationDuration)
-            .style("top", `37px`)
+            .style("top", `40px`)
 
     // Set the cycle back
     d3.select("#latent-denoiser-cycle-container")
@@ -986,19 +1049,19 @@ function reduceLatentDenoiserL2 () {
     d3.select("#latent-denoiser-cycle")
         .transition()
             .duration(animationDuration)
-            .attr("d", `M 230 10 l 43,0 l0 -50 a5,5 0 0 0 -5,-5 l-213,0 a5,5 0 0 0 -5,5 l0,31 a5,5 0 0 0 5,5 l20,0`)
+            .attr("d", `M 230 10 l 43,0 l0 -53 a5,5 0 0 0 -5,-5 l-213,0 a5,5 0 0 0 -5,5 l0,34 a5,5 0 0 0 5,5 l20,0`)
     // Set the arrow back
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("d", `M 0 10 L 30 10 C 42,10 55,24 67,24 L 95 24`)
+            .attr("d", `M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10`)
     // Text position
     d3.select("#text-vector-generator-latent-denoiser-text")
         .transition()
         .duration(animationDuration)
-            .style("top", "30px")
-            .style("text-align", "center")
-            .style("left", "-2px")
+            .style("top", "15px")
+            .style("left", "-7px")
+            .style("text-align", "right")
             .style("font-size", "13px")
     d3.select("#improved-latent-expl-container")
         .transition()
@@ -1009,8 +1072,7 @@ function reduceLatentDenoiserL2 () {
     d3.select("#guidance-scale-control-container")
         .transition()
             .duration(animationDuration)
-            .style("opacity", "0")
-            .style("top", "95px")
+            .style("top", "87px")
             .style("left", "546px")
             .style("opacity", window.gsControlDisplayed?"1":"0")
         .transition()
@@ -1018,6 +1080,21 @@ function reduceLatentDenoiserL2 () {
         .on("interrupt", function() {
             d3.select(this).style("display", "block")
         })
+    if (window.gsControlDisplayed)
+        d3.select("#guidance-scale-expl-container")
+            .transition()
+                .style("display", "block")
+            .transition()
+                .duration(500)
+                .style("opacity", "1")
+
+    // Seed controller
+    if (window.seedControlDisplayed)
+        d3.select("#seed-control-container")
+            .style("display", "block")
+            .transition()
+                .duration(animationDuration)
+                .style("opacity", "1")
     
     // Cover
     d3.select("#denoise-latent-l2-left-cover")
@@ -1064,8 +1141,14 @@ function expandLatentDenoiserL3 () {
     d3.select("#latent-denoiser-container")
         .transition()
         .duration(animationDuration)
-            .style("height", "463px")
+            .style("height", "403px")
     
+    // Change the height of main
+    d3.select("#main-wrapper")
+        .transition()
+            .duration(animationDuration)
+            .style("height", "515px")
+
     // hide guidance scale expl ...
     d3.select("#guidance-scale-control-dropdown-container")
         .transition()
@@ -1116,6 +1199,12 @@ function reduceLatentDenoiserL3 () {
         .on("interrupt", function () {
             d3.select(this).style("display", "block")
         })
+
+    // Change the height of main
+    d3.select("#main-wrapper")
+        .transition()
+            .duration(animationDuration)
+            .style("height", "400px")
 
     // Set the size of latent denoiser container back
     d3.select("#latent-denoiser-container")

@@ -4,7 +4,7 @@ document.addEventListener("keydown", (e) => {
     if (window.latentDenoiserL2Expanded && !window.latentDenoiserL3Expanded && e.key == "Escape") reduceLatentDenoiserL2();
 })
 
-document.addEventListener("mouseup", (e) => {
+document.addEventListener("mousedown", (e) => {
     if (window.latentDenoiserL2Expanded && !window.latentDenoiserL3Expanded) {
         let latentDenoiserBox = document.getElementById("latent-denoiser-container").getBoundingClientRect()
         let left = latentDenoiserBox.x
@@ -12,7 +12,9 @@ document.addEventListener("mouseup", (e) => {
         let top = latentDenoiserBox.y
         let bottom = latentDenoiserBox.y + latentDenoiserBox.height
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
-        else reduceLatentDenoiserL2();
+        else if (document.querySelector(".controller-button-circle:hover") != null) {}
+        else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
+        else {reduceLatentDenoiserL2();}
     }
 })
 
@@ -63,7 +65,8 @@ d3.select("#latent-denoiser-l2-expl-container")
             .attr("id", "denoise-latent-l2-expl-latent-unet-arrow")
             .attr("class", "architecture-arrow-img")
             .attr("marker-end", "url(#architecture-arrow-img-head)")
-            .attr("d", `M0 0 l20 0 a ${r} ${r} ${90-angle*180/Math.PI} 0 1 ${r*Math.cos(angle)} ${r-r*Math.sin(angle)} l${dx} ${dy} a ${r} ${r} ${90-angle*180/Math.PI} 0 0 ${r*Math.cos(angle)} ${r-r*Math.sin(angle)} l 3 0`)
+            // .attr("d", `M0 0 l20 0 a ${r} ${r} ${90-angle*180/Math.PI} 0 1 ${r*Math.cos(angle)} ${r-r*Math.sin(angle)} l${dx} ${dy} a ${r} ${r} ${90-angle*180/Math.PI} 0 0 ${r*Math.cos(angle)} ${r-r*Math.sin(angle)} l 3 0`)
+            .attr("d", `M20 0 a ${r} ${r} ${90-angle*180/Math.PI} 0 1 ${r*Math.cos(angle)} ${r-r*Math.sin(angle)} l${dx} ${dy} a ${r} ${r} ${90-angle*180/Math.PI} 0 0 ${r*Math.cos(angle)} ${r-r*Math.sin(angle)} l 3 0`)
 
 // UNet
 d3.select("#latent-denoiser-l2-expl-container")
@@ -85,7 +88,7 @@ d3.select("#denoise-latent-l2-expl-unet-container")
 d3.select("#denoise-latent-l2-expl-unet-container")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-unet-desc-text")
-        .text("predicts noise to remove from latent")
+        .text("predicts noise to remove")
 
 // ADD arrow and explanations for guidance scale
 let x_=12;
@@ -204,13 +207,47 @@ d3.select("#latent-denoiser-l2-expl-container")
         .append("svg")
             .attr("id", "denoise-latent-l2-expl-central-line-svg")
             .append("line")
+                .attr("id", "denoise-latent-l2-expl-central-line-arrow")
                 .attr("x1", "0")
                 .attr("y1", "10")
-                .attr("x2", "336")
+                // .attr("x2", "336")
+                .attr("x2", "346")
                 .attr("y2", "10")
-                .attr("stroke-width", `${centralLineWidth}px`)
+                // .attr("stroke-width", `${centralLineWidth}px`)
+                // .attr("stroke", "url(#denoise-latent-l2-expl-central-line-arrow-lineargradient)")
                 .attr("stroke", `${centralLineColor}`)
+                .attr("stroke-width", `2`)
                 .attr("marker-end", "url(#denoise-latent-l2-expl-central-line-arrow-head)")
+                .style("animation-name", "denoise-latent-l2-expl-central-line-arrow-animation")
+                // .style("animation-play-state", "paused")
+d3.select("#denoise-latent-l2-expl-central-line-svg")
+    .append("defs")
+    .append("linearGradient")
+        .attr("id", "denoise-latent-l2-expl-central-line-arrow-lineargradient")
+        .attr("x1", "0%")
+        .attr("x2", "100%")
+        .attr("gradientUnits", "userSpaceOnUse")
+        .attr("spreadMethod", "reflect")
+        .selectAll("stop")
+        .data([["0%","var(--img4)"],["20%","var(--img4)"],["50%","var(--img2)"],["80%","var(--img4)"],["100%","var(--img2)"]])
+        .enter()
+        .append("stop")
+            .attr("stop-color", d=>d[1])
+            .attr("offset", d=>d[0])
+d3.select("#denoise-latent-l2-expl-central-line-svg defs linearGradient")
+    .append("animate")
+        .attr("attributeName", "x1")
+        .attr("values", "0%;100%")
+        .attr("dur", "5s")
+        .attr("restart", "always")
+        .attr("repeatCount", "indefinite")
+d3.select("#denoise-latent-l2-expl-central-line-svg defs linearGradient")
+    .append("animate")
+        .attr("attributeName", "x2")
+        .attr("values", "100%;200%")
+        .attr("dur", "5s")
+        .attr("restart", "always")
+        .attr("repeatCount", "indefinite")
 d3.select("#denoise-latent-l2-expl-central-line-svg")
     .append("circle")
         .attr("r", "10")

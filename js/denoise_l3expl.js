@@ -12,6 +12,8 @@ document.addEventListener("mouseup", (e) => {
         let top = latentDenoiserBox.y
         let bottom = latentDenoiserBox.y + latentDenoiserBox.height
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else if (document.querySelector(".controller-button-circle:hover") != null) {}
+        else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
         else {reduceLatentDenoiserL3(); reduceLatentDenoiserL2();}
     }
 })
@@ -88,117 +90,90 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
             .attr("fill", "#ffffff")
             .attr("stroke", d => d[1])
             .attr("stroke-width", "3px")
+            .on("click", function (e) {
+                let gs = d3.select(this).data()[0][0]
+                moveThumb(gs); // put circle and line on 0
+                hyperparamChanged(e, window.seed, `${gs}.0`);
+                document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = (gs<=1)?gs:((gs==7)?2:3)
+            })
 
 // Drag Functions
-function dragStarted() {
-    // d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#a0a0a0")
+// Define points location, colors, and connecting line path
+let points = {
+    0: [partitions[0]*sliderWidth, (1-partitions[0])*sliderHeight],
+    1: [partitions[1]*sliderWidth, (1-partitions[1])*sliderHeight],
+    7: [partitions[2]*sliderWidth, (1-partitions[2])*sliderHeight],
+    20: [partitions[3]*sliderWidth, (1-partitions[3])*sliderHeight],
 }
+let colors = {0: "#a0a0a0", 1: "var(--text1)", 7: "var(--text2)", 20: "var(--text3)"}
+let path = {
+    0: "M0 0 l 0 -15 C 0 -30, 15.2 -31, 30.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
+    1: "M25 0 l 0 -15 C 25 -30, 40.2 -31, 55.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
+    7: "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70", 
+    20: "M250 0 l 0 -20 C 250 -25, 242.2 -31.5, 237 -32.5 L165 -37.5 C 159.8 -38.5, 152 -40, 152 -45 L152 -70"
+}
+function moveThumb(gs) {
+    d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
+        .attr("x1", points[gs][0])
+        .attr("y1", points[gs][1])
+        .attr("x2", points[gs][0])
+        .attr("stroke", colors[gs])
+    d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
+        .attr("cx", points[gs][0])
+        .attr("cy", points[gs][1])
+        .attr("fill", colors[gs])
+    d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
+        .attr("d", path[gs])
+}
+function dragStarted() {}
 function dragged(e) {
     // should move Noise, change border color as well!
-    let points = {
-        0: [partitions[0]*sliderWidth, (1-partitions[0])*sliderHeight],
-        1: [partitions[1]*sliderWidth, (1-partitions[1])*sliderHeight],
-        7: [partitions[2]*sliderWidth, (1-partitions[2])*sliderHeight],
-        20: [partitions[3]*sliderWidth, (1-partitions[3])*sliderHeight],
-    }
     if ((e.x-points[0][0])**2+(e.y-points[0][1])**2 < (e.x-points[1][0])**2+(e.y-points[1][1])**2) {
-        // put circle and line on 0
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("x1", points[0][0])
-            .attr("y1", points[0][1])
-            .attr("x2", points[0][0])
-            .attr("stroke", "#a0a0a0")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
-            .attr("cx", points[0][0])
-            .attr("cy", points[0][1])
-            .attr("fill", "#a0a0a0")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("d", "M0 0 l 0 -15 C 0 -30, 15.2 -31, 30.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70")
-        // TODO: Implement when gs=0
+        moveThumb(0); // put circle and line on 0
         hyperparamChanged(e, window.seed, "0.0");  
-        document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 0
+        document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = 0
     }
     else if ((e.x-points[1][0])**2+(e.y-points[1][1])**2 < (e.x-points[7][0])**2+(e.y-points[7][1])**2) {
         // put circle and line on 1
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("x1", points[1][0])
-            .attr("y1", points[1][1])
-            .attr("x2", points[1][0])
-            .attr("stroke", "var(--text1)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
-            .attr("cx", points[1][0])
-            .attr("cy", points[1][1])
-            .attr("fill", "var(--text1)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("d", "M25 0 l 0 -15 C 25 -30, 40.2 -31, 55.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70")
+        moveThumb(1);
         hyperparamChanged(e, window.seed, "1.0");
-        document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 0
+        document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = 1
     }
     else if ((e.x-points[20][0])**2+(e.y-points[20][1])**2 < (e.x-points[7][0])**2+(e.y-points[7][1])**2) {
         // put circle and line on 20
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("x1", points[20][0])
-            .attr("y1", points[20][1])
-            .attr("x2", points[20][0])
-            .attr("stroke", "var(--text3)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
-            .attr("cx", points[20][0])
-            .attr("cy", points[20][1])
-            .attr("fill", "var(--text3)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("d", "M250 0 l 0 -20 C 250 -25, 242.2 -31.5, 237 -32.5 L165 -37.5 C 159.8 -38.5, 152 -40, 152 -45 L152 -70")
+        moveThumb(20);
         hyperparamChanged(e, window.seed, "20.0");
-        document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 2
+        document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = 3
     }
     else {
         // put circle and line on 7
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("x1", points[7][0])
-            .attr("y1", points[7][1])
-            .attr("x2", points[7][0])
-            .attr("stroke", "var(--text2)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle")
-            .attr("cx", points[7][0])
-            .attr("cy", points[7][1])
-            .attr("fill", "var(--text2)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
-            .attr("d", "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70")
+        moveThumb(7);
         hyperparamChanged(e, window.seed, "7.0");
-        document.getElementById("unet-guidance-scale-control-dropdown-select").selectedIndex = 1
+        document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = 2
     }
 }
-function dragEnded() {
-    let points = {
-        0: [partitions[0]*sliderWidth, (1-partitions[0])*sliderHeight],
-        1: [partitions[1]*sliderWidth, (1-partitions[1])*sliderHeight],
-        7: [partitions[2]*sliderWidth, (1-partitions[2])*sliderHeight],
-        20: [partitions[3]*sliderWidth, (1-partitions[3])*sliderHeight],
-    }
+function dragEnded(e) {
     if ((e.x-points[0][0])**2+(e.y-points[0][1])**2 < (e.x-points[1][0])**2+(e.y-points[1][1])**2) {
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#a0a0a0")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "#a0a0a0")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", colors[0])
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", colors[0])
     }
     else if ((e.x-points[1][0])**2+(e.y-points[1][1])**2 < (e.x-points[7][0])**2+(e.y-points[7][1])**2) {
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#var(--text1)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "var(--text1)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", colors[1])
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", colors[1])
     }
     else if ((e.x-points[20][0])**2+(e.y-points[20][1])**2 < (e.x-points[7][0])**2+(e.y-points[7][1])**2) {
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "#var(--text3)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "var(--text3)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", colors[20])
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", colors[20])
     }
     else {
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", "var(--text2)")
-        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", "var(--text2)")
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line").attr("stroke", colors[7])
+        d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-circle").attr("fill", colors[7])
     }
 }
 let drag = d3.drag()
     .on("start", dragStarted)
     .on("drag", dragged)
     .on("end", dragEnded)
-let r = 5
-let x0 = partitions[2]*sliderWidth;
-let destX = 152
-let destY = -70
 d3.select("#latent-denoiser-l3-expl-vis-svg")
     .append("g")
         .attr("id", "latent-denoiser-l3-expl-vis-slider-thumb-g")
@@ -240,28 +215,18 @@ d3.select("#latent-denoiser-l3-expl-container")
         .attr("id", "latent-denoiser-l3-expl-text-container")
 d3.select("#latent-denoiser-l3-expl-text-container")
     .append("div")
-    .text("UNet predicts noise in latent considering your text prompt.")
+        .text("UNet predicts two noises:")
 d3.select("#latent-denoiser-l3-expl-text-container")
     .append("div")
-    .text("UNet also predicts noise with an empty prompt as a reference point.")
+        .text("(1) generic noise conditioned on an empty prompt")
 d3.select("#latent-denoiser-l3-expl-text-container")
     .append("div")
-    .text("The difference between the two noises is the guidance made by your prompt.")
+        .text("(2) prompt-specific noise conditioned on your text prompt.")
+        .style("padding-bottom", "8px")
 d3.select("#latent-denoiser-l3-expl-text-container")
     .append("div")
-    .text("Moving away from the reference point in the direction of the difference")
-d3.select("#latent-denoiser-l3-expl-text-container")
-    .append("div")
-    .text("increases guidance of your prompt.")
-d3.select("#latent-denoiser-l3-expl-text-container")
-    .append("div")
-    .text("Guidance scale is multiplied to the noise difference to control guidance.")
-d3.select("#latent-denoiser-l3-expl-text-container")
-    .append("div")
-    .text("For example, the guidance scale of 7 multiplies the noise difference by 7 ")
-d3.select("#latent-denoiser-l3-expl-text-container")
-    .append("div")
-    .text("and adds it to the reference point to increase the guidance by sevenfold.")
+        .html('To generate images strongly adhering to your text prompt, Stable Diffusion computes the weighted sum of the two noises with the weights controlled by the <span style="font-weight:500">guidance scale</span>. The larger the guidance scale, the stronger adherence to the text prompt.')
+        .style("display","inline-block")
 
 d3.select("#latent-denoiser-l3-expl-container")
     .append("img")

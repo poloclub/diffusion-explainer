@@ -1,4 +1,4 @@
-import {timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked} from "./function.js";
+import {controllerPlayButtonClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked} from "./function.js";
 
 let controllerDiv = d3.select("#controller")
 let controllerButtonsDiv = controllerDiv.append("div").attr("id", "controller-buttons")
@@ -36,8 +36,6 @@ controllerButtonsDiv.append("div")
     .append("svg")
         .attr("id", "controller-button-play-background")
         .attr("class", "controller-button-background")
-        .style("left", `4.5px`)
-        .style("top", `4.5px`)
         .append("circle")
             .attr("id", "controller-button-play-circle")
             .attr("class", "controller-button-circle")
@@ -95,11 +93,11 @@ d3.selectAll(".controller-button-background")
 d3.selectAll(".controller-button")
     .style("width", `${buttonBackgroundRadius*2}px`)
 d3.select(".controller-button-container#controller-button-play-container")
-    .style("height", `${buttonBackgroundRadius*4}px`)
-    .style("width", `${buttonBackgroundRadius*4}px`)
+    .style("height", `${buttonBackgroundRadius*3}px`)
+    .style("width", `${buttonBackgroundRadius*3}px`)
 d3.select(".controller-button-background#controller-button-play-background")
-    .style("height", `${buttonBackgroundRadius*4}px`)
-    .style("width", `${buttonBackgroundRadius*4}px`)
+    .style("height", `${buttonBackgroundRadius*3}px`)
+    .style("width", `${buttonBackgroundRadius*3}px`)
 d3.select(".controller-button#controller-button-play")
     .style("width", `${buttonBackgroundRadius*4}px`)
 
@@ -120,4 +118,4 @@ controllerTimestepDiv.append("div")
         .attr("value", "30")
         .attr("id", "controller-timestep-slider")
         .on("input", timestepSliderFunction)
-// controllerPlayButtonClicked();  // TODO: UNCOMMENT
+controllerPlayButtonClicked();  // TODO: UNCOMMENT
