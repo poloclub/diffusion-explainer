@@ -1732,14 +1732,68 @@ svg {
 /* Description */
 #description {
     width: 100%;
-    padding: 30px 17%;
+    padding: 15px 17%;
     box-sizing: border-box;
     display: block;
     background-color: var(--white);
-    color: var(--dark);
+    color: #404040;
     overflow-y: scroll;
+    font-weight: 300;
+    font-size: 17px;
+}
+
+.description-subsec {
+    padding: 5px 0px;
+}
+
+.description-subsubsec {
+    padding-top: 10px;
+}
+
+.description-subsubsec-title {
+    font-weight: 300;
+    font-size: 21px;
+    margin-bottom: -10px;
+}
+
+.description-paragraph {
+    line-height: 1.5;
 }
 
 #description h1 {
+    font-weight: 500;
+    padding-top: 25px;
+    margin-bottom: -5px;
+}
 
+.description-token {
+    font-size: 12px;
+    line-height: 16px;
+    margin: 0 2px;
+    position: relative;
+    top: -2px;
+}
+
+.description-equation {
+    text-align: center;
+    color: #808080;
+}
+
+.description-equation-term {
+    /* border: 1px solid; */
+    border-radius: 5px;
+    padding: 3px 6px;
+    margin: 0px 2px;
+}
+
+.description-equation-op {
+    
+}
+
+#description p {
+    line-height: 1.5;
+}
+
+#description h2 {
+    font-weight: 400;
 }
