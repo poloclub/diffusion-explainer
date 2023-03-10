@@ -350,7 +350,18 @@ d3.select("#description")
 d3.select("#description-section-change")
     .append("p")
         .text("You have control over text prompt and hyperparameters in our Diffusion Explainer to change the generated images:")
-// TODO: unordered list
+d3.select("#description-section-change")
+    .append("ul")
+        .attr("id", "description-hyperparameter-ol")
+d3.select("#description-hyperparameter-ol")
+    .append("li")
+    .html(`Text prompt: Description of the image you want to generate. A more detailed text prompt generally leads to better quality images.`)
+d3.select("#description-hyperparameter-ol")
+    .append("li")
+    .html(`Seed: Random seed for the initialization of the image representation at timestep 0. Changing the seed will result in different image representation at timestep 0 and therefore different images.`)
+d3.select("#description-hyperparameter-ol")
+    .append("li")
+    .html(`Guidance scale: How closely the generated image adheres to the text prompt. Increasing the guidance scale leads to stronger adherence but may degrade the creativity of the generated images.`)
 d3.select("#description-section-change")
     .append("p")
         .text("Additionally, there are other hyperparameters that are not included in the Diffusion Explainer, such as the total number of timesteps, image size, and the type of scheduler.")
@@ -376,13 +387,14 @@ d3.select("#description")
 d3.select("#description-section-who")
     .append("p")
         .html(`Diffusion Explainer was developed by 
-        Seongmin Lee, 
-        Ben Hoover, 
-        Hendrik Strobelt, 
-        Jay Wang, 
-        Anthony Peng, 
-        Austin Wright, 
-        Kevin Li, 
-        Haekyu Park, 
-        Alex Yang, 
-        and Polo Chau.`)
+        <a href="http://www.seongmin.xyz">Seongmin Lee</a>, 
+        <a href="https://bhoov.com">Ben Hoover</a>, 
+        <a href="http://hendrik.strobelt.com">Hendrik Strobelt</a>, 
+        <a href="https://zijie.wang">Jay Wang</a>, 
+        <a href="https://shengyun-peng.github.io">Anthony Peng</a>, 
+        <a href="https://www.austinpwright.com">Austin Wright</a>, 
+        <a href="https://www.linkedin.com/in/kevinyli/">Kevin Li</a>, 
+        <a href="https://haekyu.com">Haekyu Park</a>, 
+        <a href="https://alexanderyang.me">Alex Yang</a>, 
+        and 
+        <a href="https://poloclub.github.io/polochau/">Polo Chau</a>.`)

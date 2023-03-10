@@ -103,7 +103,7 @@ textGeneratorL2ExplDiv.append("div")
         console.log(e.x, e.y)
         d3.select("#generate-text-vector-l3-expl-container")
             .style("display", "block")
-            .style("left", `${e.x-119}px`)
+            .style("left", `${e.x-251}px`)
             .style("top", `${e.y-308}px`)
     })
 textGeneratorL2ExplDiv
