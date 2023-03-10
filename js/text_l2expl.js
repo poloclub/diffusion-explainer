@@ -100,11 +100,13 @@ textGeneratorL2ExplDiv.append("div")
     })
     .on("click", (e) => {
         window.textVectorGeneratorL3Expanded = true;
-        console.log(e.x, e.y)
+        console.log(e)
         d3.select("#generate-text-vector-l3-expl-container")
             .style("display", "block")
-            .style("left", `${e.x-251}px`)
-            .style("top", `${e.y-308}px`)
+            .style("left", `403px`)
+            .style("top", `26px`)
+            // .style("left", `${e.x-251}px`)
+            // .style("top", `${e.y-308}px`)
     })
 textGeneratorL2ExplDiv
     .append("div")
