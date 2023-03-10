@@ -11,7 +11,9 @@ document.addEventListener("mouseup", (e) => {
         let right = textVectorGeneratorBox.x + textVectorGeneratorBox.width
         let top = textVectorGeneratorBox.y
         let bottom = textVectorGeneratorBox.y + textVectorGeneratorBox.height
+        let descriptionBox = document.getElementById("description").getBoundingClientRect()
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else if (e.clientY > descriptionBox.y) {}
         else {
             d3.select("#generate-text-vector-l3-expl-container").style("display", "none")
             window.textVectorGeneratorL3Expanded = false;

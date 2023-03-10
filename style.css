@@ -91,6 +91,7 @@ svg {
 /* main */
 #main-wrapper {
     height: 270px;
+    margin: 55px 0 85px 0;
 }
 #main {
     width: 1010px;
@@ -198,6 +199,8 @@ svg {
     display: none;
     height: 170px;
     overflow-y: scroll;
+    border: 1px solid #f2f2f2;
+    border-top: none;
 }
 
 .prompt-selector-dropdown-options {
@@ -402,7 +405,7 @@ svg {
     opacity: 0;
     position: absolute;
     left: 427px;
-    top: -60px;
+    top: -64px;
 }
 
 #seed-control-text {
@@ -804,7 +807,9 @@ svg {
 }
 
 .text-vector-generator-l2-vector-cell-last {
-    background: linear-gradient(0.25turn, var(--text1), var(--text0) 55%);
+    background: linear-gradient(0.25turn, var(--text1), var(--text00) 55%);
+    border: 0;
+    border-left: 1px var(--text0) solid;
 }
 
 .text-vector-generator-l2-vector-horizontal-dots-svg {
@@ -823,8 +828,8 @@ svg {
     pointer-events: none;
     display: none;
     position: absolute;
-    left: -200px;
-    top: -80px;
+    left: -214px;
+    top: -105px;
     height: 300px;
     width: 300px;
     background-image: linear-gradient(to right, #ffffffff , #ffffffff, #ffffff80, #ffffff00);
@@ -835,11 +840,11 @@ svg {
     pointer-events: none;
     display: none;
     position: absolute;
-    left: 550px;
-    top: -80px;
+    left: 638px;
+    top: -105px;
     height: 300px;
     width: 700px;
-    background-image: linear-gradient(to right, #ffffff00 , #ffffff80, #ffffffff, #ffffffff);
+    background-image: linear-gradient(to right, #ffffff00 , #ffffff90, #ffffffff, #ffffffff);
     opacity: 0;
 }
 
@@ -1148,6 +1153,7 @@ svg {
     display: none;
     position: absolute;
     left: -120px;
+    top: -18px;
     height: 300px;
     width: 500px;
     background-image: linear-gradient(to right, #ffffffff, #ffffffff, #ffffff80, #ffffff00);
@@ -1737,9 +1743,9 @@ svg {
     display: block;
     background-color: var(--white);
     color: #404040;
-    overflow-y: scroll;
     font-weight: 300;
     font-size: 17px;
+    line-height: 1.5;
 }
 
 .description-subsec {
@@ -1761,7 +1767,8 @@ svg {
 }
 
 #description h1 {
-    font-weight: 500;
+    font-size: 32px;
+    font-weight: 400;
     padding-top: 25px;
     margin-bottom: -5px;
 }
@@ -1794,6 +1801,14 @@ svg {
     line-height: 1.5;
 }
 
+#description a {
+    color: #404040;
+}
+
 #description h2 {
     font-weight: 400;
+}
+
+#description ol {
+    line-height: 1.5;
 }

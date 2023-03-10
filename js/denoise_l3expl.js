@@ -11,9 +11,11 @@ document.addEventListener("mouseup", (e) => {
         let right = latentDenoiserBox.x + latentDenoiserBox.width
         let top = latentDenoiserBox.y
         let bottom = latentDenoiserBox.y + latentDenoiserBox.height
+        let descriptionBox = document.getElementById("description").getBoundingClientRect()
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
         else if (document.querySelector(".controller-button-circle:hover") != null) {}
         else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
+        else if (e.clientY > descriptionBox.y) {}
         else {reduceLatentDenoiserL3(); reduceLatentDenoiserL2();}
     }
 })

@@ -45,3 +45,5 @@ window.latentDenoiserL3Expanded = false
 window.promptDropdownExpanded = false
 window.gsControlDisplayed = false
 window.seedControlDisplayed = false
+window.promptHovered = false;
+window.hoveredPrompt = "";

@@ -183,10 +183,18 @@ function updateStep(timestep) {
     window.timestep = timestep;
     d3.select("#controller-timestep-number").text(timestep);
     document.getElementById("controller-timestep-slider").value = timestep;
-    d3.select("#improved-latent-img")
-        .attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
-    d3.select("#generated-image")
-        .attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
+    if (!window.promptHovered) {
+        d3.select("#improved-latent-img")
+            .attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
+        d3.select("#generated-image")
+            .attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
+    }
+    else {
+        d3.select("#improved-latent-img")
+            .attr("src", `./assets/latent_viz/${window.hoveredPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
+        d3.select("#generated-image")
+            .attr("src", `./assets/img/${window.hoveredPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
+    }
 
     // TODO: Comparison view, UMAP update
     // d3.select("#generated-image-2")
@@ -212,7 +220,10 @@ function updateStep(timestep) {
     d3.select("#denoise-latent-l2-expl-prev-latent-timestep").text(timestep-1)
     d3.select("#denoise-latent-l2-expl-prev-latent-text").text(`Representation of timestep ${window.timestep-1}`)
     d3.select("#improved-latent-timestep").text(timestep)
-    d3.select("#denoise-latent-l2-expl-prev-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep-1}.jpg`)
+    if (!window.promptHovered) 
+        d3.select("#denoise-latent-l2-expl-prev-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep-1}.jpg`)
+    else
+        d3.select("#denoise-latent-l2-expl-prev-latent-img").attr("src", `./assets/latent_viz/${window.hoveredPrompt}/${window.seed}_${window.gs}_${timestep-1}.jpg`)
 }
 
 function controllerPauseButtonClicked() {
@@ -459,9 +470,9 @@ function drawTextVectors() {
         d3.select(`#text-vector-generator-l2-vector-horizontal-dots-svg-${i}`).append("circle").attr("r", "1.5").attr("cx","28").attr("cy", "11").attr("class", "text-dot")
     }
     d3.select(`#text-vector-generator-l2-vectors-container`).append("svg").attr("id", "text-vector-generator-l2-vectors-vertical-dots-svg")
-    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "10").attr("class", "text-dot")
-    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "17").attr("class", "text-dot")
-    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","25").attr("cy", "24").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","35").attr("cy", "10").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","35").attr("cy", "17").attr("class", "text-dot")
+    d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","35").attr("cy", "24").attr("class", "text-dot")
     d3.json("./assets/json/text_vector.json")
         .then(function(d){
             for (let i = 0 ; i< tokenNum ; i++) {
@@ -900,6 +911,7 @@ function expandLatentDenoiserL2(e) {
         .transition()
             .duration(animationDuration)
             .style("top", `19px`)
+            .style("left", "514px")
     
     // Change the cycle to fit the new box
     d3.select("#latent-denoiser-cycle-container")

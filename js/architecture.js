@@ -104,11 +104,15 @@ d3.select("#prompt-selector-dropdown-container")
             .attr("id", (d,i) => `prompt-selector-dropdown-option-${i}`)
             .text(d => d[0])
             .on("mouseover", function () {
+                window.promptHovered = true;
                 let p = d3.select(`#${this.id}`).text()
+                window.hoveredPrompt = p
                 d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#generated-image").attr("src", `./assets/img/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
             })
             .on("mouseout", () => {
+                window.promptHovered = false;
+                window.hoveredPrompt = "";
                 d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
             })
@@ -417,6 +421,10 @@ d3.select("#timestep-0-random-noise-expl")
                     .on("interrupt", function() {
                         d3.select(this).style("display", "block")
                     })
+                d3.select("#seed-control-container")
+                    .transition("left")
+                    .duration(1000)
+                        .style("left", `${427}px`)
             }
             else {
                 window.seedControlDisplayed = true;
@@ -426,6 +434,10 @@ d3.select("#timestep-0-random-noise-expl")
                     .transition()
                     .duration(500)
                         .style("opacity", "1")
+                d3.select("#seed-control-container")
+                    .transition("left")
+                    .duration(1000)
+                        .style("left", `${427}px`)
             }
         })
 // d3.select("#timestep-0-random-noise-expl")
