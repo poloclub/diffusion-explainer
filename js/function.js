@@ -11,7 +11,7 @@ function promptChanged() {
     // collapse dropdown
     window.promptDropdownExpanded = false
     d3.select("#prompt-selector-dropdown").style("display", "none")
-    // change text tokens...
+    // change text tokens
     d3.select("#prompt-selector-dropdown-box-text").text(p)
     let h = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     d3.select("#your-text-prompt").style("top", `${20.5-h/2}px`)
@@ -24,25 +24,25 @@ function promptChanged() {
 }
 
 function addUmapHighlightNodes(promptNum) {
-    let timestep = document.getElementById("controller").timestep;
-    let selectedPrompt = (promptNum==1)?window.selectedPrompt1:window.selectedPrompt2
     let fadeColor = "#e0e0e0";
     let mainColor = (promptNum==1)?"#51B3D2":"#F6CC35";
-    let umapHighlightSvg = (promptNum==1)?d3.select("#umap-highlight-svg"):d3.select("#umap-highlight-svg-2")
+    let totalTimesteps = 50
     let selectedUmapColor = d3.scaleLinear().domain([-50,totalTimesteps]).range([fadeColor, mainColor]);
-    // let selectedUmapColor = d3.scaleLinear().domain([-50,totalTimesteps]).range([mainColor, mainColor]);
     let fullOpacity = window.comparison?0.7:1
+    let p = window.selectedPrompt.replace(/ /g, "-").replace(/,/g, "")
 
-    umapHighlightSvg
+    d3.select("#umap-all-prompt-svg")
+        .append("g")
+        .attr("id", "umap-highlight-g")
         .selectAll("circle")
             .data([...Array(totalTimesteps).keys()])
             .enter()
             .append("circle")
-                .attr("id", i => `umap-node-highlight-${promptNum}-${i}`)
+                .attr("id", i => `umap-node-highlight-${i}`)
                 .attr("class", `umap-node-highlight`)
-                .attr("cx", i => d3.select(`#umap-node-${selectedPrompt.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("cx"))
-                .attr("cy", i => d3.select(`#umap-node-${selectedPrompt.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("cy"))
-                .attr("r", i => d3.select(`#umap-node-${selectedPrompt.replace(/ /g, "-").replace(/,/g, "")}-${i}`).attr("r"))
+                .attr("cx", i => d3.select(`#umap-node-all-prompt-img-${p}-${i}`).attr("cx"))
+                .attr("cy", i => d3.select(`#umap-node-all-prompt-img-${p}-${i}`).attr("cy"))
+                .attr("r", i => d3.select(`#umap-node-all-prompt-img-${p}-${i}`).attr("r"))
                 .attr("fill", i => selectedUmapColor(i))
                 .style("opacity", i => (i > timestep)?0:fullOpacity)
                 .style("cursor", "pointer")
@@ -254,27 +254,30 @@ function animateArchCycle() {
 }
 
 function drawUmap(data) {
-    let umapSvg = d3.select("#umap-svg").html("");
+    let umapSvg = d3.select("#umap-all-prompt-svg").html("");
 
     let svgHeight = 220
     let svgWidth = 220
-    
-    let selected = data[selectedPromptGroupName];
-    // let prompt = selected["prompts"][0];
-    let prompt = selectedPrompt1;
-    window.totalTimesteps = selected["data"][prompt][seed][gs]["umap"].length
 
+    console.log(window.seed, window.gs)
+    let allImgUmaps = {}
+    let allTextUmaps = {}
     let minX=1000000, maxX = -1000000;
     let minY=1000000, maxY = -1000000;
-    selected["prompts"].forEach(p => {
-        let umap = selected["data"][p][seed][gs]["umap"];
-        umap.forEach(coord => {
+    for (let i = 0 ; i < data.length ; i++) {
+        // if (data[i][selectedPrompt]) selectedUmapData = data[i][selectedPrompt][seed][gs]
+        let p = Object.keys(data[i])[0]
+        let umap = Object.values(data[i])[0][seed][gs]
+        let umap_array = Object.values(umap)
+        umap_array.forEach(coord => {
             if (+(coord[0]) < minX) minX = +(coord[0])
             if (+(coord[0]) > maxX) maxX = +(coord[0])
             if (+(coord[1]) < minY) minY = +(coord[1])
             if (+(coord[1]) > maxY) maxY = +(coord[1])
         })
-    });
+        allTextUmaps[p] = umap["text_umap"]
+        allImgUmaps[p] =  umap_array.slice(0,umap_array.length-1)
+    }
 
     function convertCoordX (x) {
         return (0.1*svgWidth + (x-minX)/(maxX-minX)*svgWidth*0.8);
@@ -284,53 +287,48 @@ function drawUmap(data) {
         return (svgHeight - (0.1*svgHeight + (y-minY)/(maxY-minY)*svgHeight*0.8));
     }
 
-    let allUmaps = []
-    selected["prompts"].forEach(p => {
-        let umap = selected["data"][p][seed][gs]["umap"];
-        allUmaps = allUmaps.concat(umap)
-    });
-
     let nodeRadius = 3;
     let fadeColor = "#e0e0e0";
-    umapSvg
-        .selectAll("circle")
-        .data(allUmaps)
-        .enter()
-        .append("circle")
-            .attr("id", (d,i) => `umap-node-${selected["prompts"][Math.floor(i/totalTimesteps)].replace(/ /g, "-").replace(/,/g, "")}-${i%totalTimesteps}`)
-            .attr("class", `umap-node`)
-            .attr("cx", d => convertCoordX(d[0]))
-            .attr("cy", d => convertCoordY(d[1]))
-            .attr("r", nodeRadius)
-            .attr("fill", fadeColor)
-            .attr("opacity", (d,i)=>{
-                if (window.comparison) return 1
-                else if (selected["prompts"][Math.floor(i/totalTimesteps)] == prompt) return 1;
-                return 0;
-            })
-            .attr("display", (d,i)=>{
-                if (window.comparison) return "";
-                else if (selected["prompts"][Math.floor(i/totalTimesteps)] == prompt) return "";
-                return "none";
-            })
 
-    d3.select("#umap-svg").append("svg").attr("id", "umap-highlight-svg")
-    d3.select("#umap-svg").append("svg").attr("id", "umap-highlight-svg-2")
+    for (let prompt in allImgUmaps) {
+        let p = prompt.replace(/ /g, "-").replace(/,/g, "")
+        umapSvg.append("g")
+            .attr("id", `umap-all-prompt-g-${p}`)
+            .selectAll("circle")
+            .data(Object.values(allImgUmaps[prompt]))
+            .enter()
+            .append("circle")
+                .attr("id", (d,i) => `umap-node-all-prompt-img-${p}-${i}`)
+                .attr("class", `umap-node`)
+                .attr("cx", d => convertCoordX(d[0]))
+                .attr("cy", d => convertCoordY(d[1]))
+                .attr("r", nodeRadius)
+                .attr("fill", fadeColor)
+                .style("opacity", (d,i)=>{
+                    return 1 // TODO: after implementing professional view, should hide second prompts' nodes, add display style as well
+                })
+        d3.select(`#umap-all-prompt-g-${p}`)
+            .append("circle")
+                .attr("id", `umap-node-all-prompt-text-${p}`)
+                .attr("cx", convertCoordX(allTextUmaps[prompt][0]))
+                .attr("cy", convertCoordX(allTextUmaps[prompt][1]))
+                .attr("r", nodeRadius)
+                .attr("fill", prompt==selectedPrompt?"red":"pink")
+    }
+
     addUmapHighlightNodes(1)
-    if (window.comparison) addUmapHighlightNodes(2)
 }
 
 function seedChanged(e) {
     // when seed is changed
     let newSeed = this.value
     hyperparamChanged(e, newSeed, window.gs);
-    // change image galleries
+    // TODO: change image galleries
 }
 
 function gsChanged(e) {
     // when guidance scale is changed
     let newGs = d3.select(this).property('value');
-    console.log(newGs)
     hyperparamChanged(e, window.seed, newGs);
     // TODO: change the slider position of l3 expl 
     let sliderWidth = 250;
@@ -618,7 +616,7 @@ function expandTextVectorGeneratorL2(e) {
     d3.select("#prompt-text-vector-generator-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("x2", "42")
+            .attr("x2", "55")
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
             .duration(animationDuration)
@@ -643,12 +641,6 @@ function expandTextVectorGeneratorL2(e) {
         .duration(animationDuration)
             .style("opacity", "100%")
 
-    // To bring arrow to the front
-    d3.select("#text-vector-generator-l2-expl-prompt-text-vector-arrow-svg")
-        .transition()
-        .delay(animationDuration*0.5)
-        .duration(animationDuration*0.5)
-            .style("opacity","100%")
 }
 
 function reduceTextVectorGeneratorL2(e) {
@@ -702,6 +694,7 @@ function reduceTextVectorGeneratorL2(e) {
         .transition()
             .duration(animationDuration)
             .style("left", "437px")
+            .style("top", `${35}px`)
     d3.select("#latent-denoiser-container")
         .transition()
             .duration(animationDuration)
@@ -928,7 +921,7 @@ function expandLatentDenoiserL2(e) {
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("d", "M 0 10 L 40 10 C 50,10 50,10 60,10 L 137 10")
+            .attr("d", "M 0 10 L 40 10 C 50,10 50,10 60,10 L 172 10")
     // Text position
     d3.select("#text-vector-generator-latent-denoiser-text")
         .transition()
@@ -960,11 +953,11 @@ function expandLatentDenoiserL2(e) {
             .style("opacity", "1")
 
     // To bring arrow to the front
-    d3.select("#denoise-latent-l2-expl-text-vectors-arrow-svg")
-        .transition()
-        .delay(animationDuration*0.5)
-        .duration(animationDuration*0.5)
-            .style("opacity","100%")
+    // d3.select("#denoise-latent-l2-expl-text-vectors-arrow-svg")
+    //     .transition()
+    //     .delay(animationDuration*0.5)
+    //     .duration(animationDuration*0.5)
+    //         .style("opacity","100%")
 }
 
 function reduceLatentDenoiserL2 () {
