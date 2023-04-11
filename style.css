@@ -89,11 +89,23 @@ svg {
 }
 
 /* main */
-#main-wrapper {
-    height: 270px;
-    margin: 55px 0 85px 0;
-}
 #main {
+    width: 1421px;
+    display: block;
+    position: relative;
+    margin-left: -710.5px;
+    left: 50%;
+}
+
+#architecture-wrapper {
+    height: 270px;
+    padding: 55px 40px 85px 40px;
+    width: 1010px;
+    position: relative;
+    display: inline-block;
+}
+
+#architecture-controller-wrapper {
     width: 1010px;
     position: absolute;
     left: 50%;
@@ -737,23 +749,23 @@ svg {
     display: none;
     position: absolute;
     left: -214px;
-    top: -105px;
     height: 300px;
     width: 300px;
     background-image: linear-gradient(to right, #ffffffff , #ffffffff, #ffffff80, #ffffff00);
     opacity: 0;
+    z-index: 11;
 }
 
 #text-vector-generator-l2-right-cover {
     pointer-events: none;
     display: none;
     position: absolute;
-    left: 638px;
-    top: -105px;
+    left: 690px;
     height: 300px;
-    width: 700px;
-    background-image: linear-gradient(to right, #ffffff00 , #ffffff90, #ffffffff, #ffffffff);
+    width: 400px;
+    background-image: linear-gradient(to right, #ffffff00, #ffffff80, #ffffffff, #ffffffff, #ffffffff);
     opacity: 0;
+    z-index: 11;
 }
 
 /* Denoise latent l2 expl */
@@ -1036,11 +1048,10 @@ svg {
     pointer-events: none;
     display: none;
     position: absolute;
-    left: 750px;
-    top: -85px;
-    width: 500px;
+    left: 890px;
+    width: 200px;
     height: 300px;
-    background-image: linear-gradient(to right, #ffffff00 , #ffffff80, #ffffffff, #ffffffff);
+    background-image: linear-gradient(to right, #ffffff00, #ffffff80, #ffffffa0, #ffffffff);
     opacity: 0;
 }
 
@@ -1049,7 +1060,6 @@ svg {
     display: none;
     position: absolute;
     left: -120px;
-    top: -18px;
     height: 300px;
     width: 500px;
     background-image: linear-gradient(to right, #ffffffff, #ffffffff, #ffffff80, #ffffff00);
@@ -1325,90 +1335,92 @@ svg {
 }
 
 /* umap */
-#umap-container {
-    display: none;
-    padding: 26px 38px;
-    /* position: absolute; */
-    /* top: 0; */
-    /* left: 827px; */
+#umap-wrapper {
+    height: 270px;
+    width: 270px;
+    padding: 55px 30px 85px 30px;
+    display: inline-block;
+    position: absolute;
+    z-index: 1;
     background-color: white;
-    width: -webkit-fill-available;
     border-left: var(--light) 1px solid;
 }
 
-#latent-umap-title {
-    font-size: 14pt;
-    font-weight: bold;
-    color: var(--black);
-}
-
-#latent-umap-subtitle {
-    font-size: 9pt;
-    color: var(--gray);
-    margin-top: -1.5px;
-}
-
 #umap-container {
-    height: 220px;
-    width: 220px;
-    margin-top: 5px;
-    border: var(--light) solid 1px;
+    background-color: white;
+    width: -webkit-fill-available;
 }
 
-#umap-svg {
-    height: 300px;
-    width: 300px;
+#global-umap-container {
+    position: relative;
 }
 
-#umap-highlight-svg text {
-    font-size: 10pt;
+#global-umap-title {
+    padding-bottom: 3px;
 }
 
-#latent-umap-reduced {
-    font-size: 7pt;
-    color: var(--light);
+#global-umap-svg-container {
+    border: var(--light) 1px solid;
+    height: 270px;
+    width: 270px;
+    overflow: hidden;
+}
+
+#global-umap-title {
+    font-size: 20px;
+    color: #404040;
+}
+
+#global-umap-svg {
+    height: 270px;
+    width: 270px;
+    overflow: hidden;
+    scale : 1;
+    translate: 0px 0px;
+    cursor: zoom-in;
+}
+
+#global-umap-expl {
     padding-top: 3px;
+    color: #a0a0a0;
 }
 
-#latent-umap-expl {
-    font-size: 7pt;
-    color: var(--gray);
-    width: 220px;
+#global-umap-controller-container {
+    position: absolute;
+    left: 280px;
+    top: 26px;
+    text-align: center;
+    color: #a0a0a0;
+    font-size: 18px;
+}
+
+.global-umap-controller-zoom-button {
+    height: 22px;
+    width: 22px;
+    line-height: 22px;
+    background-color: #FAFAFA;
+    cursor: pointer;
+}
+
+.global-umap-controller-zoom-button:hover {
+    background-color: #EAEAEA;
+}
+
+#global-umap-controller-zoom-in {
+    border-radius: 5px 5px 0 0;
+    border: 1px solid #e0e0e0;
+}
+
+#global-umap-controller-zoom-out {
+    border-radius: 0 0 5px 5px;
+    border: 1px solid #e0e0e0;
+    position: relative;
+    top: -1px;
+    font-size: 30px;
 }
 
 
 /* for future */
-/* noise selector */
-#noise-selector {
-    width: 250px;
-    position: absolute;
-    padding: 30px 25px;
-    height: 60px;
-    border-bottom: 1px solid var(--nearwhite);
-}
-
-#noise-selector-options-container {
-    font-size: 14px;
-    color: gray;
-}
-
-#noise-selector-options {
-    display: inline-block;
-}
-
-#noise-selector-options-text {
-    display: inline-block;
-    margin-right: 10px;
-}
-
-#noise-selector-options input {
-    position: relative;
-    top: 1.5px;
-}
-
-#noise-selector-options label {
-    margin-right: 5px;
-}
 
 #professional-mode-selector {
     position: absolute;

@@ -4,39 +4,58 @@ window.prompts = [
         "pikachu floating among stars", 
     ],
     [
-        "a teddy bear sitting at a cafe, drinking a hot chocolate with beautiful latte art",
-        "a teddy bear sitting at a cafe, drinking a hot chocolate with beautiful latte art, trending on artstation",
+        "a pineapple by the water on a beautiful beach",
+        "a baobab tree by the water on a beautiful beach",
     ],
     [
-        "a pineapple tree on a beach",
-        "a pineapple tree on a beach, trending on artstation"
-    ],
-    [
-        "a cute penguin sitting around a campfire in front of an igloo, anthromorphic, detailed",
-        "a cute penguin sitting around a campfire in front of an igloo, anthromorphic"
-    ],
-    [
-        "a white Bichon howling at a moon on a mountain, background of a dark bluish sky with a full moon",  
-        "a white Bichon howling at a moon on a mountain, background of a dark bluish sky with a full moon, fantasy", 
-    ],
-    [
-        "a cat reading a book on a bench in a park",  
-        "a cat reading a book on a bench in a park, anthromorphic",
+        "a vibrant renaissance portrait of an energetic noble woman, holding an iphone",
+        "a muted renaissance portrait of a sad noble woman, holding an iphone",
     ],
     [
         "a Christmas tree in the middle of blue ocean, 4k, realistic", 
         "a Christmas tree in the desert, 4k, realistic", 
     ],
     [
-        "calm winter night, Thomas Kinkade", 
-        "calm winter night, Van Gogh", 
+        "a teddy bear sitting at a cafe, drinking a hot chocolate with latte art", 
+        "a teddy bear sitting at a cafe, drinking a hot chocolate",
     ],
+    [
+        "a cute penguin sitting around a campfire in front of an igloo, anthromorphic, detailed",
+        "a cute penguin sitting around a campfire in front of an igloo, anthromorphic",
+    ],
+    [
+        "a digital painting of a white dog howling at a full moon, on a mountain, background of a dark bluish sky, fantasy, trending on artstation",
+        "a digital painting of a white dog howling at a full moon, on a mountain, background of a dark bluish sky, fantasy",
+    ],
+    [
+        "calm winter night, Thomas Kinkade",
+        "calm winter night, Van Gogh",
+    ],
+    [
+        "a painting of a beautiful witch with orange curly hair, riding a dragon, background of Himalayas, by Greg Rutkowski",
+        "a painting of a beautiful witch with orange curly hair, riding a dragon, background of Himalayas",
+    ],
+    [
+        "a cute and adorable bunny, with huge clear eyes, holding a bunch of flowers, in the style of cute pixar character",
+        "a cute and adorable bunny, with huge clear eyes, holding a bunch of flowers",
+    ],
+    [
+        "a digital painting of a boy, making a magical potion, fantasy",
+        "a digital painting of a boy, making a magical potion",
+    ],
+    [
+        "a robot reading a book, octane render",
+        "a robot reading a book",
+    ]
 ]
 window.selectedPromptGroupIdx = 0;
 window.selectedPrompt = window.prompts[window.selectedPromptGroupIdx][0];
+window.seed_list = [1,2,3]
 window.seed = 1
+window.gs_list = ["0.0", "1.0", "7.0", "20.0"]
 window.gs = "7.0"
 window.timestep = 30
+window.totalTimesteps = 50
 window.playing = false;  // TODO: change as playing animation as default
 window.textVectorGeneratorL2Expanded = false
 window.textVectorGeneratorL3Expanded = false
@@ -47,3 +66,6 @@ window.gsControlDisplayed = false
 window.seedControlDisplayed = false
 window.promptHovered = false;
 window.hoveredPrompt = "";
+window.umapNodeDefaultColor = "#F0F0F0";
+window.umapNodeHighlightColor1 = "#c51b7d";
+window.umapNodeHovered = false;

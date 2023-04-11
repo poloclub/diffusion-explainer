@@ -118,6 +118,6 @@ textGeneratorL2ExplDiv
 drawTextVectors()
 
 // covers
-d3.select("#architecture-container").append("div").attr("id", "text-vector-generator-l2-left-cover")
-d3.select("#architecture-container").append("div").attr("id", "text-vector-generator-l2-right-cover")
+d3.select("#architecture-wrapper").append("div").attr("id", "text-vector-generator-l2-left-cover")
+d3.select("#architecture-wrapper").append("div").attr("id", "text-vector-generator-l2-right-cover")
 

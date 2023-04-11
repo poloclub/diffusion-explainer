@@ -3,3 +3,4 @@ assets/images_highres/
 *.afdesign
 assets/latent_viz_orig/
 assets/img_orig/
+assets/bin/
