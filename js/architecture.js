@@ -1,4 +1,4 @@
-import {promptChanged, gsChanged, seedChanged, expandTextVectorGeneratorL2, expandLatentDenoiserL2} from "./function.js"
+import {promptChanged, gsChanged, seedChanged, expandTextVectorGeneratorL2, expandLatentDenoiserL2, compareButtonClicked, drawUmap} from "./function.js"
 
 document.addEventListener("mouseup", (e) => {
     if (window.promptDropdownExpanded) {
@@ -16,6 +16,7 @@ document.addEventListener("mouseup", (e) => {
 let architectureLineWidth = 2;
 let architectureTextLineColor = "#7fbc41"
 let architectureImgLineColor = "#de77ae"
+let architectureCompLineColor = "#92c5de"
 
 window.textVectorGeneratorL2Expanded = false;
 window.textVectorGeneratorL3Expanded = false;
@@ -50,15 +51,22 @@ d3.select("#architecture-defs")
         .append("polygon")
             .attr("points", "0 0, 4 2, 0 4")
             .attr("fill", architectureImgLineColor)
+d3.select("#architecture-defs")
+    .append("marker")
+        .attr("id", "architecture-arrow-comp-head")
+        .attr("markerWidth", "10")
+        .attr("markerHeight", "4")
+        .attr("refX", "0")
+        .attr("refY", "2")
+        .attr("orient", "auto")
+        .append("polygon")
+            .attr("points", "0 0, 4 2, 0 4")
+            .attr("fill", architectureCompLineColor)
 
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "your-text-prompt")
 
-d3.select("#your-text-prompt")
-    .append("div")
-        .text("Your text prompt")
-        .attr("id", "prompt-selector-text")
 d3.select("#your-text-prompt")
     .append("div")
         .attr("id", "prompt-selector-dropdown-container")
@@ -74,17 +82,38 @@ d3.select("#your-text-prompt")
                 if (window.promptDropdownExpanded) {
                     window.promptDropdownExpanded = false;
                     d3.select("#prompt-selector-dropdown").style("display", "none")
+                    d3.select("#compare-button-container").style("z-index", "")
                 }
                 else {
                     window.promptDropdownExpanded = true
                     d3.select("#prompt-selector-dropdown").style("display", "block")
+                    d3.select("#compare-button-container").style("z-index", "-1")
                 }
             })
             .append("div")
                 .attr("id", "prompt-selector-dropdown-box-text")
                 .text(window.selectedPrompt)
+d3.select("#your-text-prompt")
+    .append("div")
+        .attr("id", "compare-button-container")
+d3.select("#compare-button-container")
+    .append("div")
+        .attr("id", "compare-button-text")
+        .text("Tweak prompt and compare")
+d3.select("#compare-button-container")
+    .append("label")
+        .attr("class", "toggle-switch")
+        .attr("id", "compare-button")
+d3.select("#compare-button")
+    .append("input")
+        .attr("type", "checkbox")
+        .on("click", compareButtonClicked)
+d3.select("#compare-button")
+    .append("span")
+        .attr("class", "slider round")
 let h = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
-d3.select("#your-text-prompt").style("top", `${20.5-h/2}px`)
+d3.select("#your-text-prompt").style("top", `${38.5-h/2}px`)
+d3.select("#compare-button-container").style("top", `${h-3}px`)
 
 d3.select("#prompt-selector-dropdown-box-container")
     .append("svg")
@@ -106,15 +135,24 @@ d3.select("#prompt-selector-dropdown-container")
             .on("mouseover", function () {
                 window.promptHovered = true;
                 let p = d3.select(`#${this.id}`).text()
+                let p2 = window.prompts[+(this.id.split("-")[4])][1]
                 window.hoveredPrompt = p
                 d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#generated-image").attr("src", `./assets/img/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${p2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#generated-image-2").attr("src", `./assets/img/${p2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                // TODO: Change UMAP
+                drawUmap(p,p2)
             })
             .on("mouseout", () => {
                 window.promptHovered = false;
                 window.hoveredPrompt = "";
                 d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                // TODO: Back to original UMAP
+                drawUmap()
             })
             .on("click", promptChanged)
 d3.select(`#prompt-selector-dropdown-option-${selectedPromptGroupIdx}`).style("display","none")
@@ -398,7 +436,6 @@ d3.select("#timestep-0-random-noise-container")
     .append("path")
         .attr("id", "timestep-0-random-noise-line")
         .attr("d", "M0 5 a5,5 0 0 0 -5,-5 l-5 0")
-        // TODO: Hide during animation, Show for 1sec at timestep 0
         .attr("stroke-width", architectureLineWidth)
         .attr("stroke", architectureImgLineColor)
         .attr("fill", "none")
@@ -440,10 +477,6 @@ d3.select("#timestep-0-random-noise-expl")
                         .style("left", `${427}px`)
             }
         })
-// d3.select("#timestep-0-random-noise-expl")
-//     .append("div")
-//         .attr("id", "timestep-0-random-noise-expl-1-2")
-//         .text("at")
 d3.select("#timestep-0-random-noise-expl")
     .append("div")
         .attr("id", "timestep-0-random-noise-expl-2")
