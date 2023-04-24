@@ -9,7 +9,10 @@ document.addEventListener("mouseup", (e) => {
         let top = dropdownBox.y
         let bottom = dropdownBox.y + dropdownBox.height
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
-        else d3.select("#prompt-selector-dropdown").style("display", "none");
+        else {
+            d3.select("#prompt-selector-dropdown").style("display", "none");
+            d3.select("#compare-button-container").style("z-index", "")
+        }
     }
 })
 
@@ -141,7 +144,6 @@ d3.select("#prompt-selector-dropdown-container")
                 d3.select("#generated-image").attr("src", `./assets/img/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${p2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#generated-image-2").attr("src", `./assets/img/${p2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
-                // TODO: Change UMAP
                 drawUmap(p,p2)
             })
             .on("mouseout", () => {
@@ -151,7 +153,6 @@ d3.select("#prompt-selector-dropdown-container")
                 d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
-                // TODO: Back to original UMAP
                 drawUmap()
             })
             .on("click", promptChanged)
@@ -210,6 +211,12 @@ d3.select("#text-vector-generator-latent-denoiser-text")
     .append("div")
         .text("image generation")
 d3.select("#text-vector-generator-latent-denoiser-text")
+.on("mouseover", function() {
+    d3.select("#text-vector-generator-latent-denoiser-text").style("color", window.compare?"#404040":"#276419")
+})
+.on("mouseout", function() {
+    d3.select("#text-vector-generator-latent-denoiser-text").style("color", window.compare?"#808080":"#4d9221");
+})
     .on("click", () => {
         if (window.gsControlDisplayed) {
             window.gsControlDisplayed = false;
@@ -243,7 +250,7 @@ d3.select("#text-vector-generator-latent-denoiser-text")
                 .transition()
                     .duration(500)
                     .style("opacity", "1")
-                    .style("top", "87px")
+                    .style("top", window.compare?"178px":"87px")
                     .style("left", "546px")
             d3.select("#guidance-scale-expl-container")
                 .transition()
@@ -319,7 +326,6 @@ d3.select("#architecture-container")
             .append("g")
                 .append("line")
                     .attr("id", "improved-latent-generated-image-arrow")
-                    .attr("class", "architecture-arrow-img")
                     .attr("x1", "0")
                     .attr("y1", "10")
                     .attr("x2", "48")
@@ -446,6 +452,12 @@ d3.select("#timestep-0-random-noise-expl")
     .append("div")
         .attr("id", "timestep-0-random-noise-expl-1-1")
         .text("Random noise")
+        .on("mouseover", function() {
+            d3.select("#timestep-0-random-noise-expl-1-1").style("color", window.compare?"#67001f":"#8e0152")
+        })
+        .on("mouseout", function() {
+            d3.select("#timestep-0-random-noise-expl-1-1").style("color", window.compare?"#d6604d":"#c51b7d")
+        })
         .on("click", function() {
             if (window.seedControlDisplayed) {
                 window.seedControlDisplayed = false;
