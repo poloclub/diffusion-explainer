@@ -118,4 +118,4 @@ controllerTimestepDiv.append("div")
         .attr("value", "30")
         .attr("id", "controller-timestep-slider")
         .on("input", timestepSliderFunction)
-controllerPlayButtonClicked();  // TODO: UNCOMMENT
+controllerPlayButtonClicked();  

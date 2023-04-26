@@ -26,9 +26,8 @@ function promptChanged() {
     d3.select(`#prompt-selector-dropdown-option-${i}`).style("display","none")
     // change tokens in text representation generator
     drawTokens();
-    // drawTextVectors(); // TODO: Uncomment after computing the text vectors for the new prompts
-    drawUmap()
-    // d3.json("./assets/umap/global_umap_0.1_15_0.json").then(data => drawUmap(data))
+    drawTextVectors(); 
+    drawUmap();
 }
 
 
@@ -124,11 +123,10 @@ function updateStep(timestep) {
     let translated2X = (currentNode2X-75)*scale+translateX+75
     let translated2Y = (currentNode2Y-75)*scale+translateY+75
 
-    // TODO: if the point is out of screen, display: none -- when first draw, scale up and down and translate ..
     d3.select("#global-umap-highlight-line-1").attr("x2", (translated1X)+1).attr("y2", (translated1Y)+7.5)
-        .style("opacity", translated1X>=1&&translated1X<=151&&translated1Y>=7.5&&translated1Y<=157.5?1:0)
+        .style("opacity", translated1X>=0&&translated1X<=150&&translated1Y>=0&&translated1Y<=150?1:0)
     d3.select("#global-umap-highlight-line-2").attr("x2", (translated2X)+1).attr("y2", (translated2Y)+7.5)
-        .style("opacity", translated2X>=1&&translated2X<=151&&translated2Y>=7.5&&translated2Y<=157.5?1:0)
+        .style("opacity", translated2X>=0&&translated2X<=150&&translated2Y>=0&&translated2Y<=150?1:0)
     d3.select("#umap-gradient-1").attr("x2", (translated1X)+1).attr("y2", (translated1Y)+7.5)
     d3.select("#umap-gradient-2").attr("x2", (translated2X)+1).attr("y2", (translated2Y)+7.5)
 
@@ -322,7 +320,7 @@ function drawTextVectors() {
     d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","35").attr("cy", "10").attr("class", "text-dot")
     d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","35").attr("cy", "17").attr("class", "text-dot")
     d3.select("#text-vector-generator-l2-vectors-vertical-dots-svg").append("circle").attr("r", "1.5").attr("cx","35").attr("cy", "24").attr("class", "text-dot")
-    // TODO: Compute text vector and tokens for new prompts
+
     d3.json("./assets/json/text_vector.json")
         .then(function(d){
             for (let i = 0 ; i< tokenNum ; i++) {
@@ -343,22 +341,29 @@ function drawUmap(p1,p2) {
     function convertCoordX (x) {return (0.05*svgWidth + (x-minX)/(maxX-minX)*svgWidth*0.95);}
     function convertCoordY (y) {return (svgHeight - (0.05*svgHeight + (y-minY)/(maxY-minY)*svgHeight*0.95) + 6.5);}
     function svgScale(fixedPoint, origScale, newScale) {
+        if (newScale < 0.5 || newScale >= 10) return;
+
         let origTranslate = d3.select("#global-umap-svg").style("translate").split(" ")
         let origTranslateX = +(origTranslate[0].slice(0,-2));
         let origTranslateY;
         if (!origTranslate[1]) origTranslateY = +(origTranslate[0].slice(0,-2));
         else origTranslateY = +(origTranslate[1].slice(0,-2));
-        let newTranslateX = (1-newScale/origScale)*(fixedPoint.x-135)+newScale*origTranslateX/origScale;
-        let newTranslateY = (1-newScale/origScale)*(fixedPoint.y-135)+newScale*origTranslateY/origScale;
+        // let newTranslateX = (1-newScale/origScale)*(fixedPoint.x-135)+newScale*origTranslateX/origScale;
+        // let newTranslateY = (1-newScale/origScale)*(fixedPoint.y-135)+newScale*origTranslateY/origScale;
+        let newTranslateX = (1-newScale/origScale)*(fixedPoint.x-origTranslateX-75)+origTranslateX
+        let newTranslateY = (1-newScale/origScale)*(fixedPoint.y-origTranslateY-75)+origTranslateY
         
         window.umapScale = newScale;
         window.umapTranslateX = newTranslateX;
         window.umapTranslateY = newTranslateY;
         
-        d3.select("#global-umap-svg").style("scale", newScale)
+        d3.select("#global-umap-svg")
+            .style("scale", newScale)
             .style("translate", `${newTranslateX}px ${newTranslateY}px`);
-        d3.select("#global-umap-svg").selectAll(".umap-node")
-            .attr("r", 2/Math.sqrt(newScale))
+        d3.select("#global-umap-zoom-text").text(`${Math.floor(newScale*100)}%`)
+        d3.select("#global-umap-svg")
+            .selectAll(".umap-node")
+                .attr("r", 2/Math.sqrt(newScale))
         
             // Move the end point of the highlight line
         let currentNode1X = +(d3.select(`#global-umap-node-1-${window.timestep}`).attr("cx"))
@@ -388,16 +393,18 @@ function drawUmap(p1,p2) {
         e.preventDefault();
         let scale = +d3.select("#global-umap-svg").style("scale")
         let delta = e.deltaY || e.deltaX;
-        let scaleStep = Math.abs(delta)<50?0.1:0.25 // touchpad and mouse wheel
-        let scaleDelta = delta<0?scaleStep:-scaleStep;
-        let nextScale = scale * (1+scaleDelta);
+        // let scaleStep = Math.abs(delta)<50?0.1:0.25 // touchpad and mouse wheel
+        // let scaleDelta = delta<0?scaleStep:-scaleStep;
+        // let nextScale = scale * (1+scaleDelta);
+        let nextScale = delta>0?scale-0.25:scale+0.25;
         let fixedPoint = {x: e.layerX, y:e.layerY};
         svgScale(fixedPoint, scale, nextScale);
     }
     function umapClicked(e) {
         let fixedPoint = {x: e.layerX, y:e.layerY};
         let currScale = +(d3.select("#global-umap-svg").style("scale"));
-        let newScale = currScale * 1.25;
+        // let newScale = currScale * 1.25;
+        let newScale = currScale + 0.25;
         svgScale(fixedPoint, currScale, newScale)
     }
     function umapDragStart(e) {
@@ -433,24 +440,21 @@ function drawUmap(p1,p2) {
         d3.select("#global-umap-highlight-line-1")
             .attr("x2", translated1X+1)
             .attr("y2", translated1Y+7.5)
-            .style("opacity", translated1X>=1&&translated1X<=151&&translated1Y>=7.5&&translated1Y<=157.5?1:0)
+            .style("opacity", translated1X>=0&&translated1X<=150&&translated1Y>=0&&translated1Y<=150?1:0)
         d3.select("#umap-gradient-1")
             .attr("x2", translated1X+1)
             .attr("y2", translated1Y+7.5)
         d3.select("#global-umap-highlight-line-2")
             .attr("x2", translated2X+1)
             .attr("y2", translated2Y+7.5)
-            .style("opacity", translated2X>=1&&translated2X<=151&&translated2Y>=7.5&&translated2Y<=157.5?1:0)
+            .style("opacity", translated2X>=0&&translated2X<=150&&translated2Y>=0&&translated2Y<=150?1:0)
         d3.select("#umap-gradient-2")
             .attr("x2", translated2X+1)
             .attr("y2", translated2Y+7.5)
-
     }
     function umapDragEnd(e) {
         d3.select("#global-umap-svg").style("cursor", "zoom-in");
     }
-
-
     
     let drag = d3.drag()
         .on("start", umapDragStart)
@@ -460,6 +464,21 @@ function drawUmap(p1,p2) {
         .on("wheel", umapScrolled)
         .on("click", umapClicked)
         .call(drag)
+
+    d3.select("#global-umap-zoom-in-button")
+        .on("click", () => {
+            let scale = +d3.select("#global-umap-svg").style("scale")
+            let nextScale = scale+0.25;
+            let fixedPoint = {x: svgWidth/2, y:svgHeight/2};
+            svgScale(fixedPoint, scale, nextScale);
+        })
+    d3.select("#global-umap-zoom-out-button")
+        .on("click", () => {
+            let scale = +d3.select("#global-umap-svg").style("scale")
+            let nextScale = scale-0.25;
+            let fixedPoint = {x: svgWidth/2, y:svgHeight/2};
+            svgScale(fixedPoint, scale, nextScale);
+        })
     
     d3.select("#global-umap-g-1").html("")
     d3.select("#global-umap-g-2").html("")
@@ -474,22 +493,39 @@ function drawUmap(p1,p2) {
     let data2 = data[p2][window.seed][window.gs];
     // let selectedUmapColor1 = d3.scaleLinear().domain([0,window.totalTimesteps+1]).range(["#f7f7f7", "#b2182b"]);
     // let selectedUmapColor2 = d3.scaleLinear().domain([0,window.totalTimesteps+1]).range(["#f7f7f7", "#2166ac"]);
-    let selectedUmapColor1 = d3.scaleLinear().domain([-50,window.totalTimesteps+1]).range(["#f7f7f7", "#d6604d"]);
-    let selectedUmapColor2 = d3.scaleLinear().domain([-50,window.totalTimesteps+1]).range(["#f7f7f7", "#4393c3"]);
+    let colorBuffer = 30
+    let selectedUmapColor1 = d3.scaleLinear().domain([-colorBuffer,window.totalTimesteps+1]).range(["#f7f7f7", "#d6604d"]);
+    let selectedUmapColor2 = d3.scaleLinear().domain([-colorBuffer,window.totalTimesteps+1]).range(["#f7f7f7", "#4393c3"]);
+    let scale = +(d3.select("#global-umap-svg").style("scale"))
 
-
-    // TODO: Save if it is first time to draw umap or not. If not first time, use the same scale and translate as previous umap
-    if (window.umapScale == null) {
+    if (window.firstCompare) {
         // decide the scale and ...
-        // TODO: Get min10X, max10X, min10Y, max10Y: vals computed from step 10 to 50
         let min10X=10000000, max10X=-10000000, min10Y=10000000, max10Y=-10000000;
-        // TODO: can change the origin of the transforms when translating so that the transformation becomes much easier? before doing it, git commit and start changing the code
-    }
-    else {
-    // document.getElementById("global-umap-svg").scale = 1;
-        document.getElementById("global-umap-svg").scale = +(d3.select("#global-umap-svg").style("scale"));
-        let scale = +(d3.select("#global-umap-svg").style("scale"));
-        window.umapScale = scale;
+        // 1. Get the min/max value of coordX/coordY for step 10 to 50 for given prompts/seed/gs 
+        for (let i = 10 ; i <= 50 ; i++) {
+            min10X = Math.min(min10X,data1[i][0],data2[i][0])
+            min10Y = Math.min(min10Y,data1[i][1],data2[i][1])
+            max10X = Math.max(max10X,data1[i][0],data2[i][0])
+            max10Y = Math.max(max10Y,data1[i][1],data2[i][1])
+        }
+        min10X = convertCoordX(min10X);
+        max10X = convertCoordX(max10X);
+        min10Y = convertCoordY(min10Y);
+        max10Y = convertCoordY(max10Y);
+        // 2. get the center and scale (compare with 150 and max-min)
+        let centerX = (min10X+max10X)/2;
+        let centerY = (min10Y+max10Y)/2;
+        // scale = Math.min((window.umapMaxX-window.umapMinX)/(max10X-min10X),(window.umapMaxY-window.umapMinY)/(max10Y-min10Y))
+        scale = 150 * 0.8 / Math.max(max10X-min10X, min10Y-max10Y)
+        scale = Math.floor(scale * 100 / 25)*25/100
+        let translateX = (75-centerX) * scale 
+        let translateY = (75-centerY) * scale 
+        
+        // 3. apply the translate (75-center) and scale
+        d3.select("#global-umap-svg")
+            .style("scale", scale)
+            .style("translate", `${translateX}px ${translateY}px`);
+        d3.select("#global-umap-zoom-text").text(`${Math.floor(scale*100)}%`)
     }
 
     let nodeRadius = 2/Math.sqrt(scale);
@@ -504,7 +540,7 @@ function drawUmap(p1,p2) {
             .attr("cx", d=>convertCoordX(d[0]))
             .attr("cy", d=>convertCoordY(d[1]))
             .attr("r", nodeRadius)
-            .attr("fill", (d,i)=>selectedUmapColor1(50+i))
+            .attr("fill", (d,i)=>selectedUmapColor1(colorBuffer+i))
             .style("opacity", (d,i) => (i<=window.timestep)?fullOpacity:0)
 
     d3.select("#global-umap-g-2")
@@ -517,7 +553,7 @@ function drawUmap(p1,p2) {
             .attr("cx", d=>convertCoordX(d[0]))
             .attr("cy", d=>convertCoordY(d[1]))
             .attr("r", nodeRadius)
-            .attr("fill", (d,i)=>selectedUmapColor2(50+i))
+            .attr("fill", (d,i)=>selectedUmapColor2(colorBuffer+i))
             .style("opacity", (d,i) => (i<=window.timestep)?fullOpacity:0)
 
     let currentNode1X = d3.select(`#global-umap-node-1-${window.timestep}`).attr("cx")
@@ -531,7 +567,7 @@ function drawUmap(p1,p2) {
     let translated1Y = (currentNode1Y-75)*scale+translateY+75
     let translated2X = (currentNode2X-75)*scale+translateX+75
     let translated2Y = (currentNode2Y-75)*scale+translateY+75
-    // TODO: if the point is out of screen, display: none
+
     d3.select("#global-umap-highlight-line-1")
         .attr("x1", "76")
         .attr("y1", "0")
@@ -539,7 +575,7 @@ function drawUmap(p1,p2) {
         .attr("y2", (+translated1Y)+7.5)
         .style("stroke-width", "2px")
         .style("stroke", "url(\'#umap-gradient-1\')")  
-        .style("opacity", translated1X>=1&&translated1X<=151&&translated1Y>=7.5&&translated1Y<=157.5?1:0)
+        .style("opacity", translated1X>=0&&translated1X<=150&&translated1Y>=0&&translated1Y<=150?1:0)
     d3.select("#global-umap-highlight-line-2")
         .attr("x1", "76")
         .attr("y1", "165")
@@ -547,7 +583,7 @@ function drawUmap(p1,p2) {
         .attr("y2", (+translated2Y)+7.5)
         .style("stroke-width", "2px")
         .style("stroke", "url(\'#umap-gradient-2\')")  
-        .style("opacity", translated2X>=1&&translated2X<=151&&translated2Y>=7.5&&translated2Y<=157.5?1:0)
+        .style("opacity", translated2X>=0&&translated2X<=150&&translated2Y>=0&&translated2Y<=150?1:0)
     d3.select("#umap-gradient-1")
         .attr("x2", (+translated1X)+1)
         .attr("y2", (+translated1Y)+7.5)
@@ -1338,6 +1374,7 @@ function compareButtonClicked () {
 
 function onCompare () {
     window.compare = true;
+    if (window.firstCompare){window.firstCompare = false;}
 
     let animationDuration = 1000;
 
@@ -1368,7 +1405,6 @@ function onCompare () {
     d3.select("#generated-image-container-2").style("display", "block")
 
     // change the position of prompt boxes and compare-button-container
-    // TODO: Change the position of guidance scale controller
     let h1 = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     let h2 = +getComputedStyle(document.getElementById("prompt-box-2")).height.slice(0,-2)
     d3.select("#architecture-wrapper")

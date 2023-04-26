@@ -12,7 +12,6 @@ document.addEventListener("mouseup", (e) => {
         let top = textVectorGeneratorBox.y
         let bottom = textVectorGeneratorBox.y + textVectorGeneratorBox.height
         let descriptionBox = document.getElementById("description").getBoundingClientRect()
-        console.log(e.clientY, descriptionBox.y, descriptionBox.height)
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
         else if (e.clientY > descriptionBox.y) {}
         else {reduceTextVectorGeneratorL2();}
@@ -105,8 +104,6 @@ textGeneratorL2ExplDiv.append("div")
             .style("display", "block")
             .style("left", `403px`)
             .style("top", `26px`)
-            // .style("left", `${e.x-251}px`)
-            // .style("top", `${e.y-308}px`)
     })
 textGeneratorL2ExplDiv
     .append("div")

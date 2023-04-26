@@ -32,7 +32,6 @@ d3.select("#architecture-container")
         .attr("height", `20px`)
         .on("click", reduceLatentDenoiserL2)
 
-// TODO: ADD latent images after loading d3.json data
 d3.select("#latent-denoiser-l2-expl-container")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-prev-latent-container")
