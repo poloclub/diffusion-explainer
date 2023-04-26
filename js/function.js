@@ -348,8 +348,6 @@ function drawUmap(p1,p2) {
         let origTranslateY;
         if (!origTranslate[1]) origTranslateY = +(origTranslate[0].slice(0,-2));
         else origTranslateY = +(origTranslate[1].slice(0,-2));
-        // let newTranslateX = (1-newScale/origScale)*(fixedPoint.x-135)+newScale*origTranslateX/origScale;
-        // let newTranslateY = (1-newScale/origScale)*(fixedPoint.y-135)+newScale*origTranslateY/origScale;
         let newTranslateX = (1-newScale/origScale)*(fixedPoint.x-origTranslateX-75)+origTranslateX
         let newTranslateY = (1-newScale/origScale)*(fixedPoint.y-origTranslateY-75)+origTranslateY
         
@@ -363,9 +361,9 @@ function drawUmap(p1,p2) {
         d3.select("#global-umap-zoom-text").text(`${Math.floor(newScale*100)}%`)
         d3.select("#global-umap-svg")
             .selectAll(".umap-node")
-                .attr("r", 2/Math.sqrt(newScale))
+                .attr("r", 2/newScale)
         
-            // Move the end point of the highlight line
+        // Move the end point of the highlight line
         let currentNode1X = +(d3.select(`#global-umap-node-1-${window.timestep}`).attr("cx"))
         let currentNode1Y = +(d3.select(`#global-umap-node-1-${window.timestep}`).attr("cy"))
         let currentNode2X = +(d3.select(`#global-umap-node-2-${window.timestep}`).attr("cx"))
@@ -393,9 +391,6 @@ function drawUmap(p1,p2) {
         e.preventDefault();
         let scale = +d3.select("#global-umap-svg").style("scale")
         let delta = e.deltaY || e.deltaX;
-        // let scaleStep = Math.abs(delta)<50?0.1:0.25 // touchpad and mouse wheel
-        // let scaleDelta = delta<0?scaleStep:-scaleStep;
-        // let nextScale = scale * (1+scaleDelta);
         let nextScale = delta>0?scale-0.25:scale+0.25;
         let fixedPoint = {x: e.layerX, y:e.layerY};
         svgScale(fixedPoint, scale, nextScale);
@@ -403,8 +398,8 @@ function drawUmap(p1,p2) {
     function umapClicked(e) {
         let fixedPoint = {x: e.layerX, y:e.layerY};
         let currScale = +(d3.select("#global-umap-svg").style("scale"));
-        // let newScale = currScale * 1.25;
         let newScale = currScale + 0.25;
+        console.log(e.layerX, e.layerY)
         svgScale(fixedPoint, currScale, newScale)
     }
     function umapDragStart(e) {
@@ -515,7 +510,6 @@ function drawUmap(p1,p2) {
         // 2. get the center and scale (compare with 150 and max-min)
         let centerX = (min10X+max10X)/2;
         let centerY = (min10Y+max10Y)/2;
-        // scale = Math.min((window.umapMaxX-window.umapMinX)/(max10X-min10X),(window.umapMaxY-window.umapMinY)/(max10Y-min10Y))
         scale = 150 * 0.8 / Math.max(max10X-min10X, min10Y-max10Y)
         scale = Math.floor(scale * 100 / 25)*25/100
         let translateX = (75-centerX) * scale 
@@ -528,7 +522,7 @@ function drawUmap(p1,p2) {
         d3.select("#global-umap-zoom-text").text(`${Math.floor(scale*100)}%`)
     }
 
-    let nodeRadius = 2/Math.sqrt(scale);
+    let nodeRadius = 2/scale;
 
     d3.select("#global-umap-g-1")
         .selectAll("circle")
