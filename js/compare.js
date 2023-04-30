@@ -146,8 +146,7 @@ d3.select("#umap-gradient-defs")
             .attr("stop-color", d=>d[1])
 d3.select("#global-umap-svg").append("g").attr("id", "global-umap-g-1")
 d3.select("#global-umap-svg").append("g").attr("id", "global-umap-g-2")
-// d3.json("./assets/umap/seed_umap_0.99_15_0.json").then(data => {
-d3.json("./assets/umap/new_prompts_seed_umap_0.99_15_0.json").then(data => {
+d3.json("./assets/umap/umap_0.99_15_0.json").then(data => {
     window.umapData = data
     setMinMaxCoord();
     drawUmap()
