@@ -43,5 +43,5 @@ def compressFile(file_path, save_path, new_size=(128,128)):
     image = image.resize(new_size)
     image.save(save_path, "JPEG", optimize=True, quality=70)
 
-# compress_dir("./../assets/latent_viz_orig/", "./../assets/latent_viz/", (64,64))
-compress_dir("./../assets/img_orig/", "./../assets/img/", (256,256))
+compress_dir("./../assets/latent_viz_orig/", "./../assets/latent_viz/", (64,64))
+# compress_dir("./../assets/img_orig/", "./../assets/img/", (256,256))

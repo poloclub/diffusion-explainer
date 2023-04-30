@@ -1,4 +1,4 @@
-import {drawUmap} from "./function.js";
+import {drawUmap, setMinMaxCoord} from "./function.js";
 
 let architectureLineWidth = 2;
 let architectureCompLineColor = "var(--comp1)"
@@ -7,7 +7,7 @@ d3.select("#your-text-prompt")
     .append("div")
         .attr("id", "prompt-box-2")
         .attr("class", "compare")
-        .text(window.selectedPrompt2)
+        .html(window.selectedPromptHtmlCode2)
 
 // prompt - text generator arrow
 d3.select("#prompt-text-vector-generator-container")
@@ -146,26 +146,10 @@ d3.select("#umap-gradient-defs")
             .attr("stop-color", d=>d[1])
 d3.select("#global-umap-svg").append("g").attr("id", "global-umap-g-1")
 d3.select("#global-umap-svg").append("g").attr("id", "global-umap-g-2")
-d3.json("./assets/umap/global_umap_0.1_15_0.json").then(data => {
+// d3.json("./assets/umap/seed_umap_0.99_15_0.json").then(data => {
+d3.json("./assets/umap/new_prompts_seed_umap_0.99_15_0.json").then(data => {
     window.umapData = data
-    let minX=10000000, maxX=-10000000, minY=10000000, maxY=-10000000;
-    for (let p in data) {
-        for (let seed_i = 0 ; seed_i < window.seed_list.length; seed_i++) {
-            for (let gs_i = 0 ; gs_i < window.gs_list.length; gs_i++) {
-                let umap_array = data[p][window.seed_list[seed_i]][window.gs_list[gs_i]]
-                umap_array.forEach(coord => {
-                    if (+(coord[0]) < minX) minX = +(coord[0])
-                    if (+(coord[0]) > maxX) maxX = +(coord[0])
-                    if (+(coord[1]) < minY) minY = +(coord[1])
-                    if (+(coord[1]) > maxY) maxY = +(coord[1])
-                })
-            }
-        }
-    }
-    window.umapMinX = minX;
-    window.umapMinY = minY;
-    window.umapMaxX = maxX;
-    window.umapMaxY = maxY;
+    setMinMaxCoord();
     drawUmap()
 })
 d3.select("#architecture-container")
@@ -209,3 +193,6 @@ d3.select("#architecture-container")
         .append("img")
             .attr("id", "generated-image-2")
             .attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+
+
+// TODO: Bold the keywords

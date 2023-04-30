@@ -199,6 +199,11 @@ svg {
     z-index: -1;
 }
 
+#prompt-box-2 .prompt-keyword {
+    font-weight: 700;
+    color: #2166ac;
+}
+
 #prompt-selector-dropdown-container {
     font-size: 14px;
     position: absolute;
@@ -218,6 +223,7 @@ svg {
     color: #276419;
     cursor: pointer;
     background-color: #f4f7ef;
+    font-weight: 400;
 }
 
 #prompt-selector-dropdown-box-text {
@@ -1105,23 +1111,40 @@ input:checked + .slider:before {
 }
 
 #denoise-latent-l2-expl-guidance-scale-expl-text {
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--darkgray);
     width: 323px;
     position: absolute;
-    top: 58px;
+    top: 48px;
     left: 135px;
     text-align: center;
     font-weight: 300;
+    line-height: 11.5px;
+    pointer-events: none;
+}
+
+#denoise-latent-l2-expl-guidance-scale-expl-text-1 {
+    font-size: 12px;
+    position: relative;
+    top: -7.5px;
+    left: 75px;
+    pointer-events: none;
+}
+
+#denoise-latent-l2-expl-guidance-scale-expl-text-2 {
+    display: inline-block;
+    padding-right: 5px;
 }
 
 #denoise-latent-l2-expl-guidance-scale-expl-text-how {
+    display: inline-block;
     color: var(--jargon);
     text-decoration: underline;
     font-style: italic;
-    font-size: 12px;
+    font-size: 11.5px;
     cursor: pointer;
     margin-top: 3px;
+    pointer-events: initial;
 }
 
 #denoise-latent-l2-expl-unet-svg {
@@ -1484,7 +1507,7 @@ input:checked + .slider:before {
 #latent-denoiser-l3-expl-vis-svg {
     position: absolute;
     left: 320px;
-    top: 360px;
+    top: 344px;
 }
 
 #latent-denoiser-l3-expl-vis-leave-img {
@@ -1506,7 +1529,7 @@ input:checked + .slider:before {
     color: var(--gray);
     position: absolute;
     left: 316px;
-    top: 400px;
+    top: 380px;
     width: 285px;
 }
 
@@ -1573,6 +1596,10 @@ input:checked + .slider:before {
 #global-umap-expl {
     padding-top: 3px;
     color: #a0a0a0;
+}
+
+.umap-node {
+    /* mix-blend-mode: darken; */
 }
 
 #global-umap-controller-container {

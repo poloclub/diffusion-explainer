@@ -5,6 +5,8 @@ function promptChanged() {
     window.selectedPrompt = p
     window.selectedPromptGroupIdx = +i
     window.selectedPrompt2 = window.prompts[window.selectedPromptGroupIdx][1];
+    window.selectedPromptHtmlCode = window.promptsHtmlCode[window.selectedPromptGroupIdx][0];
+    window.selectedPromptHtmlCode2 = window.promptsHtmlCode[window.selectedPromptGroupIdx][1];
     d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
     d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
     d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
@@ -13,8 +15,9 @@ function promptChanged() {
     window.promptDropdownExpanded = false
     d3.select("#prompt-selector-dropdown").style("display", "none")
     // change text tokens
-    d3.select("#prompt-selector-dropdown-box-text").text(p)
-    d3.select("#prompt-box-2").text(window.selectedPrompt2)
+    d3.select("#prompt-selector-dropdown-box-text").html(window.selectedPromptHtmlCode)
+    if (window.compare) d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword").style("color", "#b2182b").style("font-weight", "700")
+    d3.select("#prompt-box-2").html(window.selectedPromptHtmlCode2)
     let h = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     let h2 = +getComputedStyle(document.getElementById("prompt-box-2")).height.slice(0,-2)
     d3.select("#your-text-prompt").style("top", window.compare?"0px":`${38.5-h/2}px`)
@@ -105,7 +108,7 @@ function updateStep(timestep) {
     }
 
     // update UMAP Highlight
-    let fullOpacity = 1
+    let fullOpacity = 0.7
     d3.select("#global-umap-g-1").selectAll("circle").style("opacity", (d,i) => (i<=window.timestep)?fullOpacity:0)
     d3.select("#global-umap-g-2").selectAll("circle").style("opacity", (d,i) => (i<=window.timestep)?fullOpacity:0)
 
@@ -172,6 +175,7 @@ function seedChanged(e) {
     // when seed is changed
     let newSeed = this.value
     hyperparamChanged(e, newSeed, window.gs);
+    setMinMaxCoord();
 }
 
 function gsChanged(e) {
@@ -183,10 +187,14 @@ function gsChanged(e) {
     let partitions = [0,0.1,0.4,1.]
     let colors = {0: "#a0a0a0", 1: "var(--text1)", 7: "var(--text2)", 20: "var(--text3)"}
     let path = {
-        0: "M0 0 l 0 -15 C 0 -30, 15.2 -31, 30.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
-        1: "M25 0 l 0 -15 C 25 -30, 40.2 -31, 55.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
-        7: "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70", 
-        20: "M250 0 l 0 -20 C 250 -25, 242.2 -31.5, 237 -32.5 L165 -37.5 C 159.8 -38.5, 152 -40, 152 -45 L152 -70"
+        0: "M0 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
+        1: "M20 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
+        7: "M100 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
+        20: "M250 0 l 0 -10 a10 10, 0 0 0, -10 -10 L162 -20 a10 10, 0 0 1, -10 -10 L152 -54", 
+        // 0: "M0 0 l 0 -15 C 0 -30, 15.2 -31, 30.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
+        // 1: "M25 0 l 0 -15 C 25 -30, 40.2 -31, 55.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
+        // 7: "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70", 
+        // 20: "M250 0 l 0 -20 C 250 -25, 242.2 -31.5, 237 -32.5 L165 -37.5 C 159.8 -38.5, 152 -40, 152 -45 L152 -70"
     }
     let points = {
         0: [partitions[0]*sliderWidth, (1-partitions[0])*sliderHeight],
@@ -332,14 +340,56 @@ function drawTextVectors() {
         })
 }
 
+function setMinMaxCoord() {
+    let seed = window.seed
+    let data = window.umapData 
+
+    let minX=10000000, maxX=-10000000, minY=10000000, maxY=-10000000;
+    let min10X=10000000, max10X=-10000000, min10Y=10000000, max10Y=-10000000;
+    for (let p in data) {
+        // for (let seed_i = 0 ; seed_i < window.seed_list.length; seed_i++) {
+        for (let gs_i = 0 ; gs_i < window.gs_list.length; gs_i++) {
+            // let umap_array = data[p][window.seed_list[seed_i]][window.gs_list[gs_i]]
+            let umap_array = data[p][seed][window.gs_list[gs_i]]
+            for (let step = 0 ; step <= 50 ; step++) {
+                let coord = umap_array[step]
+                if (+(coord[0]) < minX) minX = +(coord[0]); 
+                if (+(coord[0]) > maxX) maxX = +(coord[0])
+                if (+(coord[1]) < minY) minY = +(coord[1])
+                if (+(coord[1]) > maxY) maxY = +(coord[1])
+            }
+        }
+        // }
+    }
+    for (let p in data) {
+        let gs = window.gs
+        let umap_array = data[p][seed][gs]
+        for (let step = 0 ; step <= 50 ; step++) {
+            let coord = umap_array[step]
+            if (+(coord[0]) < min10X && step >= 10) min10X = +(coord[0])
+            if (+(coord[0]) > max10X && step >= 10) max10X = +(coord[0])
+            if (+(coord[1]) < min10Y && step >= 10) min10Y = +(coord[1])
+            if (+(coord[1]) > max10Y && step >= 10) max10Y = +(coord[1])
+        }
+    }
+    window.umapMinX = minX;
+    window.umapMinY = minY;
+    window.umapMaxX = maxX;
+    window.umapMaxY = maxY;
+    window.umapMin10X = min10X;
+    window.umapMin10Y = min10Y;
+    window.umapMax10X = max10X;
+    window.umapMax10Y = max10Y;
+}
+
 function drawUmap(p1,p2) {
     let data = window.umapData;
     if (!p1) {
         p1 = window.selectedPrompt
         p2 = window.selectedPrompt2
     }
-    function convertCoordX (x) {return (0.05*svgWidth + (x-minX)/(maxX-minX)*svgWidth*0.95);}
-    function convertCoordY (y) {return (svgHeight - (0.05*svgHeight + (y-minY)/(maxY-minY)*svgHeight*0.95) + 6.5);}
+    function convertCoordX (x) {return (0.05*svgWidth + (x-window.umapMinX)/(window.umapMaxX-window.umapMinX)*svgWidth*0.90);}
+    function convertCoordY (y) {return (svgHeight - (0.05*svgHeight + (y-window.umapMinY)/(window.umapMaxY-window.umapMinY)*svgHeight*0.90) + 6.5);}
     function svgScale(fixedPoint, origScale, newScale) {
         if (newScale < 0.5 || newScale >= 10) return;
 
@@ -359,7 +409,13 @@ function drawUmap(p1,p2) {
             .style("scale", newScale)
             .style("translate", `${newTranslateX}px ${newTranslateY}px`);
         d3.select("#global-umap-zoom-text").text(`${Math.floor(newScale*100)}%`)
-        d3.select("#global-umap-svg")
+        // d3.select("#global-umap-svg")
+        //     .selectAll(".umap-node")
+        //         .attr("r", 2/newScale)
+        d3.select("#global-umap-g-1")
+            .selectAll(".umap-node")
+                .attr("r", 1.0*2/newScale)
+        d3.select("#global-umap-g-2")
             .selectAll(".umap-node")
                 .attr("r", 2/newScale)
         
@@ -399,7 +455,6 @@ function drawUmap(p1,p2) {
         let fixedPoint = {x: e.layerX, y:e.layerY};
         let currScale = +(d3.select("#global-umap-svg").style("scale"));
         let newScale = currScale + 0.25;
-        console.log(e.layerX, e.layerY)
         svgScale(fixedPoint, currScale, newScale)
     }
     function umapDragStart(e) {
@@ -480,9 +535,7 @@ function drawUmap(p1,p2) {
 
     let svgHeight = 150
     let svgWidth = 150
-    let minX=window.umapMinX, maxX = window.umapMaxX;
-    let minY=window.umapMinY, maxY = window.umapMaxY;
-    let fullOpacity = 1
+    let fullOpacity = 0.7
 
     let data1 = data[p1][window.seed][window.gs];
     let data2 = data[p2][window.seed][window.gs];
@@ -493,7 +546,8 @@ function drawUmap(p1,p2) {
     let selectedUmapColor2 = d3.scaleLinear().domain([-colorBuffer,window.totalTimesteps+1]).range(["#f7f7f7", "#4393c3"]);
     let scale = +(d3.select("#global-umap-svg").style("scale"))
 
-    if (window.firstCompare) {
+    if (true || window.firstCompare) {
+        /*
         // decide the scale and ...
         let min10X=10000000, max10X=-10000000, min10Y=10000000, max10Y=-10000000;
         // 1. Get the min/max value of coordX/coordY for step 10 to 50 for given prompts/seed/gs 
@@ -503,17 +557,19 @@ function drawUmap(p1,p2) {
             max10X = Math.max(max10X,data1[i][0],data2[i][0])
             max10Y = Math.max(max10Y,data1[i][1],data2[i][1])
         }
-        min10X = convertCoordX(min10X);
-        max10X = convertCoordX(max10X);
-        min10Y = convertCoordY(min10Y);
-        max10Y = convertCoordY(max10Y);
+        */
+        let coordMin10X = convertCoordX(window.umapMin10X);
+        let coordMax10X = convertCoordX(window.umapMax10X);
+        let coordMin10Y = convertCoordY(window.umapMin10Y);
+        let coordMax10Y = convertCoordY(window.umapMax10Y);
         // 2. get the center and scale (compare with 150 and max-min)
-        let centerX = (min10X+max10X)/2;
-        let centerY = (min10Y+max10Y)/2;
-        scale = 150 * 0.8 / Math.max(max10X-min10X, min10Y-max10Y)
+        let centerX = (coordMin10X+coordMax10X)/2;
+        let centerY = (coordMin10Y+coordMax10Y)/2;
+        scale = 150 / Math.max(coordMax10X-coordMin10X, coordMin10Y-coordMax10Y)
         scale = Math.floor(scale * 100 / 25)*25/100
         let translateX = (75-centerX) * scale 
         let translateY = (75-centerY) * scale 
+
         
         // 3. apply the translate (75-center) and scale
         d3.select("#global-umap-svg")
@@ -533,7 +589,7 @@ function drawUmap(p1,p2) {
             .attr("class", "umap-node")
             .attr("cx", d=>convertCoordX(d[0]))
             .attr("cy", d=>convertCoordY(d[1]))
-            .attr("r", nodeRadius)
+            .attr("r", nodeRadius*1.0)
             .attr("fill", (d,i)=>selectedUmapColor1(colorBuffer+i))
             .style("opacity", (d,i) => (i<=window.timestep)?fullOpacity:0)
 
@@ -893,7 +949,7 @@ function reduceTextVectorGeneratorL2(e) {
 function expandLatentDenoiserL2(e) {
     window.latentDenoiserL2Expanded = true;
     let latentDenoiserExpandedWidth = 323;
-    let latentDenoiserExpandedHeight = 263;
+    let latentDenoiserExpandedHeight = 230;
     let latentDenoiserGeneratorOrigWidth = 145;
     let textVectorGeneratorRectOrigWidth = 145
     let textVectorGeneratorRectOrigHeight = 80
@@ -1055,7 +1111,11 @@ function expandLatentDenoiserL2(e) {
             .duration(animationDuration)
             .style("opacity", "100%")
             .style("top", "154px")
-            .style("left", "539px")
+            .style("left", "516px")
+    d3.select("#guidance-scale-control-text")
+        .transition()
+            .duration(animationDuration)
+            .style("color", "#4d9221")
     
     // Covers
     d3.select("#denoise-latent-l2-left-cover")
@@ -1210,6 +1270,11 @@ function reduceLatentDenoiserL2 () {
             .transition()
                 .duration(500)
                 .style("opacity", "1")
+    d3.select("#guidance-scale-control-text")
+        .transition()
+            .duration(animationDuration)
+            .style("color", "#808080")
+            .style("opacity", "1")
 
     // Seed controller
     if (window.seedControlDisplayed)
@@ -1264,7 +1329,7 @@ function expandLatentDenoiserL3 () {
     d3.select("#latent-denoiser-container")
         .transition()
         .duration(animationDuration)
-            .style("height", "403px")
+            .style("height", "383px")
     
     // Change the height of main
     d3.select("#architecture-wrapper")
@@ -1333,7 +1398,7 @@ function reduceLatentDenoiserL3 () {
     d3.select("#latent-denoiser-container")
         .transition()
         .duration(animationDuration)
-            .style("height", "263px")
+            .style("height", "230px")
     
     // guidance scale
     d3.select("#guidance-scale-control-dropdown-container")
@@ -1369,6 +1434,8 @@ function compareButtonClicked () {
 function onCompare () {
     window.compare = true;
     if (window.firstCompare){window.firstCompare = false;}
+    if (window.textVectorGeneratorL3Expanded || window.textVectorGeneratorL2Expanded) reduceTextVectorGeneratorL2();
+    if (window.latentDenoiserL2Expanded || window.latentDenoiserL3Expanded) reduceLatentDenoiserL2(); 
 
     let animationDuration = 1000;
 
@@ -1410,6 +1477,7 @@ function onCompare () {
         .transition()
         .duration(animationDuration)
             .style("top", `0px`)
+            .style("left", `0px`)
     d3.select("#prompt-selector-dropdown-container")
         .transition()
         .duration(animationDuration)
@@ -1420,6 +1488,16 @@ function onCompare () {
             .style("background-color", "#fddbc7")
             .style("border-color", "#f4a582")
             .style("color", "#646464")
+    d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword")
+        .transition()
+        .duration(animationDuration)
+            .style("color", "#b2182b")
+            .style("font-weight", "700")
+    d3.selectAll(".prompt-selector-dropdown-options .prompt-keyword")
+        .transition()
+        .duration(animationDuration)
+            .style("font-weight", "700")
+            
     d3.select("#prompt-box-2")
         .transition()
         .duration(animationDuration)
@@ -1434,6 +1512,7 @@ function onCompare () {
         .duration(animationDuration)
             .style("opacity", "1")
             .style("top", `110px`)
+            .style("left", "250px")
     d3.select("#prompt-text-vector-generator-svg-2")
         .transition()
         .duration(animationDuration)
@@ -1443,13 +1522,18 @@ function onCompare () {
         .transition()
         .duration(animationDuration)
             .style("top", `101px`)
+            .style("left", "290px")
             .style("background-color", "#f4f4f4")
             .style("color", "#404040")
             .style("pointer-events", "none")
             .style("border-width", "0px")
+            .style("width", `${145}px`)
+            .style("height", `${80}px`)
+            .style("padding", "11.5px 0")
     d3.select("#text-vector-generator-latent-denoiser-container")
         .transition()
         .duration(animationDuration)
+            .style("left", "437px")
             .style("top", `110px`)
     d3.select("#text-vector-generator-latent-denoiser-svg-2")
         .transition()
@@ -1513,18 +1597,38 @@ function onCompare () {
         .transition()
         .duration(animationDuration)
             .style("left", `531px`)
+            .style("top", `40px`)
     d3.select("#guidance-scale-control-container")
         .transition()
         .duration(animationDuration)
             .style("top", `178px`)
-    d3.select("#guidance-scale-expl-container")
+            .style("left", `${546}px`)
+            .style("opacity", window.gsControlDisplayed?"1":"0")
         .transition()
-        .duration(0)
-            .style("text-align", "right")
-        .transition()
-        .duration(animationDuration)
-            .style("left", `152px`)
-            .style("top", `191px`)
+            .style("display", window.gsControlDisplayed?"block":"none")
+        .on("interrupt", function() {
+            d3.select(this).style("display", "block")
+        })
+    if (window.gsControlDisplayed)
+        d3.select("#guidance-scale-expl-container")
+            .transition()
+            .duration(0)
+                .style("text-align", "right")
+                .style("display", "block")
+            .transition()
+            .duration(animationDuration)
+                .style("left", `152px`)
+                .style("top", `191px`)
+                .style("opacity", "1")
+    else
+        d3.select("#guidance-scale-expl-container")
+            .transition()
+            .duration(0)
+                .style("text-align", "right")
+            .transition()
+            .duration(animationDuration)
+                .style("left", `152px`)
+                .style("top", `191px`)
     d3.select("#guidance-scale-expl-container svg")
         .transition()
         .duration(animationDuration)
@@ -1534,8 +1638,11 @@ function onCompare () {
     d3.select("#latent-denoiser-container")
         .transition()
         .duration(animationDuration)
+            .style("left", "542px")
+            .style("width", "145px")
             .style("height", "282px")
             .style("padding", "117.5px 0")
+            .style("top", "0px")
             .style("background-color", "#f4f4f4")
             .style("color", "#404040")
             .style("pointer-events", "none")
@@ -1575,10 +1682,20 @@ function onCompare () {
             .attr("x2", "70")
 
     // Change the color theme
-    d3.selectAll(".architecture-arrow-text")
+    // d3.selectAll(".architecture-arrow-text:not(#text-vector-generator-latent-denoiser-arrow)")
+    //     .transition()
+    //     .duration(animationDuration)
+    //         .style("stroke", "#f4a582")
+    d3.selectAll("#text-vector-generator-latent-denoiser-arrow")
+        .transition()
+        .duration(animationDuration)
+            .attr("d", "M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10")
+            .style("stroke", "#f4a582")
+    d3.selectAll("#prompt-text-vector-generator-arrow")
         .transition()
         .duration(animationDuration)
             .style("stroke", "#f4a582")
+            .attr("x2", "30")
     d3.selectAll(".architecture-arrow-img")
         .transition()
         .duration(animationDuration)
@@ -1616,6 +1733,7 @@ function onCompare () {
         .transition()
         .duration(animationDuration)
             .style("color", "#808080") 
+            .style("left", "7px")
     d3.select("#guidance-scale-expl-container-2-2")
         .transition()
         .duration(animationDuration)
@@ -1632,6 +1750,7 @@ function onCompare () {
         .duration(animationDuration)
             .style("opacity", "0")
             .style("left", "48px")
+            .style("font-size", "13px")
 }
 
 function offCompare () {
@@ -1639,6 +1758,7 @@ function offCompare () {
     let animationDuration = 1000;
     let h1 = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     let h2 = +getComputedStyle(document.getElementById("prompt-box-2")).height.slice(0,-2)
+    // TODO: Add interrupt for guidance-scale-control-container and its handler
 
     // Change position
     d3.select("#architecture-wrapper")
@@ -1660,6 +1780,15 @@ function offCompare () {
             .style("background-color", "#f4f7ef")
             .style("border-color", "#7fbc41")
             .style("color", "#276419")
+    d3.select("#prompt-selector-dropdown-box-container .prompt-keyword")
+        .transition()
+        .duration(animationDuration)
+            .style("font-weight", "400")
+            .style("color", "#276419")
+    d3.selectAll(".prompt-selector-dropdown-options .prompt-keyword")
+        .transition()
+        .duration(animationDuration)
+            .style("font-weight", "400")
     d3.select("#prompt-box-2")
         .transition()
         .duration(animationDuration)
@@ -1933,4 +2062,4 @@ function offCompare () {
 }
 
 // export {promptSelectorImageclicked, promptCompareClicked, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, updatePromptList, textVectorGeneratorClicked, reduceTextVectorGenerator, latentDenoiserClicked, reduceLatentDenoiser, expandLatentDenoiserL3,reduceLatentDenoiserL3, hyperparamChanged};
-export {promptChanged, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, expandTextVectorGeneratorL2, reduceTextVectorGeneratorL2, expandLatentDenoiserL2, reduceLatentDenoiserL2, expandLatentDenoiserL3,reduceLatentDenoiserL3, hyperparamChanged, drawTokens, drawTextVectors, compareButtonClicked};
+export {promptChanged, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, expandTextVectorGeneratorL2, reduceTextVectorGeneratorL2, expandLatentDenoiserL2, reduceLatentDenoiserL2, expandLatentDenoiserL3,reduceLatentDenoiserL3, hyperparamChanged, drawTokens, drawTextVectors, compareButtonClicked, setMinMaxCoord};

@@ -12,7 +12,6 @@ document.addEventListener("mousedown", (e) => {
         let top = latentDenoiserBox.y
         let bottom = latentDenoiserBox.y + latentDenoiserBox.height
         let descriptionBox = document.getElementById("description").getBoundingClientRect()
-        console.log(e.clientY, descriptionBox.y, descriptionBox.height)
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
         else if (document.querySelector(".controller-button-circle:hover") != null) {}
         else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
@@ -117,13 +116,19 @@ d3.select("#denoise-latent-l2-expl-guidance-scale-expl-container")
         .attr("id", "denoise-latent-l2-expl-guidance-scale-expl-text")
 d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
     .append("div")
-        .text("controls how well the image representation")
+    .attr("id", "denoise-latent-l2-expl-guidance-scale-expl-text-1")
+        .text("controls")
 d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
     .append("div")
-        .text("adheres to your text prompt.")
+        // .text("how well the image representation")
+        .text("how well the image representation adheres to text prompt.")
+// d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
+//     .append("div")
+//         .text("adheres to text prompt.")
 d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
     .append("div")
-        .text("Higher value means stronger adherence.")
+        .attr("id", "denoise-latent-l2-expl-guidance-scale-expl-text-2")
+        .text("Higher means stronger adherence.")
 d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
     .append("div")
     .attr("id", "denoise-latent-l2-expl-guidance-scale-expl-text-how")

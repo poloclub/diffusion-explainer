@@ -1,26 +1,55 @@
 window.prompts = [
-    ["spiderman in space", "winnie the pooh in space"],
-    ["a pineapple by the water on a beautiful beach", "a baobab tree by the water on a beautiful beach"],
+    ["a cute and adorable bunny, with huge clear eyes, holding a bunch of flowers, in the style of cute pixar character", "a cute and adorable bunny, with huge clear eyes, holding a bunch of flowers"],
+    ["a very very very very very beautiful cityscape", "a beautiful cityscape"],
     ["a vibrant renaissance portrait of an energetic noble woman, holding an iphone", "a muted renaissance portrait of a sad noble woman, holding an iphone"],
+    ["a cute panda playing the guitar in a bamboo forest", "a cute panda playing the guitar"],
+    ["a pineapple by the water on a beautiful beach", "a baobab tree by the water on a beautiful beach"],
+    ["spiderman in space", "winnie the pooh in space"],
     ["a castle by a sea, trending on artstation", "a castle by a sea"],
     ["a cute and lovely 4-year-old baby girl with a magical power, cosmic energy, lovely smile, digital painting, hyperrealistic, highly detailed, sharp, masterpiece", "a cute and lovely 4-year-old baby girl with a magical power, cosmic energy, lovely smile, digital painting, hyperrealistic"],
-    ["a cute and adorable bunny, with huge clear eyes, holding a bunch of flowers, in the style of cute pixar character", "a cute and adorable bunny, with huge clear eyes, holding a bunch of flowers"],
     ["a water painting of a boy, making a magical potion, highly detailed, fantasy", "a water painting of a boy, making a magical potion, highly detailed"],
     ["a cowboy cyborg riding a robot horse, atompunk", "a cowboy cyborg riding a robot horse"],
-    ["a painting of a beautiful witch with orange curly hair, riding a dragon, background of Himalayas, by Greg Rutkowski", "a painting of a beautiful witch with orange curly hair, riding a dragon, background of Himalayas"],
     ["calm winter night, Thomas Kinkade", "calm winter night, Van Gogh"],
     ["a cute rabbit knight, big eyes, holding up a carrot, zootopia", "a cute rabbit knight, holding up a carrot, zootopia"],
-    ["a cute panda playing the guitar in a bamboo forest", "a cute panda playing the guitar"],
-    ["a very very very very very beautiful cityscape", "a beautiful cityscape"],
+    ["a cute puppy, in the style of Albert Marquet", "a cute puppy"],
+]
+window.promptsHtmlCode = [
+    ["a cute and adorable bunny, with huge clear eyes, holding a bunch of flowers, <span class='prompt-keyword'>in the style of cute pixar character</span>", "a cute and adorable bunny, with huge clear eyes, holding a bunch of flowers"],
+    ["a <span class='prompt-keyword'>very very very very very</span> beautiful cityscape", "a beautiful cityscape"],
+    ["a <span class='prompt-keyword'>vibrant</span> renaissance portrait of an <span class='prompt-keyword'>energetic</span> noble woman, holding an iphone", "a <span class='prompt-keyword'>muted</span> renaissance portrait of a <span class='prompt-keyword'>sad</span> noble woman, holding an iphone"],
+    ["a cute panda playing the guitar <span class='prompt-keyword'>in a bamboo forest</span>", "a cute panda playing the guitar"],
+    ["a <span class='prompt-keyword'>pineapple</span> by the water on a beautiful beach", "a <span class='prompt-keyword'>baobab tree</span> by the water on a beautiful beach"],
+    ["<span class='prompt-keyword'>spiderman</span> in space", "<span class='prompt-keyword'>winnie the pooh</span> in space"],
+    ["a castle by a sea, <span class='prompt-keyword'>trending on artstation</span>", "a castle by a sea"],
+    ["a cute and lovely 4-year-old baby girl with a magical power, cosmic energy, lovely smile, digital painting, hyperrealistic, <span class='prompt-keyword'>highly detailed, sharp, masterpiece</span>", "a cute and lovely 4-year-old baby girl with a magical power, cosmic energy, lovely smile, digital painting, hyperrealistic"],
+    ["a water painting of a boy, making a magical potion, highly detailed, <span class='prompt-keyword'>fantasy</span>", "a water painting of a boy, making a magical potion, highly detailed"],
+    ["a cowboy cyborg riding a robot horse, <span class='prompt-keyword'>atompunk</span>", "a cowboy cyborg riding a robot horse"],
+    ["calm winter night, <span class='prompt-keyword'>Thomas Kinkade</span>", "calm winter night, <span class='prompt-keyword'>Van Gogh</span>"],
+    ["a cute rabbit knight, <span class='prompt-keyword'>big eyes</span>, holding up a carrot, zootopia", "a cute rabbit knight, holding up a carrot, zootopia"],
+    ["a cute puppy, <span class='prompt-keyword'>in the style of Albert Marquet</span>", "a cute puppy"],
 ]
 window.keywordLoc = [
-    [[0,1],]
+    [[[14,21]],[]],  // flower bunny
+    [[[1,6]],[]],  // very very very
+    [[[1,2],[6,7]],[[1,2],[6,7]]],  // renaissance iphone
+    [[[6,10]],[]],  // cute panda
+    [[[1,2]],[[1,3]]],  // pineapple and baobab tree
+    [[[0,1]],[[0,3]]], // spiderman and pooh
+    [[[5,8]],[]],  // castle by sea
+    [[[18,22]],[]],  // magical girl  
+    [[[12,13]],[]], // magical potion boy
+    [[[7,8]],[]],  // cyborg cowboy
+    [[[3,5]],[[3,5]]],  // calm winter night
+    [[[4,6]],[]],  // rabbit night
+    [[[3,9]],[]],  // cute puppy
 ]
 window.selectedPromptGroupIdx = 0;
 window.selectedPrompt = window.prompts[window.selectedPromptGroupIdx][0];
 window.selectedPrompt2 = window.prompts[window.selectedPromptGroupIdx][1];
+window.selectedPromptHtmlCode = window.promptsHtmlCode[window.selectedPromptGroupIdx][0];
+window.selectedPromptHtmlCode2 = window.promptsHtmlCode[window.selectedPromptGroupIdx][1];
 window.seed_list = [1,2,3]
-window.seed = 2
+window.seed = 1
 window.gs_list = ["0.0", "1.0", "7.0", "20.0"]
 window.gs = "7.0"
 window.timestep = 30

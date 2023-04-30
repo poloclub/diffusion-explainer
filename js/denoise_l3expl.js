@@ -109,10 +109,14 @@ let points = {
 }
 let colors = {0: "#a0a0a0", 1: "var(--text1)", 7: "var(--text2)", 20: "var(--text3)"}
 let path = {
-    0: "M0 0 l 0 -15 C 0 -30, 15.2 -31, 30.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
-    1: "M25 0 l 0 -15 C 25 -30, 40.2 -31, 55.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
-    7: "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70", 
-    20: "M250 0 l 0 -20 C 250 -25, 242.2 -31.5, 237 -32.5 L165 -37.5 C 159.8 -38.5, 152 -40, 152 -45 L152 -70"
+    0: "M0 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
+    1: "M20 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
+    7: "M100 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
+    20: "M250 0 l 0 -10 a10 10, 0 0 0, -10 -10 L162 -20 a10 10, 0 0 1, -10 -10 L152 -54", 
+    // 0: "M0 0 l 0 -15 C 0 -30, 15.2 -31, 30.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
+    // 1: "M25 0 l 0 -15 C 25 -30, 40.2 -31, 55.4 -32 L121.6 -38 C 136.8 -39, 152 -40, 152 -55 L152 -70", 
+    // 7: "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70", 
+    // 20: "M250 0 l 0 -20 C 250 -25, 242.2 -31.5, 237 -32.5 L165 -37.5 C 159.8 -38.5, 152 -40, 152 -45 L152 -70"
 }
 function moveThumb(gs) {
     d3.select("#latent-denoiser-l3-expl-vis-slider-thumb-line")
@@ -181,8 +185,7 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
         .attr("id", "latent-denoiser-l3-expl-vis-slider-thumb-g")
         .append("path")
             .attr("id", "latent-denoiser-l3-expl-vis-slider-thumb-line")
-            // .attr("d", `M${x0} 0 l 0 -${30-r*2} c 0 -${r}, ${(destX-x0)*0.15} -31.5, ${(destX-x0)/4} -32.5 L 139 -37.5  L152 -40 L${destX} ${destY}`)
-            .attr("d", "M100 0 l 0 -20 C 100 -25, 107.8 -31.5, 113 -32.5 L139 -37.5 C 144.2 -38.5, 152 -40, 152 -45 L152 -70")
+            .attr("d", path[7])
             .attr("fill", "none")
             .attr("stroke", "var(--text2)")
             .attr("stroke-width", "2px")
@@ -211,6 +214,13 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
             .attr("fill", d=>d[1])
             .style("font-weight", "500")
             .style("font-size", "20px")
+            .style("cursor", "pointer")
+            .on("click", function (e) {
+                let gs = d3.select(this).data()[0][0]
+                moveThumb(gs); // put circle and line on 0
+                hyperparamChanged(e, window.seed, `${gs}.0`);
+                document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = (gs<=1)?gs:((gs==7)?2:3)
+            })
 
 d3.select("#latent-denoiser-l3-expl-container")
     .append("div")
