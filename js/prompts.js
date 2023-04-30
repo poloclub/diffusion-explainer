@@ -28,21 +28,6 @@ window.promptsHtmlCode = [
     ["a cute rabbit knight, <span class='prompt-keyword'>big eyes</span>, holding up a carrot, zootopia", "a cute rabbit knight, holding up a carrot, zootopia"],
     ["a cute puppy, <span class='prompt-keyword'>in the style of Albert Marquet</span>", "a cute puppy"],
 ]
-window.keywordLoc = [
-    [[[14,21]],[]],  // flower bunny
-    [[[1,6]],[]],  // very very very
-    [[[1,2],[6,7]],[[1,2],[6,7]]],  // renaissance iphone
-    [[[6,10]],[]],  // cute panda
-    [[[1,2]],[[1,3]]],  // pineapple and baobab tree
-    [[[0,1]],[[0,3]]], // spiderman and pooh
-    [[[5,8]],[]],  // castle by sea
-    [[[18,22]],[]],  // magical girl  
-    [[[12,13]],[]], // magical potion boy
-    [[[7,8]],[]],  // cyborg cowboy
-    [[[3,5]],[[3,5]]],  // calm winter night
-    [[[4,6]],[]],  // rabbit night
-    [[[3,9]],[]],  // cute puppy
-]
 window.selectedPromptGroupIdx = 0;
 window.selectedPrompt = window.prompts[window.selectedPromptGroupIdx][0];
 window.selectedPrompt2 = window.prompts[window.selectedPromptGroupIdx][1];

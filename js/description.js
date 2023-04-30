@@ -212,7 +212,6 @@ d3.select("#description-subsubsec-noise-prediction")
 d3.select("#description-subsubsec-noise-prediction")
     .append("p")
         .html("At each timestep, a neural network UNet predicts noise in the image representation of the current timestep. UNet takes three inputs:")
-// TODO: ordered list
 d3.select("#description-subsubsec-noise-prediction")
     .append("ol")
         .attr("id", "description-unet-input-ol")

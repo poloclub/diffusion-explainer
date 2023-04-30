@@ -193,5 +193,3 @@ d3.select("#architecture-container")
             .attr("id", "generated-image-2")
             .attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
 
-
-// TODO: Bold the keywords
