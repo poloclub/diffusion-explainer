@@ -98,6 +98,51 @@ svg {
     color: var(--img2);
 }
 
+#header-links {
+    margin-top: 12.5px;
+}
+
+.header-link {
+    height: 35px;
+    padding: 0 12.5px;
+    opacity: 0.5;
+}
+
+.header-link:hover {
+    opacity: 0.8;
+}
+
+.header-link-img {
+    filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(99deg) brightness(113%) contrast(101%);
+    height: 25px;
+}
+
+#header-link-img-paper {
+    height: 30px;
+    position: relative;
+    top: 3px;
+}
+
+#header-link-img-youtube {
+    height: 30px;
+    position: relative;
+    top: 3.5px;
+}
+
+.header-link-text {
+    color: #ffffff;
+    display: inline-block;
+    font-size: 20px;
+    position: relative;
+    top: -4px;
+    padding-left: 10px;
+    font-weight: 100;
+}
+
+#header-link-text-paper {
+    padding-left: 3px;
+}
+
 /* main */
 #main {
     display: block;
