@@ -62,6 +62,7 @@ svg {
     font-size: 44px;
     font-variant: small-caps;
     opacity: 0.95;
+    color: var(--white);
 }
 
 #header-title * {
@@ -79,7 +80,7 @@ svg {
     height: 22px;
     font-weight: 300;
     font-size: 22px;
-    padding-top: 7px;
+    margin-top: -2px;
 }
 
 #header-message-1, #header-message-2, #header-message-3, #header-message-4, #header-message-5 {
@@ -1874,6 +1875,43 @@ input:checked + .slider:before {
     line-height: 1.5;
 }
 
+#description-top-button-container {
+    width: 55px;
+    border-radius: 50%;
+    background-color: #000000;
+    height: 55px;
+    opacity: 0.25;
+    position: fixed;
+    cursor: pointer;
+    right: 20px;
+    bottom: 20px;
+    transform: scale(0.9);
+}
+
+#description-top-button-container:hover {
+    opacity: 0.35;
+}
+
+#description-top-button-img {
+    width: 22px;
+    top: 7.5px;
+    filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(99deg) brightness(113%) contrast(101%);
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+#description-top-button-text {
+    position: relative;
+    top: -7.5px;
+    color: var(--white);
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    pointer-events: none;
+}
+
 .description-subsec {
     padding: 5px 0px;
 }
@@ -1890,6 +1928,18 @@ input:checked + .slider:before {
 
 .description-paragraph {
     line-height: 1.5;
+}
+
+.description-gif {
+    width: 500px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 0px 15px #80808030
+}
+
+#image-refining-description-gif {
+    width: 650px;
 }
 
 #description h1 {

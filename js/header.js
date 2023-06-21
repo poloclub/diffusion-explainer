@@ -1,6 +1,7 @@
 d3.select("#header")
-    .append("div")
+    .append("a")
         .attr("id", "header-title")
+        .attr("href", "https://poloclub.github.io/diffusion-explainer/")
         .append("img")
         .attr("id", "header-logo")
         .attr("src", "./icons/logo.svg")
