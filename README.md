@@ -5,7 +5,7 @@
 [![arxiv badge](https://img.shields.io/badge/arXiv-2305.03509-red)](https://arxiv.org/abs/2305.03509)
 
 <a href="http://poloclub.github.io/diffusion-explainer">🚀 Live Demo</a><br>
-<a href="https://youtu.be/Zg4gxdIWDds">🎥 Demo Video</a>
+<a href="https://youtu.be/Zg4gxdIWDds">🎥 Demo Video</a><br>
 <a href="https://arxiv.org/abs/2305.03509">📜 Research Paper</a>
 
 # How to run locally
