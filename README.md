@@ -1,8 +1,7 @@
 # Diffusion-Explainer
-<!-- [![arXiv](https://img.shields.io/badge/arXiv-2110.11227-b3131b.svg)](https://arxiv) -->
-![crown_jewel](./assets/preview/de_crownjewel.png)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![arxiv badge](https://img.shields.io/badge/arXiv-2305.03509-red)](https://arxiv.org/abs/2305.03509)
+![crown_jewel](./assets/preview/de_crownjewel.png)
 
 <a href="http://poloclub.github.io/diffusion-explainer">🚀 Live Demo</a><br>
 <a href="https://youtu.be/Zg4gxdIWDds">🎥 Demo Video</a><br>
