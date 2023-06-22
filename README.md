@@ -4,13 +4,11 @@
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![arxiv badge](https://img.shields.io/badge/arXiv-2305.03509-red)](https://arxiv.org/abs/2305.03509)
 
-<table>
-  <tr>
-    <td><a href="http://poloclub.github.io/diffusion-explainer">🚀 Live Demo</a></td>
-    <td><a href="https://youtu.be/Zg4gxdIWDds">🎥 Demo Video</a></td>
-    <td><a href="https://arxiv.org/abs/2305.03509">📜 Research Paper</a></td>
-  </tr>
-</table>
+<ul>
+  <li><a href="http://poloclub.github.io/diffusion-explainer">🚀 Live Demo</a></li>
+  <li><a href="https://youtu.be/Zg4gxdIWDds">🎥 Demo Video</a></li>
+  <li><a href="https://arxiv.org/abs/2305.03509">📜 Research Paper</a></li>
+</ul>
 
 # How to run locally
 ```
