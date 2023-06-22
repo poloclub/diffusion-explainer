@@ -2,9 +2,15 @@
 <!-- [![arXiv](https://img.shields.io/badge/arXiv-2110.11227-b3131b.svg)](https://arxiv) -->
 ![crown_jewel](./assets/preview/de_crownjewel.png)
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
+[![arxiv badge](https://img.shields.io/badge/arXiv-2305.03509-red)](https://arxiv.org/abs/2305.03509)
 
-# Live Demo
-For a live demo, visit http://poloclub.github.io/diffusion-explainer.
+<table>
+  <tr>
+    <td><a href="http://poloclub.github.io/diffusion-explainer">🚀 Live Demo</a></td>
+    <td><a href="https://youtu.be/Zg4gxdIWDds">🎥 Demo Video</a></td>
+    <td><a href="https://arxiv.org/abs/2305.03509">📜 Research Paper</a></td>
+  </tr>
+</table>
 
 # How to run locally
 ```
