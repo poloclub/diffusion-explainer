@@ -88,8 +88,6 @@ d3.select("#header-link-youtube")
         .attr("class", "header-link-text")
         .text("Video")
 
-
-
 d3.select("#header-links")
     .append("a")
         .attr("class", "header-link")
