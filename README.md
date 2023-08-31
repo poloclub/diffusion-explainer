@@ -1,11 +1,19 @@
 # Diffusion-Explainer
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![arxiv badge](https://img.shields.io/badge/arXiv-2305.03509-red)](https://arxiv.org/abs/2305.03509)
-![crown_jewel](./assets/preview/de_crownjewel.png)
+<!-- ![crown_jewel]() -->
 
-<a href="http://poloclub.github.io/diffusion-explainer">🚀 Live Demo</a><br>
-<a href="https://youtu.be/Zg4gxdIWDds">🎥 Demo Video</a><br>
-<a href="https://arxiv.org/abs/2305.03509">📜 Research Paper</a>
+<table>
+<tr>
+    <td colspan="4"><img src="./assets/preview/de_crownjewel.png" style="width: 100%"></td>
+</tr>
+<tr>
+    <td><a href="http://poloclub.github.io/diffusion-explainer">🚀 Live Demo</a></td>
+    <td><a href="https://youtu.be/Zg4gxdIWDds">📺 Demo Video</a></td>
+    <td><a href="https://arxiv.org/abs/2305.03509">📜 Research Paper</a></td>
+    <td><a href="https://medium.com/@seongminleee/77b53f4f1c4">📄 Blog Post</a></td>
+</tr>
+</table>
 
 # How to run locally
 ```
