@@ -89,6 +89,7 @@ function increaseStep() {
 
 function decreaseStep() {
     let timestep = window.timestep - 1;
+    if (timestep < 1) timestep = 50;
     updateStep(timestep);
 }
 
