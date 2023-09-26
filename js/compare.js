@@ -1,4 +1,4 @@
-import {drawUmap, setMinMaxCoord} from "./function.js";
+import {compareButtonClicked, drawUmap, setMinMaxCoord} from "./function.js";
 
 let architectureLineWidth = 2;
 let architectureCompLineColor = "var(--comp1)"
@@ -23,6 +23,20 @@ d3.select("#prompt-text-vector-generator-container")
                 .attr("x2", "30")
                 .attr("y2", "10")
                 .attr("marker-end", "url(#architecture-arrow-comp-head)")
+
+d3.select("#your-text-prompt")
+    .append("div")
+        .attr("id", "exit-button-container")
+        .text("Exit")
+        .style("position", "absolute")
+        .style("cursor", "pointer")
+        .style("left", "7px")
+        .style("text-decoration", "underline")
+        .style("color", "var(--lightgray)")
+        .style("opacity", "0")
+        .on("mouseover", () => d3.select("#exit-button-container").style("color", "var(--gray)"))
+        .on("mouseout", () => d3.select("#exit-button-container").style("color", "var(--lightgray)"))
+        .on("click", compareButtonClicked)
 
 // text generator - image refiner arrow
 d3.select("#text-vector-generator-latent-denoiser-container")

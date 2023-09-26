@@ -22,15 +22,41 @@ function promptChanged() {
     let h2 = +getComputedStyle(document.getElementById("prompt-box-2")).height.slice(0,-2)
     d3.select("#your-text-prompt").style("top", window.compare?"0px":`${38.5-h/2}px`)
     d3.select("#prompt-selector-dropdown-container").style("top", window.compare?`${136-h}px`:"0px")
-    d3.select("#compare-button-container").style("top", window.compare?`${147+h2+20}px`:`${h-3}px`).style("z-index", "")
+    // d3.select("#compare-button-container").style("top", window.compare?`${147+h2+20}px`:`${h-3}px`)
+    d3.select("#dropdown-button-container").style("top", window.compare?`${116-h}px`:`${h+6}px`)  // TODO: 
     d3.select("#prompt-box-2").style("top", window.compare?"146px":`0px`)
     // change dropdown's display
     d3.select("#prompt-selector-dropdown").selectAll("p").style("display", "block")
     d3.select(`#prompt-selector-dropdown-option-${i}`).style("display","none")
-    // change tokens in text representation generator
+    d3.select("#exit-button-container")
+        .style("top", `${151.5+22+h2}px`)  // h1:88,71.5->222, h1:55,38.5->190?, 71.5,55->205, 55,55->205px
+        // .style("opacity", "1")
     drawTokens();
     drawTextVectors(); 
     drawUmap();
+
+    d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword")
+        .style("cursor", window.compare?"":"pointer")
+        .style("font-weight", window.compare?"700":"400")
+        .style("text-decoration", window.compare?"none":"underline")
+        .on("mouseover", (e) => {
+            if (window.compare) return 
+            d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword").style("font-weight", "700")
+            d3.select("#prompt-keyword-popup-container")
+                .style("display", "block")
+                .style("left", `${e.offsetX+10}px`)
+                .style("top", `${e.offsetY+12}px`)
+        })
+        .on("mouseout", (e) => {
+            if (window.compare) return 
+            d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword").style("font-weight", "")
+            d3.select("#prompt-keyword-popup-container").style("display", "none")
+        })
+        .on("click", () => {
+            if (window.compare) return 
+            d3.select("#prompt-keyword-popup-container").style("display", "none")
+            onCompare();
+        })
 }
 
 
@@ -1451,17 +1477,15 @@ function onCompare () {
     // change the position of prompt boxes and compare-button-container
     let h1 = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     let h2 = +getComputedStyle(document.getElementById("prompt-box-2")).height.slice(0,-2)
-    d3.select("#compare-button-text")
+    d3.select("#dropdown-button-container")
         .transition()
-            .duration(animationDuration/3)
-            .style("opacity", "0")
+            .duration(animationDuration)
+            .style("top", `${116-h1}px`)  // h1:88,71.5->28, h1:55,38.5->61?, 71.5,55->ok, 55,55->61px
+    d3.select("#exit-button-container")
         .transition()
-            .text("Back to model architecture")
-            .style("left", "7px")
-            .style("top", "-3px")
-        .transition()
-            .duration(animationDuration/2)
-                .style("opacity", "1")
+            .duration(animationDuration)
+            .style("top", `${151.5+22+h2}px`)  // h1:88,71.5->222, h1:55,38.5->190?, 71.5,55->205, 55,55->205px
+            .style("opacity", "1")
     d3.select("#compare-button-arrow-svg")
         .transition()
             .duration(animationDuration/2)
@@ -1491,6 +1515,8 @@ function onCompare () {
         .duration(animationDuration)
             .style("color", "#b2182b")
             .style("font-weight", "700")
+            .style("cursor", "")
+            .style("text-decoration", "none")
     d3.selectAll(".prompt-selector-dropdown-options .prompt-keyword")
         .transition()
         .duration(animationDuration)
@@ -1753,22 +1779,7 @@ function offCompare () {
     let h1 = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     let h2 = +getComputedStyle(document.getElementById("prompt-box-2")).height.slice(0,-2)
 
-    d3.select("#compare-button-text")
-        .transition()
-            .duration(animationDuration/3)
-            .style("opacity", "0")
-        .transition()
-            .text("What happens when we modify this prompt?")
-            .style("left", "7px")
-            .style("top", "0px")
-        .transition()
-            .duration(animationDuration/2)
-                .style("opacity", "1")
-    d3.select("#compare-button-arrow-svg")
-        .transition()
-            .delay(animationDuration/2)
-            .duration(animationDuration/2)
-            .style("opacity", "1")
+    
 
     // Change position
     d3.select("#architecture-wrapper")
@@ -1795,6 +1806,8 @@ function offCompare () {
         .duration(animationDuration)
             .style("font-weight", "400")
             .style("color", "#276419")
+            .style("cursor", "pointer")
+            .style("text-decoration", "underline")
     d3.selectAll(".prompt-selector-dropdown-options .prompt-keyword")
         .transition()
         .duration(animationDuration)
@@ -1809,10 +1822,18 @@ function offCompare () {
         .on("interrupt", function() {
             d3.select(this).style("display", "block")
         })
+    d3.select("#dropdown-button-container")
+        .transition()
+        .duration(animationDuration)
+            .style("top", `${h1+6}px`) 
     d3.select("#compare-button-container")
         .transition()
         .duration(animationDuration)
             .style("top", `${h1-3}px`)
+    d3.select("#exit-button-container")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "0")  // h1:88,71.5->222, h1:55,38.5->190?, 71.5,55->ok, 55,55->205px
     d3.select("#prompt-text-vector-generator-container")
         .transition()
         .duration(animationDuration)

@@ -250,12 +250,23 @@ svg {
     color: #2166ac;
 }
 
+#prompt-keyword-popup-container {
+    position: absolute;
+    z-index: 2;
+    background-color: var(--text00);
+    border: 1.5px solid var(--text4);
+    padding: 7px;
+    width: 200px;
+    display: none;
+}
+
 #prompt-selector-dropdown-container {
     font-size: 14px;
     position: absolute;
     top: 0px;
     left: -2px;
     width: 250px;
+    z-index: 1;
 }
 
 #prompt-selector-dropdown-box-container {
@@ -267,7 +278,6 @@ svg {
     border-radius: 5px;
     position: relative;
     color: #276419;
-    cursor: pointer;
     background-color: #f4f7ef;
     font-weight: 400;
 }
@@ -308,6 +318,19 @@ svg {
 
 .prompt-selector-dropdown-options:hover {
     background-color: var(--text00);
+}
+
+#dropdown-button-container {
+    font-size: 13px;
+    color: var(--lightgray);
+    text-decoration: underline;
+    position: relative;
+    left: 7px;
+    top: 94px;
+    cursor: pointer;
+    display: inline-block;
+    opacity: 1;
+    z-index: 0;
 }
 
 #compare-button-container {
@@ -1908,9 +1931,8 @@ input:checked + .slider:before {
     opacity: 0.25;
     position: fixed;
     cursor: pointer;
-    right: 20px;
-    bottom: 20px;
-    transform: scale(0.9);
+    right: 60px;
+    bottom: 30px;
 }
 
 #description-top-button-container:hover {
