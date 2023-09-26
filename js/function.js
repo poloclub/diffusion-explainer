@@ -1405,7 +1405,8 @@ function reduceLatentDenoiserL3 () {
 }
 
 function compareButtonClicked () {
-    if (this.checked) {
+    // if (this.checked) {
+    if (!window.compare) {
         onCompare()
     }
     else {
@@ -1450,6 +1451,21 @@ function onCompare () {
     // change the position of prompt boxes and compare-button-container
     let h1 = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     let h2 = +getComputedStyle(document.getElementById("prompt-box-2")).height.slice(0,-2)
+    d3.select("#compare-button-text")
+        .transition()
+            .duration(animationDuration/3)
+            .style("opacity", "0")
+        .transition()
+            .text("Back to model architecture")
+            .style("left", "7px")
+            .style("top", "-3px")
+        .transition()
+            .duration(animationDuration/2)
+                .style("opacity", "1")
+    d3.select("#compare-button-arrow-svg")
+        .transition()
+            .duration(animationDuration/2)
+            .style("opacity", "0")
     d3.select("#architecture-wrapper")
         .transition()
         .duration(animationDuration)
@@ -1736,6 +1752,23 @@ function offCompare () {
     let animationDuration = 1000;
     let h1 = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
     let h2 = +getComputedStyle(document.getElementById("prompt-box-2")).height.slice(0,-2)
+
+    d3.select("#compare-button-text")
+        .transition()
+            .duration(animationDuration/3)
+            .style("opacity", "0")
+        .transition()
+            .text("What happens when we modify this prompt?")
+            .style("left", "7px")
+            .style("top", "0px")
+        .transition()
+            .duration(animationDuration/2)
+                .style("opacity", "1")
+    d3.select("#compare-button-arrow-svg")
+        .transition()
+            .delay(animationDuration/2)
+            .duration(animationDuration/2)
+            .style("opacity", "1")
 
     // Change position
     d3.select("#architecture-wrapper")

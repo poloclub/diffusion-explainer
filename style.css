@@ -314,15 +314,26 @@ svg {
     position: absolute;
 }
 
+#compare-button-arrow-svg {
+    position: absolute;
+    pointer-events: none;
+    transform: translate(-75px, 70px) rotate(39deg)
+}
+
 #compare-button-text {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--lightgray);
+    text-decoration: underline;
     padding-bottom: 2px;
     position: relative;
-    left: 9px;
+    left: 7px;
+    top: 0px;
+    cursor: pointer;
     display: inline-block;
     padding-right: 15px;
     padding-top: 10px;
+    opacity: 1;
+    width: 240px;
 }
 
 .toggle-switch {
