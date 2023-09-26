@@ -1657,11 +1657,17 @@ input:checked + .slider:before {
     top: 6px;
     left: 6px;
     width: 140px;
+    /* display: none; */
+}
+
+#global-umap-title-1 {
+    display: none;
 }
 
 #global-umap-title-2 {
-    color: var(--light);
-    font-size: 10px;
+    /* color: var(--light); */
+    color: #afafaf;
+    font-size: 11px;
 }
 
 #global-umap-unscaled-svg {
