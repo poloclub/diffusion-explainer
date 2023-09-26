@@ -273,6 +273,7 @@ d3.select("#text-vector-generator-latent-denoiser-text")
                 .transition()
                     .duration(500)
                     .style("opacity", "1")
+                    .style("left", "347px")
         }
     })
 

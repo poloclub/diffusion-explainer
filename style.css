@@ -253,11 +253,15 @@ svg {
 #prompt-keyword-popup-container {
     position: absolute;
     z-index: 2;
-    background-color: var(--text00);
-    border: 1.5px solid var(--text4);
+    /* background-color: var(--text00); */
+    background-color: var(--white);
+    /* border: 1px solid var(--text4); */
+    box-shadow: 1px 1px 2px var(--text1);
+    color: var(--text4);
     padding: 7px;
     width: 200px;
     display: none;
+    font-style: italic;
 }
 
 #prompt-selector-dropdown-container {
