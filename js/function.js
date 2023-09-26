@@ -1759,7 +1759,7 @@ function offCompare () {
             .style("opacity", "0")
         .transition()
             .text("What happens when we modify this prompt?")
-            .style("left", "7px")
+            .style("left", "4px")
             .style("top", "0px")
         .transition()
             .duration(animationDuration/2)
