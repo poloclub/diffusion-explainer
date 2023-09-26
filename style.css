@@ -326,7 +326,7 @@ svg {
     text-decoration: underline;
     padding-bottom: 2px;
     position: relative;
-    left: 7px;
+    left: 4px;
     top: 0px;
     cursor: pointer;
     display: inline-block;
@@ -1636,9 +1636,13 @@ input:checked + .slider:before {
     width: 140px;
 }
 
+#global-umap-title-1 {
+    display: none;
+}
+
 #global-umap-title-2 {
-    color: var(--light);
-    font-size: 10px;
+    color: #afafaf;
+    font-size: 11px;
 }
 
 #global-umap-unscaled-svg {
@@ -1908,9 +1912,8 @@ input:checked + .slider:before {
     opacity: 0.25;
     position: fixed;
     cursor: pointer;
-    right: 20px;
-    bottom: 20px;
-    transform: scale(0.9);
+    right: 60px;
+    bottom: 30px;
 }
 
 #description-top-button-container:hover {
