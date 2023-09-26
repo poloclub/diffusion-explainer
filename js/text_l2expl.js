@@ -108,7 +108,7 @@ textGeneratorL2ExplDiv.append("div")
 textGeneratorL2ExplDiv
     .append("div")
         .attr("id", "text-vector-generator-l2-text-encoder-expl-text")
-        .text("768D vector for each token")
+        .text("768-dim vector for each token")
 textGeneratorL2ExplDiv
     .append("div")
         .attr("id", "text-vector-generator-l2-vectors-container")
