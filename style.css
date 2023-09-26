@@ -1616,9 +1616,18 @@ input:checked + .slider:before {
     display: none;
 }
 
-#global-umap-title {
-    font-size: 20px;
-    color: #404040;
+#global-umap-title-container {
+    font-size: 13px;
+    color: var(--gray);
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 140px;
+}
+
+#global-umap-title-2 {
+    color: var(--light);
+    font-size: 10px;
 }
 
 #global-umap-unscaled-svg {

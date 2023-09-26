@@ -318,7 +318,7 @@ d3.select("#description-equation-gs")
         .text("generic noise")
 d3.select("#description-subsubsec-noise-prediction")
     .append("p")
-    .html(`A guidance scale of 0 means no adherence to the text prompt, while a guidance scale of 1 means using only the prompt-conditioned noise without introducing generic noise. Larger guidance scales result in stronger adherence to the text prompt. To see how the introduction of generic noise and guidance scale enhances image quality, you can check out our Diffusion Explainer by setting the guidance scale to 1 or 7.`)
+    .html(`A guidance scale of 0 means no adherence to the text prompt, while a guidance scale of 1 means using only the prompt-conditioned noise without introducing generic noise. Larger guidance scales result in stronger adherence to the text prompt. To see how the introduction of generic noise and guidance scale enhances image quality, you can check out our Diffusion Explainer by setting the guidance scale to 0 or 7.`)
 // Noise Removal
 d3.select("#description-subsec-image-representation-refining")
     .append("div")
