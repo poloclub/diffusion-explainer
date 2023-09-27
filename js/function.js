@@ -38,7 +38,7 @@ function promptChanged() {
 
     d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword")
         .style("cursor", window.compare?"":"pointer")
-        .style("font-weight", window.compare?"700":"400")
+        .style("font-weight", window.compare?"700":"700")
         .style("text-decoration", window.compare?"none":"underline")
         .on("mouseover", (e) => {
             if (window.compare) return 
@@ -50,7 +50,7 @@ function promptChanged() {
         })
         .on("mouseout", (e) => {
             if (window.compare) return 
-            d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword").style("font-weight", "")
+            d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword").style("font-weight", "700")
             d3.select("#prompt-keyword-popup-container").style("display", "none")
         })
         .on("click", () => {
@@ -1818,7 +1818,7 @@ function offCompare () {
     d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword")
         .transition()
         .duration(animationDuration)
-            .style("font-weight", "400")
+            .style("font-weight", "700")
             .style("color", "#276419")
             .style("cursor", "pointer")
             .style("text-decoration", "underline")

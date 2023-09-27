@@ -1007,7 +1007,7 @@ input:checked + .slider:before {
     background-color: var(--text0);
     color: var(--text4);
     border-radius: 5px;
-    border-color: var(--text2);
+    border-color: var(--text3);
     border-width: 1px;
     border-style: solid;
     font-size: 18px;
@@ -1793,6 +1793,11 @@ input:checked + .slider:before {
     padding: 4px;
     text-align: center;
     cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
 }
 
 #global-umap-zoom-in-button {
@@ -1874,6 +1879,11 @@ input:checked + .slider:before {
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
 }
 
 .controller-button#controller-button-play {

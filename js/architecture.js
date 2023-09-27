@@ -162,7 +162,7 @@ d3.select("#your-text-prompt")
     .text("Click to see how modifying this phrase changes generated image")
 d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword")
     .style("cursor", window.compare?"":"pointer")
-    .style("font-weight", window.compare?"700":"400")
+    .style("font-weight", window.compare?"700":"700")
     .style("text-decoration", window.compare?"none":"underline")
     .on("mouseover", (e) => {
         if (window.compare) return 
@@ -174,7 +174,7 @@ d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword")
     })
     .on("mouseout", (e) => {
         if (window.compare) return 
-        d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword").style("font-weight", "")
+        d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword").style("font-weight", "700")
         d3.select("#prompt-keyword-popup-container").style("display", "none")
     })
     .on("click", () => {
@@ -290,7 +290,7 @@ d3.select("#text-vector-generator-latent-denoiser-text")
                 .transition()
                     .duration(500)
                     .style("opacity", "1")
-                    .style("left", "347px")
+                    .style("left", window.compare?"152px":"347px")
         }
     })
 
