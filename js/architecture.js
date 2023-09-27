@@ -81,9 +81,14 @@ d3.select("#your-text-prompt")
 d3.select("#your-text-prompt")
     .append("div")
         .attr("id", "dropdown-button-container")
-        .text("Show more text prompts...")
-        .on("mouseover", () => {d3.select("#dropdown-button-container").style("color", "var(--gray)")})
-        .on("mouseout", () => {d3.select("#dropdown-button-container").style("color", "var(--lightgray)")})
+        .on("mouseover", () => {
+            d3.select("#dropdown-button-container").style("color", "var(--gray)")
+            d3.select("#dropdown-button-triangle").style("background-color", "var(--light)")
+        })
+        .on("mouseout", () => {
+            d3.select("#dropdown-button-container").style("color", "var(--lightgray)")
+            d3.select("#dropdown-button-triangle").style("background-color", "#d8d8d8")
+        })
         .on("click", () => {
             if (window.promptDropdownExpanded) {
                 window.promptDropdownExpanded = false;
@@ -96,6 +101,13 @@ d3.select("#your-text-prompt")
                 d3.select("#compare-button-container").style("z-index", "-1")
             }
         })
+d3.select("#dropdown-button-container")
+    .append("div")
+        .attr("id", "dropdown-button-triangle")
+d3.select("#dropdown-button-container")
+    .append("div")
+        .attr("id", "dropdown-button-text")
+        .text("Select another prompt")
         
 let h = +getComputedStyle(document.getElementById("prompt-selector-dropdown-container")).height.slice(0,-2)
 d3.select("#your-text-prompt").style("top", `${38.5-h/2}px`)
@@ -193,12 +205,17 @@ d3.select("#architecture-container")
         .attr("class", "architecture-rectangle architecture-component-container denoise-latent-expand-move-to-left")
         .text("Text Representation Generator")
         .on("mouseover", () => {
+            console.log("text-vector-generator-container mouseover")
             if (!window.textVectorGeneratorL2Expanded) d3.select("#text-vector-generator-container").style("background-color", "var(--text0)")
         })
         .on("mouseout", () => {
+            console.log("text-vector-generator-container mouseout")
             d3.select("#text-vector-generator-container").style("background-color", "var(--text00)")
         })
-        .on("click", expandTextVectorGeneratorL2)
+        .on("click", () => {
+            console.log("clicked")
+            expandTextVectorGeneratorL2()
+        })
 
 
 d3.select("#architecture-container")
