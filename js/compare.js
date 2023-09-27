@@ -201,6 +201,10 @@ d3.select("#architecture-container")
                     .attr("x2", "48")
                     .attr("y2", "10")
                     .attr("marker-end", "url(#architecture-arrow-comp-head)")
+d3.select("#improved-latent-generated-image-container-2")
+    .append("div")
+        .attr("id", "improved-latent-generated-image-text-2")
+        .text("Upscale")
 
 // generated image
 d3.select("#architecture-container")

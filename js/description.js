@@ -233,7 +233,7 @@ d3.select("#description-subsec-image-representation-refining")
         .attr("src", "assets/gif/imagerefine.gif")
 d3.select("#description-subsec-image-representation-refining")
     .append("p")
-        .text("Stable Diffusion generates an image representation that adheres to the text prompt by refining a randomly initialized noise over multiple timesteps. Each refinement step involves iteratively predicting and removing noise to gradually improve the quality of the image representation.")
+        .text("Stable Diffusion generates an image representation that adheres to the text prompt by refining a randomly initialized noise over multiple timesteps. Each refinement step involves predicting and removing noise to gradually improve the quality of the image representation.")
 // Noise Prediction
 d3.select("#description-subsec-image-representation-refining")
     .append("div")
