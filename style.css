@@ -80,7 +80,10 @@ svg {
     height: 22px;
     font-weight: 300;
     font-size: 22px;
-    margin-top: -2px;
+    width: max-content;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
 }
 
 #header-message-1, #header-message-2, #header-message-3, #header-message-4, #header-message-5 {
@@ -100,7 +103,7 @@ svg {
 }
 
 #header-links {
-    margin-top: 12.5px;
+    margin-top: 11.5px;
 }
 
 .header-link {
