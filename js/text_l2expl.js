@@ -12,9 +12,16 @@ document.addEventListener("mouseup", (e) => {
         let top = textVectorGeneratorBox.y
         let bottom = textVectorGeneratorBox.y + textVectorGeneratorBox.height
         let descriptionBox = document.getElementById("description").getBoundingClientRect()
+        let mainBox = document.getElementById("main").getBoundingClientRect()
+        let mainLeft = mainBox.x
+        let mainRight = mainBox.x + mainBox.width
+        let mainTop = mainBox.y
+        let mainBottom = mainBox.y + mainBox.height
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
-        else if (e.clientY > descriptionBox.y) {}
-        else {reduceTextVectorGeneratorL2();}
+        // else if (e.clientY > descriptionBox.y) {}
+        // else {reduceTextVectorGeneratorL2();}
+        else if (e.clientX > mainLeft && e.clientX < mainRight && e.clientY > mainTop && e.clientY < mainBottom) {reduceTextVectorGeneratorL2();}
+        else {}
     }
 })
 

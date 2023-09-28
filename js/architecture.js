@@ -507,7 +507,7 @@ d3.select("#timestep-0-random-noise-expl")
                 d3.select("#seed-control-container")
                     .transition("left")
                     .duration(1000)
-                        .style("left", `${427}px`)
+                        .style("left", `${437}px`)
             }
             else {
                 window.seedControlDisplayed = true;
@@ -520,7 +520,7 @@ d3.select("#timestep-0-random-noise-expl")
                 d3.select("#seed-control-container")
                     .transition("left")
                     .duration(1000)
-                        .style("left", `${427}px`)
+                        .style("left", `${437}px`)
             }
         })
 d3.select("#timestep-0-random-noise-expl")

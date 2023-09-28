@@ -12,11 +12,18 @@ document.addEventListener("mousedown", (e) => {
         let top = latentDenoiserBox.y
         let bottom = latentDenoiserBox.y + latentDenoiserBox.height
         let descriptionBox = document.getElementById("description").getBoundingClientRect()
+        let mainBox = document.getElementById("main").getBoundingClientRect()
+        let mainLeft = mainBox.x
+        let mainRight = mainBox.x + mainBox.width
+        let mainTop = mainBox.y
+        let mainBottom = mainBox.y + mainBox.height
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
         else if (document.querySelector(".controller-button-circle:hover") != null) {}
         else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
-        else if (e.clientY > descriptionBox.y) {}
-        else {reduceLatentDenoiserL2();}
+        // else if (e.clientY > descriptionBox.y) {}
+        // else {reduceLatentDenoiserL2();}
+        else if (e.clientX > mainLeft && e.clientX < mainRight && e.clientY > mainTop && e.clientY < mainBottom) {reduceLatentDenoiserL2();}
+        else {}
     }
 })
 

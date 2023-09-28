@@ -12,11 +12,21 @@ document.addEventListener("mouseup", (e) => {
         let top = textVectorGeneratorBox.y
         let bottom = textVectorGeneratorBox.y + textVectorGeneratorBox.height
         let descriptionBox = document.getElementById("description").getBoundingClientRect()
+        let mainBox = document.getElementById("main").getBoundingClientRect()
+        let mainLeft = mainBox.x
+        let mainRight = mainBox.x + mainBox.width
+        let mainTop = mainBox.y
+        let mainBottom = mainBox.y + mainBox.height
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
-        else if (e.clientY > descriptionBox.y) {}
-        else {
+        // else if (e.clientY > descriptionBox.y) {}
+        else if (e.clientX > mainLeft && e.clientX < mainRight && e.clientY > mainTop && e.clientY < mainBottom) {
             d3.select("#generate-text-vector-l3-expl-container").style("display", "none")
             window.textVectorGeneratorL3Expanded = false;
+            // reduceTextVectorGeneratorL2();
+        }
+        else {
+            // d3.select("#generate-text-vector-l3-expl-container").style("display", "none")
+            // window.textVectorGeneratorL3Expanded = false;
         }
     }
 })
