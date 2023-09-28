@@ -2167,3 +2167,8 @@ input:checked + .slider:before {
 #description ol {
     line-height: 1.5;
 }
+
+#description-subsec-text-representation-generation {
+    padding-top: 290px;
+    margin-top: -290px;
+}

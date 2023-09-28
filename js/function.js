@@ -808,6 +808,18 @@ function expandTextVectorGeneratorL2(e) {
         .duration(animationDuration)
             .style("opacity", "100%")
 
+    d3.select("#description-subsec-image-representation-refining")
+            .style("padding-top", "320px")
+            .style("margin-top", "-320px")
+    d3.select("#description-subsec-text-representation-generation")
+            .style("padding-top", "320px")
+            .style("margin-top", "-320px")
+    d3.select("#description-subsec-image-upscaling")
+            .style("padding-top", "320px")
+            .style("margin-top", "-320px")
+
+    setTimeout(function(){document.getElementById("description-subsec-text-representation-generation").scrollIntoView({"behavior": "smooth"})}, animationDuration)
+    
 }
 
 function reduceTextVectorGeneratorL2(e) {
@@ -964,6 +976,16 @@ function reduceTextVectorGeneratorL2(e) {
         .transition()
         .delay(animationDuration)
             .style("opacity","0")
+
+    d3.select("#description-subsec-text-representation-generation")
+            .style("padding-top", "290px")
+            .style("margin-top", "-290px")
+    d3.select("#description-subsec-image-representation-refining")
+            .style("padding-top", "290px")
+            .style("margin-top", "-290px")
+    d3.select("#description-subsec-image-upscaling")
+            .style("padding-top", "290px")
+            .style("margin-top", "-290px")
 }
 
 function expandLatentDenoiserL2(e) {
@@ -1141,6 +1163,19 @@ function expandLatentDenoiserL2(e) {
         .transition()
         .duration(animationDuration)
             .style("opacity", "1")
+
+    // description
+    d3.select("#description-subsec-text-representation-generation")
+            .style("padding-top", "420px")
+            .style("margin-top", "-420px")
+    d3.select("#description-subsec-image-representation-refining")
+            .style("padding-top", "420px")
+            .style("margin-top", "-420px")
+    d3.select("#description-subsec-image-upscaling")
+            .style("padding-top", "420px")
+            .style("margin-top", "-420px")
+
+    setTimeout(function(){document.getElementById("description-subsec-image-representation-refining").scrollIntoView({"behavior": "smooth"})}, animationDuration)
 }
 
 function reduceLatentDenoiserL2 () {
@@ -1327,6 +1362,17 @@ function reduceLatentDenoiserL2 () {
         .on("interrupt", function() {
             d3.select(this).style("display", "block")
         })
+
+    // description
+    d3.select("#description-subsec-text-representation-generation")
+            .style("padding-top", "290px")
+            .style("margin-top", "-290px")
+    d3.select("#description-subsec-image-representation-refining")
+            .style("padding-top", "290px")
+            .style("margin-top", "-290px")
+    d3.select("#description-subsec-image-upscaling")
+            .style("padding-top", "290px")
+            .style("margin-top", "-290px")
 }
 
 function expandLatentDenoiserL3 () {
@@ -1383,6 +1429,17 @@ function expandLatentDenoiserL3 () {
         .on("interrupt", function() {
             d3.select(this).style("display", "block")
         })
+
+    // description
+    d3.select("#description-subsec-text-representation-generation")
+            .style("padding-top", "535px")
+            .style("margin-top", "-535px")
+    d3.select("#description-subsec-image-representation-refining")
+            .style("padding-top", "535px")
+            .style("margin-top", "-535px")
+    d3.select("#description-subsec-image-upscaling")
+            .style("padding-top", "535px")
+            .style("margin-top", "-535px")
 }
 
 function reduceLatentDenoiserL3 () {
@@ -1436,6 +1493,17 @@ function reduceLatentDenoiserL3 () {
         .transition()
         .duration(animationDuration)
             .style("opacity", "1")
+
+    // description
+    d3.select("#description-subsec-text-representation-generation")
+        .style("padding-top", "420px")
+        .style("margin-top", "-420px")
+    d3.select("#description-subsec-image-representation-refining")
+        .style("padding-top", "420px")
+        .style("margin-top", "-420px")
+    d3.select("#description-subsec-image-upscaling")
+        .style("padding-top", "420px")
+        .style("margin-top", "-420px")
 }
 
 function compareButtonClicked () {
@@ -1505,7 +1573,7 @@ function onCompare () {
         .transition()
         .duration(animationDuration)
             .style("height", `430px`)
-            .style("padding", `25px 40px 85px 40px`)
+            .style("padding", `15px 40px 75px`)
     d3.select("#your-text-prompt")
         .transition()
         .duration(animationDuration)
@@ -1788,6 +1856,17 @@ function onCompare () {
             .style("opacity", "0")
             .style("left", "48px")
             .style("font-size", "13px")
+
+    // description
+    d3.select("#description-subsec-text-representation-generation")
+        .style("padding-top", "525px")
+        .style("margin-top", "-525px")
+    d3.select("#description-subsec-image-representation-refining")
+        .style("padding-top", "525px")
+        .style("margin-top", "-525px")
+    d3.select("#description-subsec-image-upscaling")
+        .style("padding-top", "525px")
+        .style("margin-top", "-525px")
 }
 
 function offCompare () {
@@ -2114,6 +2193,17 @@ function offCompare () {
         .duration(animationDuration)
             .style("opacity", "1")
             .style("left", "0px")
+
+    // description
+    d3.select("#description-subsec-text-representation-generation")
+        .style("padding-top", "290px")
+        .style("margin-top", "-290px")
+    d3.select("#description-subsec-image-representation-refining")
+        .style("padding-top", "290px")
+        .style("margin-top", "-290px")
+    d3.select("#description-subsec-image-upscaling")
+        .style("padding-top", "290px")
+        .style("margin-top", "-290px")
 }
 
 export {promptChanged, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, expandTextVectorGeneratorL2, reduceTextVectorGeneratorL2, expandLatentDenoiserL2, reduceLatentDenoiserL2, expandLatentDenoiserL3,reduceLatentDenoiserL3, hyperparamChanged, drawTokens, drawTextVectors, compareButtonClicked, setMinMaxCoord};
