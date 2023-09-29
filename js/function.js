@@ -809,16 +809,23 @@ function expandTextVectorGeneratorL2(e) {
             .style("opacity", "100%")
 
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", "320px")
-            .style("margin-top", "-320px")
+        .style("padding-top", window.showVisualization?"320px":"5px")
+        .style("margin-top", window.showVisualization?"-320px":"-5px")
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", "320px")
-            .style("margin-top", "-320px")
+        .style("padding-top", window.showVisualization?"320px":"5px")
+        .style("margin-top", window.showVisualization?"-320px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", "320px")
-            .style("margin-top", "-320px")
+        .style("padding-top", window.showVisualization?"320px":"5px")
+        .style("margin-top", window.showVisualization?"-320px":"-5px")
 
-    setTimeout(function(){document.getElementById("description-subsec-text-representation-generation").scrollIntoView({"behavior": "smooth"})}, animationDuration)
+    if (window.showVisualization)
+        setTimeout(function(){document.getElementById("description-subsec-text-representation-generation").scrollIntoView({"behavior": "smooth"})}, animationDuration)
+    else {
+        setTimeout(function(){
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#main").style("top", `${-mainHeight}px`)
+        }, animationDuration)
+    }
     
 }
 
@@ -978,14 +985,21 @@ function reduceTextVectorGeneratorL2(e) {
             .style("opacity","0")
 
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", "290px")
-            .style("margin-top", "-290px")
+            .style("padding-top", window.showVisualization?"290px":"5px")
+            .style("margin-top", window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", "290px")
-            .style("margin-top", "-290px")
+            .style("padding-top", window.showVisualization?"290px":"5px")
+            .style("margin-top", window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", "290px")
-            .style("margin-top", "-290px")
+            .style("padding-top", window.showVisualization?"290px":"5px")
+            .style("margin-top", window.showVisualization?"-290px":"-5px")
+
+    if (!window.showVisualization) {
+        setTimeout(function(){
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#main").style("top", `${-mainHeight}px`)
+        }, animationDuration)
+    }
 }
 
 function expandLatentDenoiserL2(e) {
@@ -1166,16 +1180,23 @@ function expandLatentDenoiserL2(e) {
 
     // description
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", "420px")
-            .style("margin-top", "-420px")
+            .style("padding-top", window.showVisualization?"420px":"5px")
+            .style("margin-top", window.showVisualization?"-420px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", "420px")
-            .style("margin-top", "-420px")
+            .style("padding-top", window.showVisualization?"420px":"5px")
+            .style("margin-top", window.showVisualization?"-420px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", "420px")
-            .style("margin-top", "-420px")
+            .style("padding-top", window.showVisualization?"420px":"5px")
+            .style("margin-top", window.showVisualization?"-420px":"-5px")
 
-    setTimeout(function(){document.getElementById("description-subsec-image-representation-refining").scrollIntoView({"behavior": "smooth"})}, animationDuration)
+    if (window.showVisualization)
+        setTimeout(function(){document.getElementById("description-subsec-image-representation-refining").scrollIntoView({"behavior": "smooth"})}, animationDuration)
+    else {
+        setTimeout(function(){
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#main").style("top", `${-mainHeight}px`)
+        }, animationDuration)
+    }
 }
 
 function reduceLatentDenoiserL2 () {
@@ -1365,14 +1386,21 @@ function reduceLatentDenoiserL2 () {
 
     // description
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", "290px")
-            .style("margin-top", "-290px")
+            .style("padding-top", window.showVisualization?"290px":"5px")
+            .style("margin-top", window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", "290px")
-            .style("margin-top", "-290px")
+            .style("padding-top", window.showVisualization?"290px":"5px")
+            .style("margin-top", window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", "290px")
-            .style("margin-top", "-290px")
+            .style("padding-top", window.showVisualization?"290px":"5px")
+            .style("margin-top", window.showVisualization?"-290px":"-5px")
+
+    if (!window.showVisualization) {
+        setTimeout(function(){
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#main").style("top", `${-mainHeight}px`)
+        }, animationDuration)
+    }
 }
 
 function expandLatentDenoiserL3 () {
@@ -1432,14 +1460,21 @@ function expandLatentDenoiserL3 () {
 
     // description
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", "535px")
-            .style("margin-top", "-535px")
+            .style("padding-top", window.showVisualization?"535px":"5px")
+            .style("margin-top", window.showVisualization?"-535px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", "535px")
-            .style("margin-top", "-535px")
+            .style("padding-top", window.showVisualization?"535px":"5px")
+            .style("margin-top", window.showVisualization?"-535px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", "535px")
-            .style("margin-top", "-535px")
+            .style("padding-top", window.showVisualization?"535px":"5px")
+            .style("margin-top", window.showVisualization?"-535px":"-5px")
+
+    if (!window.showVisualization) {
+        setTimeout(function(){
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#main").style("top", `${-mainHeight}px`)
+        }, animationDuration)
+    }
 }
 
 function reduceLatentDenoiserL3 () {
@@ -1496,14 +1531,21 @@ function reduceLatentDenoiserL3 () {
 
     // description
     d3.select("#description-subsec-text-representation-generation")
-        .style("padding-top", "420px")
-        .style("margin-top", "-420px")
+        .style("padding-top", window.showVisualization?"420px":"5px")
+        .style("margin-top", window.showVisualization?"-420px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-        .style("padding-top", "420px")
-        .style("margin-top", "-420px")
+        .style("padding-top", window.showVisualization?"420px":"5px")
+        .style("margin-top", window.showVisualization?"-420px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-        .style("padding-top", "420px")
-        .style("margin-top", "-420px")
+        .style("padding-top", window.showVisualization?"420px":"5px")
+        .style("margin-top", window.showVisualization?"-420px":"-5px")
+
+    if (!window.showVisualization) {
+        setTimeout(function(){
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#main").style("top", `${-mainHeight}px`)
+        }, animationDuration)
+    }
 }
 
 function compareButtonClicked () {
@@ -1859,14 +1901,21 @@ function onCompare () {
 
     // description
     d3.select("#description-subsec-text-representation-generation")
-        .style("padding-top", "525px")
-        .style("margin-top", "-525px")
+        .style("padding-top", window.showVisualization?"525px":"5px")
+        .style("margin-top", window.showVisualization?"-525px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-        .style("padding-top", "525px")
-        .style("margin-top", "-525px")
+        .style("padding-top", window.showVisualization?"525px":"5px")
+        .style("margin-top", window.showVisualization?"-525px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-        .style("padding-top", "525px")
-        .style("margin-top", "-525px")
+        .style("padding-top", window.showVisualization?"525px":"5px")
+        .style("margin-top", window.showVisualization?"-525px":"-5px")
+
+    if (!window.showVisualization) {
+        setTimeout(function(){
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#main").style("top", `${-mainHeight}px`)
+        }, animationDuration)
+    }
 }
 
 function offCompare () {
@@ -2196,14 +2245,21 @@ function offCompare () {
 
     // description
     d3.select("#description-subsec-text-representation-generation")
-        .style("padding-top", "290px")
-        .style("margin-top", "-290px")
+        .style("padding-top", window.showVisualization?"290px":"5px")
+        .style("margin-top", window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-        .style("padding-top", "290px")
-        .style("margin-top", "-290px")
+        .style("padding-top", window.showVisualization?"290px":"5px")
+        .style("margin-top", window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-        .style("padding-top", "290px")
-        .style("margin-top", "-290px")
+        .style("padding-top", window.showVisualization?"290px":"5px")
+        .style("margin-top", window.showVisualization?"-290px":"-5px")
+
+    if (!window.showVisualization) {
+        setTimeout(function(){
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#main").style("top", `${-mainHeight}px`)
+        }, animationDuration)
+    }
 }
 
 export {promptChanged, timestepSliderFunction, controllerButtonHovered, controllerButtonMouseout, controllerButtonClicked, controllerPlayButtonClicked, updateStep, controllerPauseButtonClicked, seedChanged, gsChanged, drawUmap, expandTextVectorGeneratorL2, reduceTextVectorGeneratorL2, expandLatentDenoiserL2, reduceLatentDenoiserL2, expandLatentDenoiserL3,reduceLatentDenoiserL3, hyperparamChanged, drawTokens, drawTextVectors, compareButtonClicked, setMinMaxCoord};

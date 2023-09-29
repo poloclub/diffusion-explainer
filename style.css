@@ -54,6 +54,7 @@ svg {
     color: var(--white);
     padding: 30px;
     text-align: center;
+    box-sizing: border-box;
 }
 
 #header-title {
@@ -953,8 +954,8 @@ input:checked + .slider:before {
     opacity: 0; 
     position: absolute;
     left: 112px;
-    width: 550px;
-    height: 230px;
+    width: 525px;
+    height: 110px;
 }
 
 #text-vector-generator-l2-expl-reduce-button {
@@ -987,11 +988,21 @@ input:checked + .slider:before {
     box-sizing: border-box;
 }
 
+#text-vector-generator-l2-tokens-dots-svg {
+    width: 130px;
+    height: 30px;
+}
+
 #text-vector-generator-l2-tokenizer-text-encoder-arrow-container {
     height: 20px;
     position: absolute;
     left: 102px;
     top: 15px;
+}
+
+#text-vector-generator-l2-tokenizer-text-encoder-arrow-svg {
+    height: 20px;
+    width: 140px;
 }
 
 #text-vector-generator-l2-tokenizer-out-expl-text {
@@ -1016,6 +1027,11 @@ input:checked + .slider:before {
     position: inherit;
     top: 7px;
     left: 39px;
+}
+
+#text-vector-generator-l2-tokenizer-out-detailed-expl-arrow {
+    width: 10px;
+    height: 10px;
 }
 
 #text-vector-generator-l2-tokenizer-out-detailed-expl-arrow path {
@@ -1131,6 +1147,8 @@ input:checked + .slider:before {
 
 #text-vector-generator-l2-vectors-vertical-dots-svg {
     position: absolute;
+    width: 10px;
+    height: 30px;
 }
 
 #text-vector-generator-l2-left-cover {
@@ -2174,4 +2192,50 @@ input:checked + .slider:before {
 #description-subsec-text-representation-generation {
     padding-top: 290px;
     margin-top: -290px;
+}
+
+/* button to hide architecture container */
+#architecture-container-hide-button-container, 
+#architecture-container-show-button-container {
+    position: absolute;
+    /* background-color: var(--light); */
+    height: 25px;
+    width: 50px;
+    left: 50%;
+    cursor: pointer;
+}
+#architecture-container-hide-button-container {
+    border-radius: 37.5px 37.5px 0 0;
+    background-color: #f0f0f0;
+    bottom: -4px;
+    /* z-index: -1; */
+}
+
+#architecture-container-show-button-container {
+    border-radius: 0 0 37.5px 37.5px;
+    bottom: -29px;
+    box-shadow: 0px 4px 10px #0000002a;
+    background-color: var(--white);
+    /* display: none; */
+}
+
+#architecture-container-hide-button-container-svg,
+#architecture-container-show-button-container-svg {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) scale(0.7);
+}
+
+#architecture-container-hide-button-container-svg {
+    top: 7px;
+}
+
+#architecture-container-show-button-container-svg {
+    top: 5px;
+}
+
+#architecture-container-hide-button-container-svg-g line,
+#architecture-container-show-button-container-svg-g line {
+    stroke: var(--lightgray);
+    stroke-width: 2px;
 }

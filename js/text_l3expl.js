@@ -18,6 +18,7 @@ document.addEventListener("mouseup", (e) => {
         let mainTop = mainBox.y
         let mainBottom = mainBox.y + mainBox.height
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else if (document.querySelector("#architecture-container-hide-button-container:hover") != null) {}
         // else if (e.clientY > descriptionBox.y) {}
         else if (e.clientX > mainLeft && e.clientX < mainRight && e.clientY > mainTop && e.clientY < mainBottom) {
             d3.select("#generate-text-vector-l3-expl-container").style("display", "none")

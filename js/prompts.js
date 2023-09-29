@@ -55,3 +55,4 @@ window.umapNodeHighlightColor2 = "#2166ac";
 window.umapNodeHovered = false;
 window.compare = false;
 window.firstCompare = true;
+window.showVisualization = true;

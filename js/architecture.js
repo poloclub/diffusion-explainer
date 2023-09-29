@@ -16,6 +16,15 @@ document.addEventListener("mouseup", (e) => {
     }
 })
 
+document.addEventListener("scroll", (e)=> {
+    console.log("scroll", innerHeight)
+    if (innerHeight < 865) return
+    let headerHeight = +(getComputedStyle(document.getElementById("header"))["height"].slice(0,-2))
+    console.log(headerHeight, scrollY)
+    if (window.showVisualization) d3.select("#architecture-container-hide-button-container").style("display", scrollY>=headerHeight?"block":"none")
+    else d3.select("#architecture-container-hide-button-container").style("display", "none")
+})
+
 let architectureLineWidth = 2;
 let architectureTextLineColor = "#7fbc41"
 let architectureImgLineColor = "#de77ae"
@@ -551,3 +560,125 @@ d3.select("#seed-control-container")
                 .attr("value", d => d)
                 .text(d => d)
                 .property("selected", d => (d==window.seed))
+
+// Hide button
+let animationDuration = 500;
+d3.select("#architecture-container-hide-button-container")
+        .style("display", () => {
+            // TODO: display "block" if scrolled and shown, "none" if not
+            if (innerHeight < 865) return "none"
+            let headerHeight = +(getComputedStyle(document.getElementById("header"))["height"].slice(0,-2))
+            return scrollY>=headerHeight?"block":"none"
+        })
+        .on("mouseover", () => {d3.select("#architecture-container-hide-button-container").style("background-color", "#e0e0e0")})
+        .on("mouseout", () => {d3.select("#architecture-container-hide-button-container").style("background-color", "#f0f0f0")})
+        .on("click", () => {
+            d3.select("#architecture-container-hide-button-container").style("background-color", "#f0f0f0")
+            let mainHeight = +getComputedStyle(document.getElementById("main"))["height"].slice(0,-2)
+            d3.select("#main")
+                .transition()
+                .duration(animationDuration)
+                    .style("top", `-${mainHeight}px`)
+            d3.select("#architecture-container-show-button-container")
+                .transition()
+                    .style("display", "block")
+                .transition()
+                .duration(animationDuration)
+                    .style("opacity", `1`)
+            d3.select("#architecture-container-hide-button-container")
+                .transition()
+                .duration(animationDuration)
+                    .style("opacity", `0`)
+                .transition()
+                .style("display", "none")
+            d3.select("#description-subsec-text-representation-generation")
+                .style("padding-top", "5px")
+                .style("margin-top", "-5px")
+            d3.select("#description-subsec-image-representation-refining")
+                .style("padding-top", "5px")
+                .style("margin-top", "-5px")
+            d3.select("#description-subsec-image-upscaling")
+                .style("padding-top", "5px")
+                .style("margin-top", "-5px")
+            window.showVisualization = false;
+        })
+        .append("svg")
+            .style("width", "30px")
+            .style("height", "15px")
+            .attr("id", "architecture-container-hide-button-container-svg")
+            .append("g")
+                .attr("id", "architecture-container-hide-button-container-svg-g")
+d3.select("#architecture-container-hide-button-container-svg-g")
+    .append("line")
+        .attr("x1", "15")
+        .attr("y1", "0")
+        .attr("x2", "0")
+        .attr("y2", "15")
+d3.select("#architecture-container-hide-button-container-svg-g")
+    .append("line")
+        .attr("x1", "15")
+        .attr("y1", "0")
+        .attr("x2", "30")
+        .attr("y2", "15")
+
+
+d3.select("#architecture-container-show-button-container")
+    .style("display", () => {
+        if (innerHeight < 865) return "none"
+        if (window.showVisualization) return "none"
+        let headerHeight = +(getComputedStyle(document.getElementById("header"))["height"].slice(0,-2))
+        if (scrollY >= headerHeight) return "block"
+        else return "none"
+        // TODO: display "display" if scrolled and not shown under sticky setting, "none" if not
+    })
+    .on("mouseover", () => {d3.select("#architecture-container-show-button-container").style("background-color", "#eaeaea")})
+    .on("mouseout", () => {d3.select("#architecture-container-show-button-container").style("background-color", "var(--white)")})
+    .on("click", () => {
+        d3.select("#architecture-container-show-button-container").style("background-color", "var(--white)")
+        let mainHeight = +getComputedStyle(document.getElementById("main"))["height"].slice(0,-2)
+        d3.select("#main")
+            .transition()
+            .duration(animationDuration)
+                .style("top", `0px`)
+        d3.select("#architecture-container-show-button-container")
+            .transition()
+            .duration(animationDuration)
+                .style("opacity", `0`)
+            .transition()
+                .style("display", "none")
+        d3.select("#architecture-container-hide-button-container")
+            .transition()
+                .style("display", "block")
+            .transition()
+            .duration(animationDuration)
+                .style("opacity", `1`)
+        d3.select("#description-subsec-text-representation-generation")
+            .style("padding-top", `${mainHeight+20}px`)
+            .style("margin-top", `-${mainHeight+20}px`)
+        d3.select("#description-subsec-image-representation-refining")
+            .style("padding-top", `${mainHeight+20}px`)
+            .style("margin-top", `-${mainHeight+20}px`)
+        d3.select("#description-subsec-image-upscaling")
+            .style("padding-top", `${mainHeight+20}px`)
+            .style("margin-top", `-${mainHeight+20}px`)
+        window.showVisualization = true;
+    })
+    .append("svg")
+        .style("width", "30px")
+        .style("height", "15px")
+        .attr("id", "architecture-container-show-button-container-svg")
+        .append("g")
+            .attr("id", "architecture-container-show-button-container-svg-g")
+
+d3.select("#architecture-container-show-button-container-svg-g")
+    .append("line")
+        .attr("x1", "0")
+        .attr("y1", "0")
+        .attr("x2", "15")
+        .attr("y2", "15")
+d3.select("#architecture-container-show-button-container-svg-g")
+    .append("line")
+        .attr("x1", "30")
+        .attr("y1", "0")
+        .attr("x2", "15")
+        .attr("y2", "15")

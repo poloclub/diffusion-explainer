@@ -20,6 +20,7 @@ document.addEventListener("mousedown", (e) => {
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
         else if (document.querySelector(".controller-button-circle:hover") != null) {}
         else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
+        else if (document.querySelector("#architecture-container-hide-button-container:hover") != null) {}
         // else if (e.clientY > descriptionBox.y) {}
         // else {reduceLatentDenoiserL2();}
         else if (e.clientX > mainLeft && e.clientX < mainRight && e.clientY > mainTop && e.clientY < mainBottom) {reduceLatentDenoiserL2();}

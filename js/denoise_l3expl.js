@@ -18,6 +18,7 @@ document.addEventListener("mouseup", (e) => {
         let mainTop = mainBox.y
         let mainBottom = mainBox.y + mainBox.height
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else if (document.querySelector("#architecture-container-hide-button-container:hover") != null) {}
         else if (document.querySelector(".controller-button-circle:hover") != null) {}
         else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
         // else if (e.clientY > descriptionBox.y) {}

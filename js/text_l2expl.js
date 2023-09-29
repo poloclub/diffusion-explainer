@@ -20,6 +20,7 @@ document.addEventListener("mouseup", (e) => {
         if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
         // else if (e.clientY > descriptionBox.y) {}
         // else {reduceTextVectorGeneratorL2();}
+        else if (document.querySelector("#architecture-container-hide-button-container:hover") != null) {}
         else if (e.clientX > mainLeft && e.clientX < mainRight && e.clientY > mainTop && e.clientY < mainBottom) {reduceTextVectorGeneratorL2();}
         else {}
     }
