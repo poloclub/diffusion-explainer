@@ -676,7 +676,6 @@ function expandTextVectorGeneratorL2(e) {
     // Resize text vector generator
     console.log("expandTextVectorGeneratorL2")
     d3.select("#text-vector-generator-container")
-        .style("cursor", "default")
         .transition()
             .duration(animationDuration)
             .style("width", `${textVectorGeneratorRectExpandedWidth}px`)
@@ -687,6 +686,7 @@ function expandTextVectorGeneratorL2(e) {
             .style("border-width", "0px")
             // .style("background-color", "var(--text00)")
             .style("background-color", "#f4f7ef")
+            .style("cursor", "default")
 
     // Change the height of main
     d3.select("#architecture-wrapper")
@@ -721,6 +721,8 @@ function expandTextVectorGeneratorL2(e) {
             .style("height", "80px")
             .style("top", "0px")
             .style("background-color", "var(--img00)")
+            .style("border-width", "1px")
+            .style("color", "#8e0152ff")
     d3.select("#latent-denoiser-cycle-container")
         .transition()
             .duration(animationDuration)
@@ -817,28 +819,26 @@ function expandTextVectorGeneratorL2(e) {
     // d3.select("#description-subsec-image-upscaling")
     //     .style("padding-top", window.showVisualization?"320px":"5px")
     //     .style("margin-top", window.showVisualization?"-320px":"-5px")
+    let stickyFlag = d3.select("#main").style("position") == "sticky"
     d3.select("#description-subsec-image-representation-refining")
-        .style("padding-top", window.showVisualization?"320px":"320px")
-        .style("margin-top", window.showVisualization?"-320px":"-320px")
+        // .style("padding-top", window.showVisualization?"320px":"320px")
+        .style("padding-top", stickyFlag?"320px":"5px")
+        // .style("margin-top", window.showVisualization?"-320px":"-320px")
+        .style("margin-top", stickyFlag?"-320px":"-5px")
     d3.select("#description-subsec-text-representation-generation")
-        .style("padding-top", window.showVisualization?"320px":"320px")
-        .style("margin-top", window.showVisualization?"-320px":"-320px")
+        // .style("padding-top", window.showVisualization?"320px":"320px")
+        .style("padding-top", stickyFlag?"320px":"5px")
+        // .style("margin-top", window.showVisualization?"-320px":"-320px")
+        .style("margin-top", stickyFlag?"-320px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-        .style("padding-top", window.showVisualization?"320px":"320px")
-        .style("margin-top", window.showVisualization?"-320px":"-320px")
+        // .style("padding-top", window.showVisualization?"320px":"320px")
+        .style("padding-top", stickyFlag?"320px":"5px")
+        // .style("margin-top", window.showVisualization?"-320px":"-320px")
+        .style("margin-top", stickyFlag?"-320px":"-5px")
 
-    // if ()
-    if (d3.select("#main").style("position") == "sticky") {
-        // if (!window.showVisualization) {
-            // setTimeout(function(){
-            //     let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
-            //     d3.select("#main").style("top", `${-mainHeight}px`)
-            // }, animationDuration)
-        // }
-        console.log("text")
+    if (stickyFlag) {
         window.showVisualization = true;
         d3.select("#main").style("top", `0px`)
-        // if (window.showVisualization) 
         setTimeout(function(){document.getElementById("description-subsec-text-representation-generation").scrollIntoView({"behavior": "smooth"})}, animationDuration)
     }
     
@@ -999,15 +999,16 @@ function reduceTextVectorGeneratorL2(e) {
         .delay(animationDuration)
             .style("opacity","0")
 
+    let stickyFlag = d3.select("#main").style("position") == "sticky"
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", window.showVisualization?"290px":"5px")
-            .style("margin-top", window.showVisualization?"-290px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"290px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", window.showVisualization?"290px":"5px")
-            .style("margin-top", window.showVisualization?"-290px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"290px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", window.showVisualization?"290px":"5px")
-            .style("margin-top", window.showVisualization?"-290px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"290px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-290px":"-5px")
 
     if (!window.showVisualization && d3.select("#main").style("position") == "sticky"  && document.querySelector("#latent-denoiser-container:hover") == null) {
         setTimeout(function(){
@@ -1089,6 +1090,7 @@ function expandLatentDenoiserL2(e) {
             .style("left", `${542-movePx}px`)
             .style("top", "-13px")
             .style("border-width", "0px")
+            .style("color", "#8e015200")
     
     // Change the height of main
     d3.select("#architecture-wrapper")
@@ -1194,24 +1196,25 @@ function expandLatentDenoiserL2(e) {
             .style("opacity", "1")
 
     // description
-    // d3.select("#description-subsec-text-representation-generation")
-    //         .style("padding-top", window.showVisualization?"420px":"5px")
-    //         .style("margin-top", window.showVisualization?"-420px":"-5px")
-    // d3.select("#description-subsec-image-representation-refining")
-    //         .style("padding-top", window.showVisualization?"420px":"5px")
-    //         .style("margin-top", window.showVisualization?"-420px":"-5px")
-    // d3.select("#description-subsec-image-upscaling")
-    //         .style("padding-top", window.showVisualization?"420px":"5px")
-    //         .style("margin-top", window.showVisualization?"-420px":"-5px")
+    let stickyFlag = d3.select("#main").style("position") == "sticky"
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", window.showVisualization?"420px":"420px")
-            .style("margin-top", window.showVisualization?"-420px":"-420px")
+            .style("padding-top", stickyFlag?"420px":"5px")
+            .style("margin-top", stickyFlag?"-420px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", window.showVisualization?"420px":"420px")
-            .style("margin-top", window.showVisualization?"-420px":"-420px")
+            .style("padding-top", stickyFlag?"420px":"5px")
+            .style("margin-top", stickyFlag?"-420px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", window.showVisualization?"420px":"420px")
-            .style("margin-top", window.showVisualization?"-420px":"-420px")
+            .style("padding-top", stickyFlag?"420px":"5px")
+            .style("margin-top", stickyFlag?"-420px":"-5px")
+    // d3.select("#description-subsec-text-representation-generation")
+    //         .style("padding-top", window.showVisualization?"420px":"420px")
+    //         .style("margin-top", window.showVisualization?"-420px":"-420px")
+    // d3.select("#description-subsec-image-representation-refining")
+    //         .style("padding-top", window.showVisualization?"420px":"420px")
+    //         .style("margin-top", window.showVisualization?"-420px":"-420px")
+    // d3.select("#description-subsec-image-upscaling")
+    //         .style("padding-top", window.showVisualization?"420px":"420px")
+    //         .style("margin-top", window.showVisualization?"-420px":"-420px")
 
     if (d3.select("#main").style("position") == "sticky") {
         // if (!window.showVisualization) {
@@ -1259,16 +1262,16 @@ function reduceLatentDenoiserL2 () {
             .style("left", `${507}px`)
     // resize latent denoiser
     d3.select("#latent-denoiser-container")
-        .style("cursor", "pointer")
         .transition()
             .duration(animationDuration)
+            .style("cursor", "pointer")
             .style("width", "145px")
             .style("height", "80px")
             .style("left", "542px")
             .style("top", "0px")
-            .style("background-color", "var(--img00)")
+            .style("background-color", "#fbf5f8")
             .style("border-width", "1px")
-
+            .style("color", "#8e0152ff")
     // Change the height of main
     d3.select("#architecture-wrapper")
         .transition()
@@ -1414,15 +1417,16 @@ function reduceLatentDenoiserL2 () {
         })
 
     // description
+    let stickyFlag = d3.select("#main").style("position") == "sticky"
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", window.showVisualization?"290px":"5px")
-            .style("margin-top", window.showVisualization?"-290px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"290px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", window.showVisualization?"290px":"5px")
-            .style("margin-top", window.showVisualization?"-290px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"290px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-290px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", window.showVisualization?"290px":"5px")
-            .style("margin-top", window.showVisualization?"-290px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"290px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-290px":"-5px")
 
     if (d3.select("#main").style("position") == "sticky" && !window.showVisualization && document.querySelector("#text-vector-generator-container:hover") == null) {
         console.log("image")
@@ -1489,15 +1493,16 @@ function expandLatentDenoiserL3 () {
         })
 
     // description
+    let stickyFlag = d3.select("#main").style("position") == "sticky"
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", window.showVisualization?"535px":"5px")
-            .style("margin-top", window.showVisualization?"-535px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"535px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-535px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", window.showVisualization?"535px":"5px")
-            .style("margin-top", window.showVisualization?"-535px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"535px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-535px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", window.showVisualization?"535px":"5px")
-            .style("margin-top", window.showVisualization?"-535px":"-5px")
+            .style("padding-top", stickyFlag&&window.showVisualization?"535px":"5px")
+            .style("margin-top", stickyFlag&&window.showVisualization?"-535px":"-5px")
 
     if (d3.select("#main").style("position") == "sticky" && !window.showVisualization) {
         setTimeout(function(){
@@ -1560,15 +1565,16 @@ function reduceLatentDenoiserL3 () {
             .style("opacity", "1")
 
     // description
+    let stickyFlag = d3.select("#main").style("position") == "sticky"
     d3.select("#description-subsec-text-representation-generation")
-        .style("padding-top", window.showVisualization?"420px":"5px")
-        .style("margin-top", window.showVisualization?"-420px":"-5px")
+        .style("padding-top", stickyFlag&&window.showVisualization?"420px":"5px")
+        .style("margin-top", stickyFlag&&window.showVisualization?"-420px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-        .style("padding-top", window.showVisualization?"420px":"5px")
-        .style("margin-top", window.showVisualization?"-420px":"-5px")
+        .style("padding-top", stickyFlag&&window.showVisualization?"420px":"5px")
+        .style("margin-top", stickyFlag&&window.showVisualization?"-420px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-        .style("padding-top", window.showVisualization?"420px":"5px")
-        .style("margin-top", window.showVisualization?"-420px":"-5px")
+        .style("padding-top", stickyFlag&&window.showVisualization?"420px":"5px")
+        .style("margin-top", stickyFlag&&window.showVisualization?"-420px":"-5px")
 
     if (d3.select("#main").style("position") == "sticky" && !window.showVisualization && document.querySelector("#text-vector-generator-container:hover") == null) {
         setTimeout(function(){
@@ -1645,7 +1651,8 @@ function onCompare () {
         .transition()
         .duration(animationDuration)
             .style("height", `430px`)
-            .style("padding", `15px 40px 75px`)
+            // .style("padding", `15px 40px 75px`)
+            .style("padding", `5px 40px 10px 40px`)
     d3.select("#your-text-prompt")
         .transition()
         .duration(animationDuration)
@@ -1930,15 +1937,16 @@ function onCompare () {
             .style("font-size", "13px")
 
     // description
+    let stickyFlag = d3.select("#main").style("position") == "sticky"
     d3.select("#description-subsec-text-representation-generation")
-        .style("padding-top", window.showVisualization?"525px":"5px")
-        .style("margin-top", window.showVisualization?"-525px":"-5px")
+        .style("padding-top", window.showVisualization&&stickyFlag?"525px":"5px")
+        .style("margin-top", window.showVisualization&&stickyFlag?"-525px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-        .style("padding-top", window.showVisualization?"525px":"5px")
-        .style("margin-top", window.showVisualization?"-525px":"-5px")
+        .style("padding-top", window.showVisualization&&stickyFlag?"525px":"5px")
+        .style("margin-top", window.showVisualization&&stickyFlag?"-525px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-        .style("padding-top", window.showVisualization?"525px":"5px")
-        .style("margin-top", window.showVisualization?"-525px":"-5px")
+        .style("padding-top", window.showVisualization&&stickyFlag?"525px":"5px")
+        .style("margin-top", window.showVisualization&&stickyFlag?"-525px":"-5px")
 
     if (d3.select("#main").style("position") == "sticky" && !window.showVisualization) {
         setTimeout(function(){
@@ -1962,7 +1970,8 @@ function offCompare () {
         .duration(animationDuration)
             .style("height", `270px`)
             // .style("padding", `55px 40px 85px 40px`)
-            .style("padding", `15px 40px 0px 40px`)
+            // .style("padding", `15px 40px 0px 40px`)
+            .style("padding", `5px 40px 10px 40px`)
     d3.select("#your-text-prompt")
         .transition()
         .duration(animationDuration)
@@ -2274,15 +2283,16 @@ function offCompare () {
             .style("left", "0px")
 
     // description
+    let stickyFlag = d3.select("#main").style("position") == "sticky"
     d3.select("#description-subsec-text-representation-generation")
-        .style("padding-top", window.showVisualization?"290px":"5px")
-        .style("margin-top", window.showVisualization?"-290px":"-5px")
+        .style("padding-top", window.showVisualization&&stickyFlag?"290px":"5px")
+        .style("margin-top", window.showVisualization&&stickyFlag?"-290px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-        .style("padding-top", window.showVisualization?"290px":"5px")
-        .style("margin-top", window.showVisualization?"-290px":"-5px")
+        .style("padding-top", window.showVisualization&&stickyFlag?"290px":"5px")
+        .style("margin-top", window.showVisualization&&stickyFlag?"-290px":"-5px")
     d3.select("#description-subsec-image-upscaling")
-        .style("padding-top", window.showVisualization?"290px":"5px")
-        .style("margin-top", window.showVisualization?"-290px":"-5px")
+        .style("padding-top", window.showVisualization&&stickyFlag?"290px":"5px")
+        .style("margin-top", window.showVisualization&&stickyFlag?"-290px":"-5px")
 
     if (d3.select("#main").style("position") == "sticky" && !window.showVisualization) {
         setTimeout(function(){

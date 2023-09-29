@@ -32,12 +32,24 @@ let textGeneratorL2ExplDiv = d3.select("#architecture-container")
 
 // leave button
 textGeneratorL2ExplDiv
-    .append("img") 
-        .attr("id", "text-vector-generator-l2-expl-reduce-button")
-        .attr("src", "./icons/reduce.svg")
-        .attr("alt", "Reduce SVG")
-        .attr("height", `20px`)
-        .on("click", reduceTextVectorGeneratorL2)
+    .append("div")
+        .attr("id", "text-vector-generator-l2-expl-reduce-button-container")
+        .append("img") 
+            .attr("id", "text-vector-generator-l2-expl-reduce-button")
+            .attr("src", "./icons/reduce.svg")
+            .attr("alt", "Reduce SVG")
+            .on("click", reduceTextVectorGeneratorL2)
+
+// info button
+textGeneratorL2ExplDiv
+    .append("div")
+        .attr("id", "text-vector-generator-l2-expl-info-button")
+        .text("i")
+        .on("click", () => {
+            // document.getElementById("description-subsec-image-representation-refining").scrollIntoView({"behavior": "smooth"})
+            document.getElementById("description-subsec-text-representation-generation").scrollIntoView({"behavior": "smooth"})
+        })
+
 
 // tokenizer
 textGeneratorL2ExplDiv.append("div")

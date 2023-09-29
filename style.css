@@ -58,6 +58,8 @@ svg {
 }
 
 #header-title {
+    display: inline-block;
+    width: max-content;
     height: 40px;
     font-weight: 800;
     font-size: 44px;
@@ -105,6 +107,10 @@ svg {
 
 #header-links {
     margin-top: 11.5px;
+    width: max-content;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .header-link {
@@ -149,7 +155,7 @@ svg {
 }
 
 /* main */
-@media screen and (max-height: 864px) {
+@media screen and (max-height: 799px) {
     #main {
         position: relative;
         /* display: block;
@@ -162,7 +168,7 @@ svg {
     }
 }
 
-@media screen and (min-height: 865px) {
+@media screen and (min-height: 800px) {
     #main {
         position: sticky;
         /* display: block;
@@ -193,7 +199,8 @@ svg {
 
 #architecture-wrapper {
     height: 270px;
-    padding: 15px 40px 0px 40px;
+    padding: 5px 40px 10px 40px;
+    /* padding: 15px 40px 0px 40px; */
     width: 1008px;
     position: relative;
     display: inline-block;
@@ -451,7 +458,9 @@ svg {
     cursor: pointer;
     color: var(--lightgray);
     opacity: 0;
-    font-size: 15px;
+    font-size: 16px;
+    width: max-content;
+    color: #a0a0a0;
 }
 
 #exit-button-arrow {
@@ -690,13 +699,14 @@ input:checked + .slider:before {
 }
 
 #improved-latent-expl-container {
-    font-family: "Roboto Condensed", sans-serif;
+    /* font-family: "Roboto Condensed", sans-serif; */
     text-align: left;
     color: var(--img3);
     width: 100px;
     top: 158.5px;
     left: 0px;
     font-size: 13px;
+    line-height: 13px;
     position: absolute;
     opacity: 1;
 }
@@ -711,7 +721,7 @@ input:checked + .slider:before {
 }
 
 #improved-latent-generated-image-text {
-    font-family: "Roboto Condensed", sans-serif;
+    /* font-family: "Roboto Condensed", sans-serif; */
     color: #c51b7d;
     text-align: center;
     position: relative;
@@ -721,7 +731,7 @@ input:checked + .slider:before {
 }
 
 #improved-latent-generated-image-text-2 {
-    font-family: "Roboto Condensed", sans-serif;
+    /* font-family: "Roboto Condensed", sans-serif; */
     color: var(--comp2);
     text-align: center;
     position: relative;
@@ -958,19 +968,48 @@ input:checked + .slider:before {
     height: 110px;
 }
 
-#text-vector-generator-l2-expl-reduce-button {
-    opacity: 0.3;    
-    margin: 6px;
+#text-vector-generator-l2-expl-reduce-button-container {
+    background-color: #c8c8c8;
+    border: #b0b0b0 1px solid;
+    border-radius: 50%;
+    height: 13px;
+    width: 13px;
     position: absolute;
-    top: -79px;
-    left: -19px;
+    top: -75px;
+    right: 10px;
     cursor: pointer;
-    filter: invert(26%) sepia(74%) saturate(561%) hue-rotate(63deg) brightness(95%) contrast(86%);
+    overflow: hidden;
 }
 
-#text-vector-generator-l2-expl-reduce-button:hover {
-    opacity: 0.6;    
+#text-vector-generator-l2-expl-reduce-button {
+    height: 13px;
+    filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(1deg) brightness(103%) contrast(107%);;
 }
+
+#text-vector-generator-l2-expl-reduce-button-container:hover,
+#text-vector-generator-l2-expl-info-button:hover {    
+    background-color: #afafaf;
+    border: #9a9a9a 1px solid;
+}
+
+#text-vector-generator-l2-expl-info-button {
+    background-color: #c8c8c8;
+    border: #b0b0b0 1px solid;
+    width: 13px;
+    height: 13px;
+    font-size: 12px;
+    border-radius: 50%;
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: -75px;
+    right: 30px;
+    cursor: pointer;
+}
+
+/* #text-vector-generator-l2-expl-reduce-button:hover {
+    opacity: 0.6;    
+} */
 
 #text-vector-generator-l2-tokenizer-container {
     width: 100px;
@@ -1184,18 +1223,64 @@ input:checked + .slider:before {
     left: 312px;
 }
 
+#latent-denoiser-l2-expl-reduce-button-container {
+    background-color: #c8c8c8;
+    border: #b0b0b0 1px solid;
+    border-radius: 50%;
+    height: 13px;
+    width: 13px;
+    position: absolute;
+    top: 37px;
+    left: 440px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
 #denoise-latent-l2-expl-reduce-button {
-    opacity: 0.3;    
+    height: 13px;
+    filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(1deg) brightness(103%) contrast(107%);;
+    /* opacity: 0.3;    
     filter: invert(17%) sepia(71%) saturate(3596%) hue-rotate(309deg) brightness(98%) contrast(95%);
     margin: 13px;
     position: absolute;
     cursor: pointer;
     top: 21px;
-    left: 136px;
+    left: 136px; */
+}
+
+#latent-denoiser-l2-expl-reduce-button-container:hover,
+#latent-denoiser-l2-expl-info-button:hover {
+    background-color: #afafaf;
+    border: #9a9a9a 1px solid;
+}
+
+#latent-denoiser-l2-expl-info-button {
+    background-color: #c8c8c8;
+    border: #b0b0b0 1px solid;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    text-align: center;
+    color: white;
+    position: absolute;
+    top: 37px;
+    left: 421px;
+    cursor: pointer;
+
 }
 
 #denoise-latent-l2-expl-reduce-button:hover {
-    opacity: 0.6;    
+    /* opacity: 0.6;     */
+}
+
+#latent-denoiser-l2-expl-title {
+    color: #8e0152;
+    font-size: 18px;
+    font-weight: 500;
+    width: max-content;
+    position: relative;
+    left: 163px;
+    top: 34px;
 }
 
 #denoise-latent-l2-expl-prev-latent-container {
@@ -1207,9 +1292,10 @@ input:checked + .slider:before {
 }
 
 #denoise-latent-l2-expl-prev-latent-text {
-    font-family: "Roboto Condensed", sans-serif;
+    /* font-family: "Roboto Condensed", sans-serif; */
     width: 80px;
     font-size: 12px;
+    line-height: 13px;
     position: relative;
     right: 34px;
     top: -18px;
@@ -1218,7 +1304,8 @@ input:checked + .slider:before {
 }
 
 #denoise-latent-l2-expl-prev-latent-image-container {
-    cursor: pointer;    
+    /* cursor: pointer;     */
+    cursor: default;
 }
 
 #denoise-latent-l2-expl-prev-latent-img{
@@ -1401,7 +1488,7 @@ input:checked + .slider:before {
 #denoise-latent-l2-expl-noise-container {
     position: relative;
     left: 288px;
-    top: 145px;
+    top: 120px;
 }
 
 .denoise-latent-l2-expl-noise {
@@ -1440,7 +1527,8 @@ input:checked + .slider:before {
     left: 51px;
     top: -17px;
     text-decoration: underline;
-    cursor: pointer;
+    /* cursor: pointer; */
+    cursor: default;
 }
 
 #denoise-latent-l2-expl-weaken-arrow-svg {
@@ -2116,13 +2204,13 @@ input:checked + .slider:before {
 
 
 
-@media screen and (max-height: 864px) {
+@media screen and (max-height: 799px) {
     .description-subsec {
         padding: 5px 0px;
     }
 }
 
-@media screen and (min-height: 865px) {
+@media screen and (min-height: 800px) {
     .description-subsec {
         padding: 290px 0px 0px 0px;
         margin-top: -290px;

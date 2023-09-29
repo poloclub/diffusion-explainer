@@ -202,7 +202,8 @@ d3.select("#description-subsubsec-tokenizing-token-example-paragraph")
 
 d3.select("#description-subsubsec-tokenizing")
     .append("p")
-        .html("To ensure that all token sequences have the same length for easier computation, Stable Diffusion pads or truncates the token sequences to exactly 77 tokens. If the input prompt has fewer than 77 tokens, <end> tokens are added to the end of the sequence until it reaches 77 tokens. If the input prompt has more than 77 tokens, the last 77 tokens are retained and the rest are truncated. The number of tokens was set to balance performance and computational efficiency.")
+        .html('To ensure that all token sequences have the same length for easier computation, Stable Diffusion pads or truncates the token sequences to exactly 77 tokens. If the input prompt has fewer than 77 tokens, <span class="text-vector-generator-token description-token" id="description-token-end"></span> tokens are added to the end of the sequence until it reaches 77 tokens. If the input prompt has more than 77 tokens, the last 77 tokens are retained and the rest are truncated. The number of tokens was set to balance performance and computational efficiency.')
+d3.select("#description-token-end").text("<end>")
 // Text encoding
 d3.select("#description-subsec-text-representation-generation")
     .append("div")

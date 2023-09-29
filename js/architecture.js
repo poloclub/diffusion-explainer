@@ -17,7 +17,7 @@ document.addEventListener("mouseup", (e) => {
 })
 
 document.addEventListener("scroll", (e)=> {
-    if (innerHeight < 865) return
+    if (innerHeight < 800) return
     let headerHeight = +(getComputedStyle(document.getElementById("header"))["height"].slice(0,-2))
     if (window.showVisualization) {
         d3.select("#architecture-container-hide-button-container").style("display", scrollY>=headerHeight?"block":"none").style("opacity", scrollY>=headerHeight?"1":"0")
@@ -31,7 +31,7 @@ document.addEventListener("scroll", (e)=> {
 
 window.addEventListener("resize", (e)=> {
     console.log(innerHeight, innerWidth)
-    if (innerHeight < 865) {
+    if (innerHeight < 800) {
         window.showVisualization = false
         d3.select("#main").style("top", "0").style("position", "relative")
         d3.select("#architecture-container-hide-button-container").style("display", "none")
@@ -56,6 +56,17 @@ window.addEventListener("resize", (e)=> {
             d3.select("#main").style("top", "0")
             d3.select("#architecture-container-hide-button-container").style("display", scrollY>=headerHeight?"block":"none").style("opacity", scrollY>=headerHeight?"1":"0")
             d3.select("#architecture-container-show-button-container").style("display", "none").style("opacity", "0")
+
+            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            d3.select("#description-subsec-image-representation-refining")
+                .style("padding-top", `${mainHeight+1}px`)
+                .style("margin-top", `${-mainHeight-1}px`)
+            d3.select("#description-subsec-text-representation-generation")
+                .style("padding-top", `${mainHeight+1}px`)
+                .style("margin-top", `${-mainHeight-1}px`)
+            d3.select("#description-subsec-image-upscaling")
+                .style("padding-top", `${mainHeight+1}px`)
+                .style("margin-top", `${-mainHeight-1}px`)
         }
         else {
             d3.select("#architecture-container-show-button-container").style("display", scrollY>=headerHeight?"block":"none").style("opacity", scrollY>=headerHeight?"1":"0")
@@ -605,7 +616,7 @@ let animationDuration = 500;
 d3.select("#architecture-container-hide-button-container")
         .style("display", () => {
             // TODO: display "block" if scrolled and shown, "none" if not
-            if (innerHeight < 865) return "none"
+            if (innerHeight < 800) return "none"
             let headerHeight = +(getComputedStyle(document.getElementById("header"))["height"].slice(0,-2))
             return scrollY>=headerHeight?"block":"none"
         })
@@ -663,7 +674,7 @@ d3.select("#architecture-container-hide-button-container-svg-g")
 
 d3.select("#architecture-container-show-button-container")
     .style("display", () => {
-        if (innerHeight < 865) return "none"
+        if (innerHeight < 800) return "none"
         if (window.showVisualization) return "none"
         let headerHeight = +(getComputedStyle(document.getElementById("header"))["height"].slice(0,-2))
         if (scrollY >= headerHeight) return "block"

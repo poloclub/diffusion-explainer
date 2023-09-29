@@ -27,9 +27,9 @@ d3.select("#prompt-text-vector-generator-container")
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "exit-button-container")
-        .html('<i class="fa-solid fa-arrow-left" id="exit-button-arrow"></i><span id="exit-button-text">Back</span>')
-        .on("mouseover", () => d3.select("#exit-button-container").style("color", "var(--gray)"))
-        .on("mouseout", () => d3.select("#exit-button-container").style("color", "var(--lightgray)"))
+        .html('<i class="fa-solid fa-arrow-left" id="exit-button-arrow"></i><span id="exit-button-text">Back to Overview</span>')
+        .on("mouseover", () => d3.select("#exit-button-container").style("color", "var(--lightgray)"))
+        .on("mouseout", () => d3.select("#exit-button-container").style("color", "#a0a0a0"))
         .on("click", compareButtonClicked)
 
 // text generator - image refiner arrow
