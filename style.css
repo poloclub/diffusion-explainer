@@ -2113,8 +2113,20 @@ input:checked + .slider:before {
     pointer-events: none;
 }
 
-.description-subsec {
-    padding: 5px 0px;
+
+
+
+@media screen and (max-height: 864px) {
+    .description-subsec {
+        padding: 5px 0px;
+    }
+}
+
+@media screen and (min-height: 865px) {
+    .description-subsec {
+        padding: 290px 0px 0px 0px;
+        margin-top: -290px;
+    }
 }
 
 .description-subsubsec {
