@@ -808,23 +808,38 @@ function expandTextVectorGeneratorL2(e) {
         .duration(animationDuration)
             .style("opacity", "100%")
 
+    // d3.select("#description-subsec-image-representation-refining")
+    //     .style("padding-top", window.showVisualization?"320px":"5px")
+    //     .style("margin-top", window.showVisualization?"-320px":"-5px")
+    // d3.select("#description-subsec-text-representation-generation")
+    //     .style("padding-top", window.showVisualization?"320px":"5px")
+    //     .style("margin-top", window.showVisualization?"-320px":"-5px")
+    // d3.select("#description-subsec-image-upscaling")
+    //     .style("padding-top", window.showVisualization?"320px":"5px")
+    //     .style("margin-top", window.showVisualization?"-320px":"-5px")
     d3.select("#description-subsec-image-representation-refining")
-        .style("padding-top", window.showVisualization?"320px":"5px")
-        .style("margin-top", window.showVisualization?"-320px":"-5px")
+        .style("padding-top", window.showVisualization?"320px":"320px")
+        .style("margin-top", window.showVisualization?"-320px":"-320px")
     d3.select("#description-subsec-text-representation-generation")
-        .style("padding-top", window.showVisualization?"320px":"5px")
-        .style("margin-top", window.showVisualization?"-320px":"-5px")
+        .style("padding-top", window.showVisualization?"320px":"320px")
+        .style("margin-top", window.showVisualization?"-320px":"-320px")
     d3.select("#description-subsec-image-upscaling")
-        .style("padding-top", window.showVisualization?"320px":"5px")
-        .style("margin-top", window.showVisualization?"-320px":"-5px")
+        .style("padding-top", window.showVisualization?"320px":"320px")
+        .style("margin-top", window.showVisualization?"-320px":"-320px")
 
-    if (window.showVisualization)
+    // if ()
+    if (d3.select("#main").style("position") == "sticky") {
+        // if (!window.showVisualization) {
+            // setTimeout(function(){
+            //     let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            //     d3.select("#main").style("top", `${-mainHeight}px`)
+            // }, animationDuration)
+        // }
+        console.log("text")
+        window.showVisualization = true;
+        d3.select("#main").style("top", `0px`)
+        // if (window.showVisualization) 
         setTimeout(function(){document.getElementById("description-subsec-text-representation-generation").scrollIntoView({"behavior": "smooth"})}, animationDuration)
-    else {
-        setTimeout(function(){
-            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
-            d3.select("#main").style("top", `${-mainHeight}px`)
-        }, animationDuration)
     }
     
 }
@@ -994,7 +1009,7 @@ function reduceTextVectorGeneratorL2(e) {
             .style("padding-top", window.showVisualization?"290px":"5px")
             .style("margin-top", window.showVisualization?"-290px":"-5px")
 
-    if (!window.showVisualization) {
+    if (!window.showVisualization && d3.select("#main").style("position") == "sticky"  && document.querySelector("#latent-denoiser-container:hover") == null) {
         setTimeout(function(){
             let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
             d3.select("#main").style("top", `${-mainHeight}px`)
@@ -1179,23 +1194,37 @@ function expandLatentDenoiserL2(e) {
             .style("opacity", "1")
 
     // description
+    // d3.select("#description-subsec-text-representation-generation")
+    //         .style("padding-top", window.showVisualization?"420px":"5px")
+    //         .style("margin-top", window.showVisualization?"-420px":"-5px")
+    // d3.select("#description-subsec-image-representation-refining")
+    //         .style("padding-top", window.showVisualization?"420px":"5px")
+    //         .style("margin-top", window.showVisualization?"-420px":"-5px")
+    // d3.select("#description-subsec-image-upscaling")
+    //         .style("padding-top", window.showVisualization?"420px":"5px")
+    //         .style("margin-top", window.showVisualization?"-420px":"-5px")
     d3.select("#description-subsec-text-representation-generation")
-            .style("padding-top", window.showVisualization?"420px":"5px")
-            .style("margin-top", window.showVisualization?"-420px":"-5px")
+            .style("padding-top", window.showVisualization?"420px":"420px")
+            .style("margin-top", window.showVisualization?"-420px":"-420px")
     d3.select("#description-subsec-image-representation-refining")
-            .style("padding-top", window.showVisualization?"420px":"5px")
-            .style("margin-top", window.showVisualization?"-420px":"-5px")
+            .style("padding-top", window.showVisualization?"420px":"420px")
+            .style("margin-top", window.showVisualization?"-420px":"-420px")
     d3.select("#description-subsec-image-upscaling")
-            .style("padding-top", window.showVisualization?"420px":"5px")
-            .style("margin-top", window.showVisualization?"-420px":"-5px")
+            .style("padding-top", window.showVisualization?"420px":"420px")
+            .style("margin-top", window.showVisualization?"-420px":"-420px")
 
-    if (window.showVisualization)
+    if (d3.select("#main").style("position") == "sticky") {
+        // if (!window.showVisualization) {
+            // setTimeout(function(){
+            //     let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
+            //     d3.select("#main").style("top", `${-mainHeight}px`)
+            // }, animationDuration)
+        // }
+        console.log("image")
+        window.showVisualization = true
+        d3.select("#main").style("top", "0px")
+        // if (window.showVisualization) 
         setTimeout(function(){document.getElementById("description-subsec-image-representation-refining").scrollIntoView({"behavior": "smooth"})}, animationDuration)
-    else {
-        setTimeout(function(){
-            let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
-            d3.select("#main").style("top", `${-mainHeight}px`)
-        }, animationDuration)
     }
 }
 
@@ -1395,7 +1424,8 @@ function reduceLatentDenoiserL2 () {
             .style("padding-top", window.showVisualization?"290px":"5px")
             .style("margin-top", window.showVisualization?"-290px":"-5px")
 
-    if (!window.showVisualization) {
+    if (d3.select("#main").style("position") == "sticky" && !window.showVisualization && document.querySelector("#text-vector-generator-container:hover") == null) {
+        console.log("image")
         setTimeout(function(){
             let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
             d3.select("#main").style("top", `${-mainHeight}px`)
@@ -1469,7 +1499,7 @@ function expandLatentDenoiserL3 () {
             .style("padding-top", window.showVisualization?"535px":"5px")
             .style("margin-top", window.showVisualization?"-535px":"-5px")
 
-    if (!window.showVisualization) {
+    if (d3.select("#main").style("position") == "sticky" && !window.showVisualization) {
         setTimeout(function(){
             let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
             d3.select("#main").style("top", `${-mainHeight}px`)
@@ -1540,7 +1570,7 @@ function reduceLatentDenoiserL3 () {
         .style("padding-top", window.showVisualization?"420px":"5px")
         .style("margin-top", window.showVisualization?"-420px":"-5px")
 
-    if (!window.showVisualization) {
+    if (d3.select("#main").style("position") == "sticky" && !window.showVisualization && document.querySelector("#text-vector-generator-container:hover") == null) {
         setTimeout(function(){
             let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
             d3.select("#main").style("top", `${-mainHeight}px`)
@@ -1910,7 +1940,7 @@ function onCompare () {
         .style("padding-top", window.showVisualization?"525px":"5px")
         .style("margin-top", window.showVisualization?"-525px":"-5px")
 
-    if (!window.showVisualization) {
+    if (d3.select("#main").style("position") == "sticky" && !window.showVisualization) {
         setTimeout(function(){
             let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
             d3.select("#main").style("top", `${-mainHeight}px`)
@@ -2254,7 +2284,7 @@ function offCompare () {
         .style("padding-top", window.showVisualization?"290px":"5px")
         .style("margin-top", window.showVisualization?"-290px":"-5px")
 
-    if (!window.showVisualization) {
+    if (d3.select("#main").style("position") == "sticky" && !window.showVisualization) {
         setTimeout(function(){
             let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
             d3.select("#main").style("top", `${-mainHeight}px`)

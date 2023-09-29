@@ -17,12 +17,51 @@ document.addEventListener("mouseup", (e) => {
 })
 
 document.addEventListener("scroll", (e)=> {
-    console.log("scroll", innerHeight)
     if (innerHeight < 865) return
     let headerHeight = +(getComputedStyle(document.getElementById("header"))["height"].slice(0,-2))
-    console.log(headerHeight, scrollY)
-    if (window.showVisualization) d3.select("#architecture-container-hide-button-container").style("display", scrollY>=headerHeight?"block":"none")
-    else d3.select("#architecture-container-hide-button-container").style("display", "none")
+    if (window.showVisualization) {
+        d3.select("#architecture-container-hide-button-container").style("display", scrollY>=headerHeight?"block":"none").style("opacity", scrollY>=headerHeight?"1":"0")
+        d3.select("#architecture-container-show-button-container").style("display", "none").style("opacity", "0")
+    }
+    else {
+        d3.select("#architecture-container-hide-button-container").style("display", "none").style("opacity", "0")
+        d3.select("#architecture-container-show-button-container").style("display", scrollY>=headerHeight?"block":"none").style("opacity", scrollY>=headerHeight?"1":"0")
+    }
+})
+
+window.addEventListener("resize", (e)=> {
+    console.log(innerHeight, innerWidth)
+    if (innerHeight < 865) {
+        window.showVisualization = false
+        d3.select("#main").style("top", "0").style("position", "relative")
+        d3.select("#architecture-container-hide-button-container").style("display", "none")
+        d3.select("#architecture-container-show-button-container").style("display", "none")
+
+        d3.select("#description-subsec-image-representation-refining")
+            .style("padding-top", "5px")
+            .style("margin-top", "-5px")
+        d3.select("#description-subsec-text-representation-generation")
+            .style("padding-top", "5px")
+            .style("margin-top", "-5px")
+        d3.select("#description-subsec-image-upscaling")
+            .style("padding-top", "5px")
+            .style("margin-top", "-5px")
+    }
+    else {
+        let headerHeight = +(getComputedStyle(document.getElementById("header"))["height"].slice(0,-2))
+        if (d3.select("#main").style("position") == "relative") {window.showVisualization = true}
+        
+        d3.select("#main").style("position", "sticky") 
+        if (window.showVisualization) {
+            d3.select("#main").style("top", "0")
+            d3.select("#architecture-container-hide-button-container").style("display", scrollY>=headerHeight?"block":"none").style("opacity", scrollY>=headerHeight?"1":"0")
+            d3.select("#architecture-container-show-button-container").style("display", "none").style("opacity", "0")
+        }
+        else {
+            d3.select("#architecture-container-show-button-container").style("display", scrollY>=headerHeight?"block":"none").style("opacity", scrollY>=headerHeight?"1":"0")
+            d3.select("#architecture-container-hide-button-container").style("display", "none").style("opacity", "0")
+        }
+    }
 })
 
 let architectureLineWidth = 2;
