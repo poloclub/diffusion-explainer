@@ -1223,7 +1223,6 @@ function expandLatentDenoiserL2(e) {
             //     d3.select("#main").style("top", `${-mainHeight}px`)
             // }, animationDuration)
         // }
-        console.log("image")
         window.showVisualization = true
         d3.select("#main").style("top", "0px")
         // if (window.showVisualization) 
@@ -1652,7 +1651,7 @@ function onCompare () {
         .duration(animationDuration)
             .style("height", `430px`)
             // .style("padding", `15px 40px 75px`)
-            .style("padding", `5px 40px 10px 40px`)
+            .style("padding", `5px 0px 10px 40px`)
     d3.select("#your-text-prompt")
         .transition()
         .duration(animationDuration)
@@ -1971,7 +1970,7 @@ function offCompare () {
             .style("height", `270px`)
             // .style("padding", `55px 40px 85px 40px`)
             // .style("padding", `15px 40px 0px 40px`)
-            .style("padding", `5px 40px 10px 40px`)
+            .style("padding", `5px 0px 10px 40px`)
     d3.select("#your-text-prompt")
         .transition()
         .duration(animationDuration)
