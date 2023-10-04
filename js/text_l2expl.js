@@ -99,7 +99,7 @@ d3.select("#text-vector-generator-l2-tokenizer-out-detailed-expl-arrow g")
 d3.select("#text-vector-generator-l2-tokenizer-out-detailed-expl-container")
     .append("div")
         .attr("id", "text-vector-generator-l2-tokenizer-out-detailed-expl-text")
-        .text("Truncate if prompt consists of more than 77 tokens Pad with <end> if less than 77 tokens")
+        .text("Truncate if prompt consists of more than 77 tokens (words) Pad with <end> if less than 77 tokens")
 
 // Add tokens (implement this at function and import)
 textGeneratorL2ExplDiv
@@ -128,7 +128,7 @@ textGeneratorL2ExplDiv.append("div")
 textGeneratorL2ExplDiv
     .append("div")
         .attr("id", "text-vector-generator-l2-text-encoder-expl-text")
-        .text("768-dim vector for each token")
+        .text("vector for each token")
 textGeneratorL2ExplDiv
     .append("div")
         .attr("id", "text-vector-generator-l2-vectors-container")

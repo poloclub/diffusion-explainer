@@ -30,7 +30,6 @@ document.addEventListener("scroll", (e)=> {
 })
 
 window.addEventListener("resize", (e)=> {
-    console.log(innerHeight, innerWidth)
     if (innerHeight < 800) {
         window.showVisualization = false
         d3.select("#main").style("top", "0").style("position", "relative")
@@ -264,15 +263,12 @@ d3.select("#architecture-container")
         .attr("class", "architecture-rectangle architecture-component-container denoise-latent-expand-move-to-left")
         .text("Text Representation Generator")
         .on("mouseover", () => {
-            console.log("text-vector-generator-container mouseover")
             if (!window.textVectorGeneratorL2Expanded) d3.select("#text-vector-generator-container").style("background-color", "var(--text0)")
         })
         .on("mouseout", () => {
-            console.log("text-vector-generator-container mouseout")
             d3.select("#text-vector-generator-container").style("background-color", "var(--text00)")
         })
         .on("click", () => {
-            console.log("clicked")
             expandTextVectorGeneratorL2()
         })
 

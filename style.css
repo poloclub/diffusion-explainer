@@ -1092,6 +1092,7 @@ input:checked + .slider:before {
     top: -42px;
     left: 46px;
     font-style: italic;
+    width: 320px;
 }
 
 #text-vector-generator-l2-tokens-container {
@@ -1140,7 +1141,7 @@ input:checked + .slider:before {
 
 #text-vector-generator-l2-text-encoder-expl-text {
     position: absolute;
-    left: 340px;
+    left: 338px;
     width: 184px;
     text-align: center;
     top: 4px;

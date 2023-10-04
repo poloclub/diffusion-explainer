@@ -674,7 +674,6 @@ function expandTextVectorGeneratorL2(e) {
         .style("pointer-events", "initial")
     
     // Resize text vector generator
-    console.log("expandTextVectorGeneratorL2")
     d3.select("#text-vector-generator-container")
         .transition()
             .duration(animationDuration)
@@ -867,7 +866,6 @@ function reduceTextVectorGeneratorL2(e) {
         .style("pointer-events", "none")
 
     // Text vector generator resize
-    // console.log("reduceTextVectorGeneratorL2")
     d3.select("#text-vector-generator-container")
         .transition()
             .duration(animationDuration)
@@ -1110,7 +1108,6 @@ function expandLatentDenoiserL2(e) {
             .duration(animationDuration)
             .style("left", `${250-movePx-20}px`)
             .style("top", `111px`)
-    // console.log("expandLatentDenoiserL2")
     d3.select("#text-vector-generator-container")
         .transition()
             .duration(animationDuration)
@@ -1289,7 +1286,6 @@ function reduceLatentDenoiserL2 () {
             .duration(animationDuration)
             .style("left", `${250}px`)
             .style("top", `30px`)
-    // console.log("reduceLatentDenoiserL2")
     d3.select("#text-vector-generator-container")
         .transition()
             .duration(animationDuration)
@@ -1428,7 +1424,6 @@ function reduceLatentDenoiserL2 () {
             .style("margin-top", stickyFlag&&window.showVisualization?"-290px":"-5px")
 
     if (d3.select("#main").style("position") == "sticky" && !window.showVisualization && document.querySelector("#text-vector-generator-container:hover") == null) {
-        console.log("image")
         setTimeout(function(){
             let mainHeight = +(getComputedStyle(document.getElementById("main"))["height"].slice(0,-2))
             d3.select("#main").style("top", `${-mainHeight}px`)
@@ -1700,7 +1695,6 @@ function onCompare () {
         .duration(animationDuration)
             .style("opacity", "1")
             .style("top", `42px`)
-    // console.log("oncompare")
     d3.select("#text-vector-generator-container")
         .transition()
         .duration(animationDuration)
@@ -2034,7 +2028,6 @@ function offCompare () {
         .on("interrupt", function() {
             d3.select(this).style("display", "block")
         })
-    // console.log("offcompare")
     d3.select("#text-vector-generator-container")
         .transition()
         .duration(animationDuration)
