@@ -155,7 +155,7 @@ svg {
 }
 
 /* main */
-@media screen and (max-height: 799px) {
+@media screen and (max-height: 767px) {
     #main {
         position: relative;
         /* display: block;
@@ -168,7 +168,7 @@ svg {
     }
 }
 
-@media screen and (min-height: 800px) {
+@media screen and (min-height: 768px) {
     #main {
         position: sticky;
         /* display: block;
@@ -856,8 +856,8 @@ input:checked + .slider:before {
 
 /* seed control */
 #seed-control-container {
-    display: none;
-    opacity: 0;
+    display: block;
+    opacity: 1;
     position: absolute;
     left: 437px;
     top: -67px;
@@ -880,11 +880,11 @@ input:checked + .slider:before {
 
 /* guidance scale control */
 #guidance-scale-control-container {
-    display: none;
-    opacity: 0%; 
+    display: block;
+    opacity: 1; 
     position: absolute;
     top: 87px;
-    left: 544px;
+    left: 549px;
     width: 250px;
 }
 
@@ -922,8 +922,8 @@ input:checked + .slider:before {
 }
 
 #guidance-scale-expl-container {
-    display: none;
-    opacity: 0;
+    display: block;
+    opacity: 1;
     color: var(--darkgray);
     position: absolute;
     width: 400px;
@@ -2219,13 +2219,13 @@ input:checked + .slider:before {
 
 
 
-@media screen and (max-height: 799px) {
+@media screen and (max-height: 767px) {
     .description-subsec {
         padding: 5px 0px;
     }
 }
 
-@media screen and (min-height: 800px) {
+@media screen and (min-height: 768px) {
     .description-subsec {
         padding: 290px 0px 0px 0px;
         margin-top: -290px;
