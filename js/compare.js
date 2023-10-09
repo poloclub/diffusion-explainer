@@ -32,6 +32,12 @@ d3.select("#architecture-container")
         .on("mouseout", () => d3.select("#exit-button-container").style("color", "#a0a0a0"))
         .on("click", compareButtonClicked)
 
+// text representation generator, image representation refiner hovering
+d3.select("#architecture-container")
+    .append("div")
+        .attr("id", "text-representation-generator-alert-window-container")
+        .text("Go back to Overview to expand")
+
 // text generator - image refiner arrow
 d3.select("#text-vector-generator-latent-denoiser-container")
     .append("svg")

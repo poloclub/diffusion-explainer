@@ -262,14 +262,21 @@ d3.select("#architecture-container")
         .attr("id", "text-vector-generator-container")
         .attr("class", "architecture-rectangle architecture-component-container denoise-latent-expand-move-to-left")
         .text("Text Representation Generator")
-        .on("mouseover", () => {
-            if (!window.textVectorGeneratorL2Expanded) d3.select("#text-vector-generator-container").style("background-color", "var(--text0)")
+        .on("mouseover", (e) => {
+            if (!window.compare && !window.textVectorGeneratorL2Expanded) d3.select("#text-vector-generator-container").style("background-color", "var(--text0)")
+            else if (window.compare) {
+                d3.select("#text-representation-generator-alert-window-container")
+                    .style("display", "block")
+                    .style("left", `${e.offsetX+295}px`)
+                    .style("top", `${e.offsetY+101}px`)
+            }
         })
         .on("mouseout", () => {
-            d3.select("#text-vector-generator-container").style("background-color", "var(--text00)")
+            if (!window.compare) d3.select("#text-vector-generator-container").style("background-color", "var(--text00)")
+            else {d3.select("#text-representation-generator-alert-window-container").style("display", "none")}
         })
         .on("click", () => {
-            expandTextVectorGeneratorL2()
+            if (!window.compare) expandTextVectorGeneratorL2()
         })
 
 
@@ -357,14 +364,21 @@ d3.select("#architecture-container")
         .attr("id", "latent-denoiser-container")
         .attr("class", "architecture-rectangle architecture-component-container denoise-latent-expand-move-to-left")
         .text("Image Representation Refiner")
-        .on("mouseover", () => {
-            if (!window.latentDenoiserL2Expanded) d3.select("#latent-denoiser-container").style("background-color", "var(--img0)")
+        .on("mouseover", (e) => {
+            if (!window.compare && !window.latentDenoiserL2Expanded) d3.select("#latent-denoiser-container").style("background-color", "var(--img0)")
+            else if (window.compare) {
+                d3.select("#text-representation-generator-alert-window-container")
+                    .style("display", "block")
+                    .style("left", `${e.offsetX+547}px`)
+                    .style("top", `${e.offsetY}px`)
+            }
         })
         .on("mouseout", () => {
-            d3.select("#latent-denoiser-container").style("background-color", "var(--img00)")
+            if (!window.compare) d3.select("#latent-denoiser-container").style("background-color", "var(--img00)")
+            else d3.select("#text-representation-generator-alert-window-container").style("display", "none")
         })
         .on("click", function (e) {
-            if (!latentDenoiserL2Expanded) expandLatentDenoiserL2(e);
+            if (!windonw.compare && !latentDenoiserL2Expanded) expandLatentDenoiserL2(e);
         })
 
 // cycle

@@ -2354,3 +2354,18 @@ input:checked + .slider:before {
     stroke: var(--lightgray);
     stroke-width: 2px;
 }
+
+#text-representation-generator-alert-window-container {
+    display: none;
+    background-color: #fcfcfc;
+    color: var(--gray);
+    padding: 7px;
+    width: 180px;
+    text-align: center;
+    font-style: italic;
+    box-shadow: 1px 1px 2px var(--light);
+    position: absolute;
+    left: 290px;
+    top: 101px;
+    z-index: 10;
+}

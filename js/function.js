@@ -1702,7 +1702,8 @@ function onCompare () {
             .style("left", "290px")
             .style("background-color", "#f4f4f4")
             .style("color", "#404040")
-            .style("pointer-events", "none")
+            // .style("pointer-events", "none")
+            .style("cursor", "default")
             .style("border-width", "0px")
             .style("width", `${145}px`)
             .style("height", `${80}px`)
@@ -1826,7 +1827,8 @@ function onCompare () {
             .style("top", "0px")
             .style("background-color", "#f4f4f4")
             .style("color", "#404040")
-            .style("pointer-events", "none")
+            // .style("pointer-events", "none")
+            .style("cursor", "default")
             .style("border-width", "0px")
 
     // Change the cycle
@@ -2034,7 +2036,8 @@ function offCompare () {
             .style("top", `0px`)
             .style("background-color", "#f4f7ef")
             .style("color", "#276419")
-            .style("pointer-events", "")
+            // .style("pointer-events", "")
+            .style("cursor", "pointer")
             .style("border-width", "1px")
     d3.select("#text-vector-generator-latent-denoiser-container")
         .transition()
@@ -2179,7 +2182,8 @@ function offCompare () {
             .style("padding", "11.5px 0")
             .style("background-color", "#fbf5f8")
             .style("color", "#8e0152")
-            .style("pointer-events", "")
+            // .style("pointer-events", "")
+            .style("cursor", "pointer")
             .style("border-width", "1px")
 
     // Change the cycle path
