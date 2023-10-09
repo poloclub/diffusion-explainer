@@ -378,7 +378,8 @@ d3.select("#architecture-container")
             else d3.select("#text-representation-generator-alert-window-container").style("display", "none")
         })
         .on("click", function (e) {
-            if (!windonw.compare && !latentDenoiserL2Expanded) expandLatentDenoiserL2(e);
+            console.log(window.compare)
+            if (!window.compare && !latentDenoiserL2Expanded) expandLatentDenoiserL2(e);
         })
 
 // cycle
