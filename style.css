@@ -1143,9 +1143,12 @@ input:checked + .slider:before {
 }
 
 @keyframes text-encoder-animation {
-    0% {background-color: var(--text0);}
+    /* 0% {background-color: var(--text0);}
     50% {background-color: var(--text1);}
-    100% {background-color: var(--text0);}
+    100% {background-color: var(--text0);} */
+    0% {box-shadow: 0px 0px 10px 0px var(--text0);}
+    50% {box-shadow: 0px 0px 10px 0px var(--text1);}
+    100% {box-shadow: 0px 0px 10px 0px var(--text0);}
 }
 
 #text-vector-generator-l2-text-encoder-expl-text {
