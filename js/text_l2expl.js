@@ -114,18 +114,18 @@ textGeneratorL2ExplDiv.append("div")
     .on("mouseover", () => {
         d3.select(`#text-vector-generator-l2-text-encoder-container`)
             .style("background-color", "var(--text1)")
-            .style("animation", "None")
+            // .style("animation", "None")
     })
     .on("mouseout", () => {
         if (window.textEncoderClicked){
             d3.select(`#text-vector-generator-l2-text-encoder-container`)
                 .style("background-color", "var(--text0)")
-                .style("animation", "None")
+                // .style("animation", "None")
         }
         else {
             d3.select(`#text-vector-generator-l2-text-encoder-container`)
                 .style("background-color", "var(--text0)")
-                .style("animation", "text-encoder-animation 1.0s infinite")
+                // .style("animation", "text-encoder-animation 1.0s infinite")
         }
     })
     .on("click", (e) => {

@@ -1126,7 +1126,7 @@ input:checked + .slider:before {
     position: absolute;
     left: 240px;
     background-color: var(--text0);
-    animation: text-encoder-animation 1.0s infinite;
+    animation: text-encoder-animation 1.3s infinite;
     animation-timing-function: linear;
     color: var(--text4);
     border-radius: 5px;
