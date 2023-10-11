@@ -56,3 +56,4 @@ window.umapNodeHovered = false;
 window.compare = false;
 window.firstCompare = true;
 window.showVisualization = true;
+window.textEncoderClicked = false;

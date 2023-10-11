@@ -112,14 +112,25 @@ textGeneratorL2ExplDiv.append("div")
     .attr("id", "text-vector-generator-l2-text-encoder-container")
     .text("Text Encoder")
     .on("mouseover", () => {
-        d3.select(`#text-vector-generator-l2-text-encoder-container`).style("background-color", "var(--text1)")
+        d3.select(`#text-vector-generator-l2-text-encoder-container`)
+            .style("background-color", "var(--text1)")
+            .style("animation", "None")
     })
     .on("mouseout", () => {
-        d3.select(`#text-vector-generator-l2-text-encoder-container`).style("background-color", "var(--text0)")
+        if (window.textEncoderClicked){
+            d3.select(`#text-vector-generator-l2-text-encoder-container`)
+                .style("background-color", "var(--text0)")
+                .style("animation", "None")
+        }
+        else {
+            d3.select(`#text-vector-generator-l2-text-encoder-container`)
+                .style("background-color", "var(--text0)")
+                .style("animation", "text-encoder-animation 1.0s infinite")
+        }
     })
     .on("click", (e) => {
         window.textVectorGeneratorL3Expanded = true;
-        console.log(e)
+        window.textEncoderClicked = true;
         d3.select("#generate-text-vector-l3-expl-container")
             .style("display", "block")
             .style("left", `403px`)

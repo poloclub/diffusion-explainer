@@ -365,7 +365,9 @@ d3.select("#architecture-container")
         .attr("class", "architecture-rectangle architecture-component-container denoise-latent-expand-move-to-left")
         .text("Image Representation Refiner")
         .on("mouseover", (e) => {
-            if (!window.compare && !window.latentDenoiserL2Expanded) d3.select("#latent-denoiser-container").style("background-color", "var(--img0)")
+            if (!window.compare && !window.latentDenoiserL2Expanded) {
+                d3.select("#latent-denoiser-container").style("background-color", "var(--img0)")
+            }
             else if (window.compare) {
                 d3.select("#text-representation-generator-alert-window-container")
                     .style("display", "block")
@@ -378,7 +380,6 @@ d3.select("#architecture-container")
             else d3.select("#text-representation-generator-alert-window-container").style("display", "none")
         })
         .on("click", function (e) {
-            console.log(window.compare)
             if (!window.compare && !latentDenoiserL2Expanded) expandLatentDenoiserL2(e);
         })
 
