@@ -647,8 +647,8 @@ input:checked + .slider:before {
 
 #timestep-0-random-noise-expl-1-1 {
     display: inline-block;
-    text-decoration: underline;
-    cursor: pointer;
+    /* text-decoration: underline; */
+    /* cursor: pointer; */
     /* font-weight: 700; */
 }
 
@@ -1146,9 +1146,9 @@ input:checked + .slider:before {
     /* 0% {background-color: var(--text0);}
     50% {background-color: var(--text1);}
     100% {background-color: var(--text0);} */
-    0% {box-shadow: 0px 0px 10px 0px var(--text0);}
-    50% {box-shadow: 0px 0px 10px 0px var(--text1);}
-    100% {box-shadow: 0px 0px 10px 0px var(--text0);}
+    0% {box-shadow: 0px 0px 10px 1px var(--text0);}
+    50% {box-shadow: 0px 0px 10px 1px var(--text1);}
+    100% {box-shadow: 0px 0px 10px 1px var(--text0);}
 }
 
 #text-vector-generator-l2-text-encoder-expl-text {
@@ -2105,6 +2105,7 @@ input:checked + .slider:before {
     padding-right: 6px;
     color: var(--lightgray);
     font-weight: 300;
+    pointer-events: none;
 }
 
 #controller-timestep-number {
@@ -2114,6 +2115,7 @@ input:checked + .slider:before {
     position: absolute;
     top: -3px;
     right: 0;
+    pointer-events: none;
 }
 
 #controller-timestep-slider-container {

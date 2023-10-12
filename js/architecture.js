@@ -558,12 +558,13 @@ d3.select("#timestep-0-random-noise-expl")
         .attr("id", "timestep-0-random-noise-expl-1-1")
         .text("Random noise")
         .on("mouseover", function() {
-            d3.select("#timestep-0-random-noise-expl-1-1").style("color", window.compare?"#67001f":"#8e0152")
+            // d3.select("#timestep-0-random-noise-expl-1-1").style("color", window.compare?"#67001f":"#8e0152")
         })
         .on("mouseout", function() {
-            d3.select("#timestep-0-random-noise-expl-1-1").style("color", window.compare?"#d6604d":"#c51b7d")
+            // d3.select("#timestep-0-random-noise-expl-1-1").style("color", window.compare?"#d6604d":"#c51b7d")
         })
         .on("click", function() {
+            return 
             if (window.seedControlDisplayed) {
                 window.seedControlDisplayed = false;
                 d3.select("#seed-control-container")

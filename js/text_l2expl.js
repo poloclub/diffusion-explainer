@@ -47,6 +47,7 @@ textGeneratorL2ExplDiv
         .text("i")
         .on("click", () => {
             // document.getElementById("description-subsec-image-representation-refining").scrollIntoView({"behavior": "smooth"})
+            window.scrollBy(0, 10)
             document.getElementById("description-subsec-text-representation-generation").scrollIntoView({"behavior": "smooth"})
         })
 

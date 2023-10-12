@@ -46,13 +46,14 @@ d3.select("#latent-denoiser-l2-expl-container")
         .attr("id", "latent-denoiser-l2-expl-info-button")
         .text("i")
         .on("click", () => {
+            window.scrollBy(0, 10)
             document.getElementById("description-subsec-image-representation-refining").scrollIntoView({"behavior": "smooth"})
         })
 
 d3.select("#latent-denoiser-l2-expl-container")
     .append("div")
         .attr("id", "latent-denoiser-l2-expl-title")
-        .text("Image Represenstation Refiner")
+        .text("Image Representation Refiner")
 
 d3.select("#latent-denoiser-l2-expl-container")
     .append("div")

@@ -14,7 +14,6 @@ function promptChanged() {
     // collapse dropdown
     window.promptDropdownExpanded = false
     d3.select("#prompt-selector-dropdown").style("display", "none")
-    // change text tokens
     d3.select("#prompt-selector-dropdown-box-text").html(window.selectedPromptHtmlCode)
     if (window.compare) d3.selectAll("#prompt-selector-dropdown-box-container .prompt-keyword").style("color", "#b2182b").style("font-weight", "700")
     d3.select("#prompt-box-2").html(window.selectedPromptHtmlCode2)
@@ -32,6 +31,7 @@ function promptChanged() {
     d3.select("#dropdown-button-container")
         .style("top", window.compare?`${151.5+22+h2}px`:`${h+6}px`)  // h1:88,71.5->222, h1:55,38.5->190?, 71.5,55->205, 55,55->205px
         // .style("opacity", "1")
+    // change text tokens
     drawTokens();
     drawTextVectors(); 
     drawUmap();
@@ -263,6 +263,7 @@ function hyperparamChanged(e, newSeed, newGs) {
 
 function drawTokens() {
     let tokenList = window.selectedPrompt.split(" ")
+    tokenList.push("<end>", "<end>", "<end>")
     let containerId = "text-vector-generator-l2-tokens-container"
     d3.selectAll("#text-vector-generator-l2-tokens-container > *").remove()
     d3.select("#text-vector-generator-l2-expl-container").style("display", "block")
@@ -278,7 +279,7 @@ function drawTokens() {
                 .attr("class", "text-vector-generator-token")
                 .text(tokenList[i])
         let height = +getComputedStyle(document.getElementById(containerId))["height"].slice(0,-2)
-        if (height > 70) {
+        if (height > 72) {
             document.getElementById(containerId).lastChild.remove();
             full = true;
             break;
@@ -463,14 +464,19 @@ function drawUmap(p1,p2) {
         let scale = +d3.select("#global-umap-svg").style("scale")
         let delta = e.deltaY || e.deltaX;
         let nextScale = delta>0?scale-0.25:scale+0.25;
-        let fixedPoint = {x: e.layerX, y:e.layerY};
+        // let fixedPoint = {x: e.layerX, y:e.layerY};
+        let fixedPoint = {x: svgWidth/2, y:svgHeight/2};
         svgScale(fixedPoint, scale, nextScale);
     }
     function umapClicked(e) {
-        let fixedPoint = {x: e.layerX, y:e.layerY};
-        let currScale = +(d3.select("#global-umap-svg").style("scale"));
-        let newScale = currScale + 0.25;
-        svgScale(fixedPoint, currScale, newScale)
+        let scale = +d3.select("#global-umap-svg").style("scale")
+        let nextScale = scale+0.25;
+        let fixedPoint = {x: svgWidth/2, y:svgHeight/2};
+        svgScale(fixedPoint, scale, nextScale);
+        // let fixedPoint = {x: e.layerX, y:e.layerY};
+        // let currScale = +(d3.select("#global-umap-svg").style("scale"));
+        // let newScale = currScale + 0.25;
+        // svgScale(fixedPoint, currScale, newScale)
     }
     function umapDragStart(e) {
         document.getElementById("global-umap-svg").dragStartX = e.x;
