@@ -124,15 +124,29 @@ function updateStep(timestep) {
     window.timestep = timestep;
     d3.select("#controller-timestep-number").text(timestep);
     document.getElementById("controller-timestep-slider").value = timestep;
-    if (!window.promptHovered) {
+    if (window.promptHovered){
+        d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.hoveredPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
+        d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.hoveredPrompt2}/${window.seed}_${window.gs}_${timestep}.jpg`)
+        d3.select("#generated-image").attr("src", `./assets/img/${window.hoveredPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
+        d3.select("#generated-image-2").attr("src", `./assets/img/${window.hoveredPrompt2}/${window.seed}_${window.gs}_${timestep}.jpg`)
+    }
+    else if (window.gsHovered) {
+        d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.hoveredGs}_${timestep}.jpg`)
+        d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.seed}_${window.hoveredGs}_${timestep}.jpg`)
+        d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.hoveredGs}_${timestep}.jpg`)
+        d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.hoveredGs}_${timestep}.jpg`)
+    }
+    else if (window.seedHovered) {
+        d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.hoveredSeed}_${window.gs}_${window.timestep}.jpg`)
+        d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.hoveredSeed}_${window.gs}_${window.timestep}.jpg`)
+        d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.hoveredSeed}_${window.gs}_${window.timestep}.jpg`)
+        d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.hoveredSeed}_${window.gs}_${window.timestep}.jpg`)
+    }
+    else {
         d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
         d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
         d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.seed}_${window.gs}_${timestep}.jpg`)
         d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.gs}_${timestep}.jpg`)
-    }
-    else {
-        d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.hoveredPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
-        d3.select("#generated-image").attr("src", `./assets/img/${window.hoveredPrompt}/${window.seed}_${window.gs}_${timestep}.jpg`)
     }
 
     // update UMAP Highlight
@@ -165,10 +179,13 @@ function updateStep(timestep) {
     d3.select("#denoise-latent-l2-expl-prev-latent-timestep").text(timestep-1)
     d3.select("#denoise-latent-l2-expl-prev-latent-text").text(`Representation of timestep ${window.timestep-1}`)
     d3.select("#improved-latent-timestep").text(timestep)
-    if (!window.promptHovered) 
-        d3.select("#denoise-latent-l2-expl-prev-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep-1}.jpg`)
-    else
+    if (window.promptHovered) {
         d3.select("#denoise-latent-l2-expl-prev-latent-img").attr("src", `./assets/latent_viz/${window.hoveredPrompt}/${window.seed}_${window.gs}_${timestep-1}.jpg`)
+    }
+    else {
+        d3.select("#denoise-latent-l2-expl-prev-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${timestep-1}.jpg`)
+    }
+        
 }
 
 function controllerPauseButtonClicked() {
@@ -201,14 +218,24 @@ function animateArchCycle() {
 
 function seedChanged(e) {
     // when seed is changed
-    let newSeed = this.value
+    window.seedDropdownExpanded = false;
+    d3.select("#seed-dropdown-options-container").style("display", "none")
+    let newSeed = d3.select(`#${this.id}`).text()
+    d3.select("#seed-dropdown-box-text").text(newSeed)
     hyperparamChanged(e, newSeed, window.gs);
     setMinMaxCoord();
 }
 
 function gsChanged(e) {
     // when guidance scale is changed
-    let newGs = d3.select(this).property('value');
+    window.gsDropdownExpanded = false;
+    d3.select("#gs-dropdown-options-container").style("display", "none")
+    let newGs = d3.select(`#${this.id}`).text()
+    if (newGs == "20") d3.select("#gs-dropdown-deco").style("width", "27px")
+    else d3.select("#gs-dropdown-deco").style("width", "22px")
+    d3.select("#gs-dropdown-box-text").text(newGs)
+    newGs = newGs + ".0";
+    // let newGs = d3.select(this).property('value');
     hyperparamChanged(e, window.seed, newGs);
     let sliderWidth = 250;
     let sliderHeight = 0;
@@ -216,7 +243,7 @@ function gsChanged(e) {
     let colors = {0: "#a0a0a0", 1: "var(--text1)", 7: "var(--text2)", 20: "var(--text3)"}
     let path = {
         0: "M0 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
-        1: "M20 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
+        1: "M25 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
         7: "M100 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
         20: "M250 0 l 0 -10 a10 10, 0 0 0, -10 -10 L162 -20 a10 10, 0 0 1, -10 -10 L152 -54", 
     }
@@ -558,8 +585,10 @@ function drawUmap(p1,p2) {
     let svgWidth = 150
     let fullOpacity = 0.7
 
-    let data1 = data[p1][window.seed][window.gs];
-    let data2 = data[p2][window.seed][window.gs];
+    let gs = window.gsHovered?window.hoveredGs:window.gs 
+    let seed = window.seedHovered?window.hoveredSeed:window.seed
+    let data1 = data[p1][seed][gs];
+    let data2 = data[p2][seed][gs];
     let colorBuffer = 30
     let selectedUmapColor1 = d3.scaleLinear().domain([-colorBuffer,window.totalTimesteps+1]).range(["#f7f7f7", "#d6604d"]);
     let selectedUmapColor2 = d3.scaleLinear().domain([-colorBuffer,window.totalTimesteps+1]).range(["#f7f7f7", "#4393c3"]);
@@ -721,7 +750,7 @@ function expandTextVectorGeneratorL2(e) {
         .style("cursor", "pointer")
         .transition()
             .duration(animationDuration)
-            .style("left", `${542+movePx+20}px`)
+            .style("left", `${570+movePx+10}px`)
             .style("width", "145px")
             .style("height", "80px")
             .style("top", "0px")
@@ -732,29 +761,29 @@ function expandTextVectorGeneratorL2(e) {
     d3.select("#latent-denoiser-cycle-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${457+movePx+20}px`)
+            .style("left", `${485+movePx+10}px`)
             .style("top", `30px`)
     d3.select("#improved-latent-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${702+movePx+20}px`)
+            .style("left", `${730+movePx+10}px`)
     d3.select("#improved-latent-generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${753+movePx+20}px`)
+            .style("left", `${779+movePx+10}px`)
     d3.select("#generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${800+movePx+20}px`)
+            .style("left", `${838+movePx+10}px`)
     d3.select("#controller")
         .transition()
             .duration(animationDuration)
-            .style("left", `${514+movePx+20}px`)
+            .style("left", `${542+movePx+10}px`)
             .style("top", `37px`)
     d3.select("#guidance-scale-control-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${549+movePx+20}px`)
+            .style("left", `${549+movePx+10}px`)
             .style("top", "87px")
             .style("opacity", window.gsControlDisplayed?"1":"0")
         .transition()
@@ -766,19 +795,19 @@ function expandTextVectorGeneratorL2(e) {
         .style("display", window.gsControlDisplayed?"block":"none")
         .transition()
             .duration(animationDuration)
-            .style("left", `${347+movePx+20}px`)
+            .style("left", `${347+movePx+10}px`)
             .style("opacity", window.gsControlDisplayed?"1":"0")
     d3.select("#seed-control-container")
         .style("display", window.seedControlDisplayed?"block":"none")
         .transition()
             .duration(animationDuration)
-            .style("left", `${437+movePx+20}px`)
+            .style("left", `${465+movePx+10}px`)
             .style("opacity", window.seedControlDisplayed?"1":"0")
     d3.select("#timestep-0-random-noise-container")
         .style("display", "block")
         .transition()
             .duration(animationDuration)
-            .style("left", `${507+movePx+20}px`)
+            .style("left", `${535+movePx+10}px`)
             .style("opacity", "1")
 
     // Set the cycle back
@@ -795,13 +824,14 @@ function expandTextVectorGeneratorL2(e) {
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("d", "M -178 10 L 40 10 C 50,10 50,10 60,10 L 122 10")
+            .attr("d", "M -178 10 L 140 10")
 
     // Move Text
     d3.select("#text-vector-generator-latent-denoiser-text")
         .transition()
             .duration(animationDuration)
-            .style("left", "30px")
+            .style("left", "16px")
+            .style("top", "15px")
             .style("font-size", "13px")
     
     // cover
@@ -914,27 +944,27 @@ function reduceTextVectorGeneratorL2(e) {
             .duration(animationDuration)
             .style("width", "145px")
             .style("height", "80px")
-            .style("left", "542px")
+            .style("left", "570px")
             .style("top", "0px")
             .style("background-color", "var(--img00)")
             .style("border-width", "1px")
     d3.select("#latent-denoiser-cycle-container")
         .transition()
             .duration(animationDuration)
-            .style("left", "457px")
+            .style("left", "485px")
             .style("top", `30px`)
     d3.select("#improved-latent-container")
         .transition()
             .duration(animationDuration)
-            .style("left", "702px")
+            .style("left", "730px")
     d3.select("#improved-latent-generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", "751px")
+            .style("left", "779px")
     d3.select("#generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", "810px")
+            .style("left", "838px")
     d3.select("#guidance-scale-control-container")
         .transition()
             .duration(animationDuration)
@@ -950,29 +980,29 @@ function reduceTextVectorGeneratorL2(e) {
     d3.select("#timestep-0-random-noise-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${507}px`)
+            .style("left", `${535}px`)
             .style("opacity", "1")
     d3.select("#seed-control-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${437}px`)
+            .style("left", `${465}px`)
     d3.select("#controller")
         .transition()
             .duration(animationDuration)
-            .style("left", "514px")
+            .style("left", "542px")
             .style("top", `40px`)
 
     // Move Text
     d3.select("#text-vector-generator-latent-denoiser-text")
         .transition()
             .duration(animationDuration)
-            .style("left", "7px")
+            .style("left", "5px")
 
     // arrows
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
         .duration(animationDuration)
-            .attr("d", "M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10")
+            .attr("d", "M 0 10 L 123 10")
     d3.select("#prompt-text-vector-generator-arrow")
         .transition()
             .duration(animationDuration)
@@ -1037,6 +1067,7 @@ function expandLatentDenoiserL2(e) {
     d3.interrupt(d3.select("#latent-denoiser-l2-expl-container"))
     d3.interrupt(d3.select("#improved-latent-timestep"))
     d3.interrupt(d3.select("#guidance-scale-control-container"))
+    // d3.interrupt(d3.select("#text-vector-generator-latent-denoiser-text"))
     d3.interrupt(d3.select("#denoise-latent-l2-left-cover"))
 
     // show hidden elements
@@ -1071,7 +1102,7 @@ function expandLatentDenoiserL2(e) {
         .transition()
             .style("display", "none")
         .on("interrupt", function(){
-            if (window.gsControlDisplayed) d3.select(this).style("display", "block")
+            d3.select(this).style("display", "block")
         })
     d3.select("#seed-control-container")
         .transition()
@@ -1081,7 +1112,7 @@ function expandLatentDenoiserL2(e) {
         .transition()
             .style("display", "none")
         .on("interrupt", function(){
-            if (window.seedControlDisplayed) d3.select(this).style("display", "block")
+            d3.select(this).style("display", "block")
         })
 
     // expand latent denoiser container
@@ -1139,7 +1170,7 @@ function expandLatentDenoiserL2(e) {
     d3.select("#improved-latent-generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${753+movePx}px`)
+            .style("left", `${751+movePx}px`)
     d3.select("#generated-image-container")
         .transition()
             .duration(animationDuration)
@@ -1166,15 +1197,32 @@ function expandLatentDenoiserL2(e) {
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("d", "M 0 10 L 40 10 C 50,10 50,10 60,10 L 172 10")
+            .attr("d", "M 0 10 L 172 10")
     // Text position
     d3.select("#text-vector-generator-latent-denoiser-text")
         .transition()
         .duration(animationDuration)
             .style("font-size", "12px")
-            .style("top", "15px")
-            .style("text-align", "right")
-            .style("left", "20px")
+            .style("top", "43px")
+            .style("left", "202px")  
+    d3.select("#text-vector-generator-latent-denoiser-text-2")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "0")
+        .transition()
+            .style("display", "none")
+        .on("interrupt", function(){
+            d3.select(this).style("display", "block")
+        })
+    d3.select("#gs-dropdown-desc")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "0")
+        .transition()
+            .style("display", "none")
+        .on("interrupt", function(){
+            d3.select(this).style("display", "block")
+        })
     d3.select("#improved-latent-expl-container")
         .transition()
         .duration(animationDuration)
@@ -1243,6 +1291,8 @@ function reduceLatentDenoiserL2 () {
     d3.interrupt(d3.select("#timestep-0-random-noise-container"))
     d3.interrupt(d3.select("#guidance-scale-expl-container"))
     d3.interrupt(d3.select("#seed-control-container"))
+    d3.interrupt(d3.select("#text-vector-generator-latent-denoiser-text-2"))
+    d3.interrupt(d3.select("#gs-dropdown-desc"))
 
     // hide elements
     d3.select("#latent-denoiser-l2-expl-container")
@@ -1262,7 +1312,7 @@ function reduceLatentDenoiserL2 () {
         .transition()
             .duration(animationDuration)
             .style("opacity", "1")
-            .style("left", `${507}px`)
+            .style("left", `${535}px`)
     // resize latent denoiser
     d3.select("#latent-denoiser-container")
         .transition()
@@ -1270,7 +1320,7 @@ function reduceLatentDenoiserL2 () {
             .style("cursor", "pointer")
             .style("width", "145px")
             .style("height", "80px")
-            .style("left", "542px")
+            .style("left", "570px")
             .style("top", "0px")
             .style("background-color", "#fbf5f8")
             .style("border-width", "1px")
@@ -1312,28 +1362,28 @@ function reduceLatentDenoiserL2 () {
     d3.select("#improved-latent-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${702}px`)
+            .style("left", `730px`)
     d3.select("#improved-latent-generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${753}px`)
+            .style("left", `${779}px`)
     d3.select("#generated-image-container")
         .transition()
             .duration(animationDuration)
-            .style("left", `${810}px`)
+            .style("left", `${838}px`)
     // Move controller
     d3.select("#controller")
         .transition()
             .duration(animationDuration)
             .style("top", `40px`)
-            .style("left", "514px")
+            .style("left", "542px")
 
     // Set the cycle back
     d3.select("#latent-denoiser-cycle-container")
         .transition()
             .duration(animationDuration)
             .style("top", `30px`)
-            .style("left", `457px`)
+            .style("left", `485px`)
     d3.select("#latent-denoiser-cycle")
         .transition()
             .duration(animationDuration)
@@ -1342,15 +1392,27 @@ function reduceLatentDenoiserL2 () {
     d3.select("#text-vector-generator-latent-denoiser-arrow")
         .transition()
             .duration(animationDuration)
-            .attr("d", `M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10`)
+            .attr("d", `M 0 10 L 123 10`)
     // Text position
     d3.select("#text-vector-generator-latent-denoiser-text")
         .transition()
         .duration(animationDuration)
             .style("top", "15px")
-            .style("left", "7px")
-            .style("text-align", "right")
+            .style("left", "5px")
+            // .style("text-align", "right")
             .style("font-size", "13px")
+            .style("opacity", "1")
+
+    d3.select("#text-vector-generator-latent-denoiser-text-2")
+        .style("display", "block")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "1")
+    d3.select("#gs-dropdown-desc")
+        .style("display", "block") 
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "1")
     d3.select("#improved-latent-expl-container")
         .transition()
         .duration(animationDuration)
@@ -1382,13 +1444,12 @@ function reduceLatentDenoiserL2 () {
             .style("opacity", "1")
 
     // Seed controller
-    if (window.seedControlDisplayed)
-        d3.select("#seed-control-container")
-            .style("display", "block")
-            .style("left", `${437}px`)
-            .transition()
-                .duration(animationDuration)
-                .style("opacity", "1")
+    d3.select("#seed-control-container")
+        .style("display", "block")
+        .transition()
+            .duration(animationDuration)
+            .style("opacity", "1")
+            .style("left", `${465}px`)
     
     // Cover
     d3.select("#denoise-latent-l2-left-cover")
@@ -1463,6 +1524,16 @@ function expandLatentDenoiserL3 () {
             .style("height", "515px")
 
     // hide guidance scale expl ...
+    d3.select("#text-vector-generator-latent-denoiser-text")
+        .transition()
+        .duration(animationDuration)
+            .style("opacity", "0")
+        .transition()
+            .style("display","none")
+        .on("interrupt", function () {
+            d3.select(this).style("display", "block")
+        })
+    
     d3.select("#guidance-scale-control-dropdown-container")
         .transition()
         .duration(animationDuration)
@@ -1518,6 +1589,7 @@ function reduceLatentDenoiserL3 () {
     let animationDuration = 1000
     // ADD interrupt 
     d3.interrupt(d3.select("#guidance-scale-control-dropdown-container"))
+    d3.interrupt(d3.select("#text-vector-generator-latent-denoiser-text"))
     d3.interrupt(d3.select("#denoise-latent-l2-expl-guidance-scale-expl-container"))
     d3.interrupt(d3.select("#denoise-latent-l2-expl-question-mark"))
 
@@ -1545,6 +1617,11 @@ function reduceLatentDenoiserL3 () {
             .style("height", "230px")
     
     // guidance scale
+    d3.select("#text-vector-generator-latent-denoiser-text")
+        .transition()
+            .style("display","block")
+        .duration(animationDuration)
+            .style("opacity", "1")
     d3.select("#guidance-scale-control-dropdown-container")
         .transition()
             .style("display","inline-block")
@@ -1758,22 +1835,22 @@ function onCompare () {
     d3.select("#improved-latent-generated-image-container")
         .transition()
         .duration(animationDuration)
-            .style("left", `798px`)
+            .style("left", `${798+28}px`)
     d3.select("#improved-latent-generated-image-container-2")
         .transition()
         .duration(animationDuration)
             .style("opacity", "1")
-            .style("left", `798px`)
+            .style("left", `${798+28}px`)
             .style("top", "236px")
     d3.select("#generated-image-container")
         .transition()
         .duration(animationDuration)
-            .style("left", `880px`)
+            .style("left", `${880+28}px`)
     d3.select("#generated-image-container-2")
         .transition()
         .duration(animationDuration)
             .style("opacity", "1")
-            .style("left", `880px`)
+            .style("left", `${880+28}px`)
     d3.select("#generated-image-2")
         .transition()
         .duration(animationDuration)
@@ -1781,7 +1858,7 @@ function onCompare () {
     d3.select("#controller")
         .transition()
         .duration(animationDuration)
-            .style("left", `531px`)
+            .style("left", `${531+28}px`)
             .style("top", `40px`)
     d3.select("#guidance-scale-control-container")
         .transition()
@@ -1827,7 +1904,7 @@ function onCompare () {
     d3.select("#latent-denoiser-container")
         .transition()
         .duration(animationDuration)
-            .style("left", "542px")
+            .style("left", "570px")
             .style("width", "145px")
             .style("height", "282px")
             .style("padding", "117.5px 0")
@@ -1875,7 +1952,7 @@ function onCompare () {
     d3.selectAll("#text-vector-generator-latent-denoiser-arrow")
         .transition()
         .duration(animationDuration)
-            .attr("d", "M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10")
+            .attr("d", "M 0 10 L 123 10")
             .style("stroke", "#f4a582")
     d3.selectAll("#prompt-text-vector-generator-arrow")
         .transition()
@@ -1919,7 +1996,39 @@ function onCompare () {
         .transition()
         .duration(animationDuration)
             .style("color", "#808080") 
-            .style("left", "7px")
+            .style("left", "5px")
+            .style("top", "24px")
+    d3.select("#gs-dropdown-box")
+        .transition()
+        .duration(animationDuration)
+            .style("color", "#808080") 
+    d3.select("#gs-dropdown-deco")
+        .transition()
+        .duration(animationDuration)
+            .style("background-color", "#d0d0d0") 
+    d3.select("#seed-control-container")
+        // .style("display", "block")
+        .transition()
+        .duration(animationDuration)
+            .style("color", "#808080") 
+            .style("opacity", "1")
+            .style("left", `${465}px`)
+    d3.select("#seed-dropdown-box")
+        .transition()
+        .duration(animationDuration)
+            .style("color", "#808080") 
+    d3.select("#seed-dropdown-box g")
+        .transition()
+        .duration(animationDuration)
+            .style("stroke", "#808080") 
+    d3.select("#seed-dropdown-deco")
+        .transition()
+        .duration(animationDuration)
+            .style("background-color", "#d0d0d0") 
+    d3.select("#text-vector-generator-latent-denoiser-text g")
+        .transition()
+        .duration(animationDuration)
+            .style("stroke", "#808080") 
     d3.select("#guidance-scale-expl-container-2-2")
         .transition()
         .duration(animationDuration)
@@ -2127,12 +2236,12 @@ function offCompare () {
     d3.select("#improved-latent-generated-image-container")
         .transition()
         .duration(animationDuration)
-            .style("left", `751px`)
+            .style("left", `779px`)
     d3.select("#improved-latent-generated-image-container-2")
         .transition()
         .duration(animationDuration)
             .style("opacity", "0")
-            .style("left", `751px`)
+            .style("left", `779px`)
             .style("top", "30px")
         .transition()
             .style("display", "none")
@@ -2142,12 +2251,12 @@ function offCompare () {
     d3.select("#generated-image-container")
         .transition()
         .duration(animationDuration)
-            .style("left", `810px`)
+            .style("left", `838px`)
     d3.select("#generated-image-container-2")
         .transition()
         .duration(animationDuration)
             .style("opacity", "0")
-            .style("left", `810px`)
+            .style("left", `838px`)
         .transition()
             .style("display", "none")
         .on("interrupt", function() {
@@ -2160,7 +2269,7 @@ function offCompare () {
     d3.select("#controller")
         .transition()
         .duration(animationDuration)
-            .style("left", `514px`)
+            .style("left", `542px`)
     d3.select("#guidance-scale-control-container")
         .transition()
         .duration(animationDuration)
@@ -2269,6 +2378,31 @@ function offCompare () {
         .transition()
         .duration(animationDuration)
             .style("color", "#4d9221") 
+            .style("top", "15px")
+    d3.select("#text-vector-generator-latent-denoiser-text g")
+        .transition()
+        .duration(animationDuration)
+        .style("stroke", "#4d9221")
+    d3.select("#gs-dropdown-box")
+        .transition()
+        .duration(animationDuration)
+        .style("color", "#4d9221")
+    d3.select("#seed-control-container")
+        .transition()
+        .duration(animationDuration)
+            .style("color", "#de77ae") 
+    d3.select("#seed-dropdown-box")
+        .transition()
+        .duration(animationDuration)
+            .style("color", "#de77ae") 
+    d3.select("#seed-dropdown-box g")
+        .transition()
+        .duration(animationDuration)
+            .style("stroke", "#de77ae") 
+    d3.select("#seed-dropdown-deco")
+        .transition()
+        .duration(animationDuration)
+            .style("background-color", "#f1b6da") 
     d3.select("#guidance-scale-expl-container-2-2")
         .transition()
         .duration(animationDuration)

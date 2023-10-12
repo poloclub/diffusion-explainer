@@ -102,9 +102,10 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
             .attr("stroke-width", "3px")
             .on("click", function (e) {
                 let gs = d3.select(this).data()[0][0]
+                d3.select("#gs-dropdown-box-text").text(gs)
                 moveThumb(gs); // put circle and line on 0
                 hyperparamChanged(e, window.seed, `${gs}.0`);
-                document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = (gs<=1)?gs:((gs==7)?2:3)
+                // document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = (gs<=1)?gs:((gs==7)?2:3)
             })
 
 // Drag Functions
@@ -118,7 +119,7 @@ let points = {
 let colors = {0: "#a0a0a0", 1: "var(--text1)", 7: "var(--text2)", 20: "var(--text3)"}
 let path = {
     0: "M0 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
-    1: "M20 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
+    1: "M25 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
     7: "M100 0 l 0 -10 a10 10, 0 0 1, 10 -10 L142 -20 a10 10, 0 0 0, 10 -10 L152 -54", 
     20: "M250 0 l 0 -10 a10 10, 0 0 0, -10 -10 L162 -20 a10 10, 0 0 1, -10 -10 L152 -54", 
 }
@@ -221,9 +222,9 @@ d3.select("#latent-denoiser-l3-expl-vis-svg")
             .style("cursor", "pointer")
             .on("click", function (e) {
                 let gs = d3.select(this).data()[0][0]
+                d3.select("#gs-dropdown-box-text").text(gs)
                 moveThumb(gs); // put circle and line on 0
                 hyperparamChanged(e, window.seed, `${gs}.0`);
-                document.getElementById("guidance-scale-control-dropdown-select").selectedIndex = (gs<=1)?gs:((gs==7)?2:3)
             })
 
 d3.select("#latent-denoiser-l3-expl-container")

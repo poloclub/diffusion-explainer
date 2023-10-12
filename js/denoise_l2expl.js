@@ -21,6 +21,7 @@ document.addEventListener("mousedown", (e) => {
         else if (document.querySelector(".controller-button-circle:hover") != null) {}
         else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
         else if (document.querySelector("#architecture-container-hide-button-container:hover") != null) {}
+        else if (document.querySelector(".gs-dropdown-options:hover") != null) {}
         // else if (e.clientY > descriptionBox.y) {}
         // else {reduceLatentDenoiserL2();}
         else if (e.clientX > mainLeft && e.clientX < mainRight && e.clientY > mainTop && e.clientY < mainBottom) {reduceLatentDenoiserL2();}
@@ -114,6 +115,12 @@ d3.select("#denoise-latent-l2-expl-unet-container")
         .attr("id", "denoise-latent-l2-expl-unet-desc-text")
         .text("predicts noise to remove")
 
+// Guidance scale text 
+d3.select("#latent-denoiser-l2-expl-container")
+    .append("div")
+    .attr("id", "denoise-latent-l2-expl-guidance-scale-text")
+    .text("Guide image generation")
+
 // ADD arrow and explanations for guidance scale
 let x_=12;
 let y_=12;
@@ -148,7 +155,7 @@ d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
     .append("div")
         .attr("id", "denoise-latent-l2-expl-guidance-scale-expl-text-2")
         // .text("Higher means stronger adherence.")
-        .text("Higher gives stronger adherence but less creativity.")
+        .text("Higher gives stronger adherence but can exaggerate.")
 d3.select("#denoise-latent-l2-expl-guidance-scale-expl-text")
     .append("div")
     .attr("id", "denoise-latent-l2-expl-guidance-scale-expl-text-how")

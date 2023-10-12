@@ -47,7 +47,7 @@ d3.select("#text-vector-generator-latent-denoiser-container")
             .append("path")
                 .attr("id", "text-vector-generator-latent-denoiser-arrow-2")
                 .attr("class", "architecture-arrow-comp")
-                .attr("d", "M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10")
+                .attr("d", "M 0 10 L 123 10")
                 .attr("marker-end", "url(#architecture-arrow-comp-head)")
 
 // cycle

@@ -14,6 +14,48 @@ document.addEventListener("mouseup", (e) => {
             d3.select("#compare-button-container").style("z-index", "")
         }
     }
+    else if (window.gsDropdownExpanded) {
+        if (document.querySelector("#gs-dropdown-box:hover") != null) return
+        if (document.querySelector("#gs-dropdown-desc:hover") != null) return
+
+        window.gsDropdownExpanded = false;
+        let dropdownBox = document.getElementById("gs-dropdown-options-container").getBoundingClientRect()
+        let left = dropdownBox.x
+        let right = dropdownBox.x + dropdownBox.width
+        let top = dropdownBox.y
+        let bottom = dropdownBox.y + dropdownBox.height
+        let dropdownDescBox = document.getElementById("gs-dropdown-desc").getBoundingClientRect()
+        let descleft = dropdownDescBox.x
+        let descright = dropdownDescBox.x + dropdownDescBox.width
+        let desctop = dropdownDescBox.y
+        let descbottom = dropdownDescBox.y + dropdownDescBox.height
+        if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else if (e.clientX > descleft && e.clientX < descright && e.clientY > desctop && e.clientY < descbottom) {}
+        else {
+            d3.select("#gs-dropdown-options-container").style("display", "none");
+        }
+    }
+    else if (window.seedDropdownExpanded) {
+        if (document.querySelector("#seed-dropdown-box:hover") != null) return
+        if (document.querySelector("#seed-dropdown-desc:hover") != null) return
+
+        window.seedDropdownExpanded = false;
+        let dropdownBox = document.getElementById("seed-dropdown-options-container").getBoundingClientRect()
+        let left = dropdownBox.x
+        let right = dropdownBox.x + dropdownBox.width
+        let top = dropdownBox.y
+        let bottom = dropdownBox.y + dropdownBox.height
+        let dropdownDescBox = document.getElementById("seed-dropdown-desc").getBoundingClientRect()
+        let descleft = dropdownDescBox.x
+        let descright = dropdownDescBox.x + dropdownDescBox.width
+        let desctop = dropdownDescBox.y
+        let descbottom = dropdownDescBox.y + dropdownDescBox.height
+        if (e.clientX > left && e.clientX < right && e.clientY > top && e.clientY < bottom) {}
+        else if (e.clientX > descleft && e.clientX < descright && e.clientY > desctop && e.clientY < descbottom) {}
+        else {
+            d3.select("#seed-dropdown-options-container").style("display", "none");
+        }
+    }
 })
 
 document.addEventListener("scroll", (e)=> {
@@ -196,6 +238,7 @@ d3.select("#prompt-selector-dropdown-container")
                 let pCode1 = window.promptsHtmlCode[groupIdx][0]
                 let pCode2 = window.promptsHtmlCode[groupIdx][1]
                 window.hoveredPrompt = p
+                window.hoveredPrompt2 = p2
                 d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#generated-image").attr("src", `./assets/img/${p}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
                 d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${p2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
@@ -291,72 +334,132 @@ d3.select("#architecture-container")
                     .append("path")
                         .attr("id", "text-vector-generator-latent-denoiser-arrow")
                         .attr("class", "architecture-arrow-text")
-                        .attr("d", "M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10")
+                        // .attr("d", "M 0 10 L 30 10 C 42,10 55,10 67,10 L 95 10")
+                        .attr("d", "M 0 10 L 123 10")
                         .attr("marker-end", "url(#architecture-arrow-text-head)")
 d3.select("#text-vector-generator-latent-denoiser-container")
     .append("div")
         .attr("id", "text-vector-generator-latent-denoiser-text")
 d3.select("#text-vector-generator-latent-denoiser-text")
     .append("div")
-        // .text("Guidance for")
-        .text("Guide image")
+        .attr("id", "text-vector-generator-latent-denoiser-text-1")
+        .append("div")
+            .attr("id", "text-vector-generator-latent-denoiser-text-1-text")
+            .text("Guidance scale")
+d3.select("#text-vector-generator-latent-denoiser-text-1")
+    .append("div")
+        .attr("id", "gs-dropdown-container")
+        .append("div")
+            .attr("id", "gs-dropdown-deco")
+d3.select("#gs-dropdown-container")
+        .append("div")
+            .attr("id", "gs-dropdown-box")
+            .on("mouseover", () => {
+                if (window.compare) {
+                    d3.select("#gs-dropdown-box").style("color","#404040")
+                    d3.select("#gs-dropdown-box g").style("stroke","#404040")
+                    d3.select("#gs-dropdown-deco").style("opacity", "0.9")
+                }
+                else {
+                    d3.select("#gs-dropdown-box").style("color","var(--text4)")
+                    d3.select("#gs-dropdown-box g").style("stroke","var(--text4)")
+                    d3.select("#gs-dropdown-deco").style("opacity", "0.9")
+                }
+            })
+            .on("mouseout", () => {
+                if (window.compare) {
+                    d3.select("#gs-dropdown-box").style("color","#808080")
+                    d3.select("#gs-dropdown-box g").style("stroke","#808080")
+                    d3.select("#gs-dropdown-deco").style("opacity", "0.5")
+                }
+                else {
+                    d3.select("#gs-dropdown-box").style("color","var(--text3)")
+                    d3.select("#gs-dropdown-box g").style("stroke","var(--text3)")
+                    d3.select("#gs-dropdown-deco").style("opacity", "0.5")
+                }
+            })
+            .on("click", () => {
+                if (window.gsDropdownExpanded){
+                    window.gsDropdownExpanded = false;
+                    d3.select("#gs-dropdown-options-container").style("display", "none")
+                }
+                else {
+                    window.gsDropdownExpanded = true;
+                    d3.select("#gs-dropdown-options-container").style("display", "block")
+                }
+            })
+            .append("div")
+                .attr("id", "gs-dropdown-box-text")
+                .text(Math.round(window.gs))
+        
+d3.select("#gs-dropdown-box")
+    .append("svg")
+        .attr("id", "gs-dropdown-arrow-svg")
+        .append("g")
+            .attr("id", "gs-dropdown-arrow-g")
+            .append("path")
+                .attr("d", "M2 3 l 4.5 5 l 4.5 -5")
+d3.select("#gs-dropdown-container")
+    .append("div")
+        .attr("id", "gs-dropdown-options-container")
+        .append("div")
+            .attr("id", "gs-dropdown-desc")
+d3.select("#gs-dropdown-desc")
+    .append("div")
+        .attr("id", "gs-dropdown-desc-1")
+        .text("A higher value strengthens")
+d3.select("#gs-dropdown-desc")
+    .append("div")
+        .attr("id", "gs-dropdown-desc-2")
+d3.select("#gs-dropdown-desc-2")
+    .append("div")
+        .attr("id", "gs-dropdown-desc-2-1")
+        .text("image's")
+d3.select("#gs-dropdown-desc-2")
+    .append("div")
+        .attr("id", "gs-dropdown-desc-2-2")
+        .text("adherence to")
+d3.select("#gs-dropdown-desc-2")
+    .append("div")
+        .attr("id", "gs-dropdown-desc-2-3")
+        .text("text prompt")
+d3.select("#gs-dropdown-desc")
+    .append("div")
+        .attr("id", "gs-dropdown-desc-3")
+        .text("but may cause exaggeration")
+        
+d3.select("#gs-dropdown-options-container")
+        .selectAll("p")
+        .data([0,1,7,20])
+        .enter()
+        .append("p")
+            .attr("class", "gs-dropdown-options")
+            .attr("id", d => `gs-dropdown-option-${d}`)
+            .text(d => d)
+            .on("mouseover", function () {
+                window.gsHovered = true;
+                window.hoveredGs = d3.select(`#${this.id}`).text() + ".0"
+                d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.hoveredGs}_${window.timestep}.jpg`)
+                d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.hoveredGs}_${window.timestep}.jpg`)
+                d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.seed}_${window.hoveredGs}_${window.timestep}.jpg`)
+                d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.hoveredGs}_${window.timestep}.jpg`)
+                drawUmap()
+            })
+            .on("mouseout", function () {
+                window.gsHovered = false;
+                window.hoveredGs = -1;
+                d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+                drawUmap()
+            })
+            .on("click", gsChanged)
 d3.select("#text-vector-generator-latent-denoiser-text")
     .append("div")
-        .text("generation")
-d3.select("#text-vector-generator-latent-denoiser-text")
-.on("mouseover", function() {
-    d3.select("#text-vector-generator-latent-denoiser-text").style("color", window.compare?"#404040":"#276419")
-})
-.on("mouseout", function() {
-    d3.select("#text-vector-generator-latent-denoiser-text").style("color", window.compare?"#808080":"#4d9221");
-})
-    .on("click", () => {
-        if (window.gsControlDisplayed) {
-            window.gsControlDisplayed = false;
-            d3.select("#guidance-scale-control-container")
-                .transition()
-                .duration(500)
-                    .style("opacity", "0")
-                    .style("top", window.compare?"178px":"87px")
-                    .style("left", "549px")
-                .transition()
-                    .style("display", "none")
-                .on("interrupt", function() {
-                    d3.select(this).style("display", "block")
-                })
-            d3.select("#guidance-scale-expl-container")
-                .transition()
-                .duration(500)
-                    .style("opacity", "0")
-                .transition()
-                    .style("display", "none")
-                .on("interrupt", function() {
-                    d3.select(this).style("display", "block")
-                })
-            
-        }
-        else {
-            window.gsControlDisplayed = true;
-            d3.interrupt(d3.select("#guidance-scale-control-container"))    
-            d3.interrupt(d3.select("#guidance-scale-expl-container"))    
-            d3.select("#guidance-scale-control-container")
-                .transition()
-                    .style("display", "block")
-                .transition()
-                    .duration(500)
-                    .style("opacity", "1")
-                    .style("top", window.compare?"178px":"87px")
-                    .style("left", "549px")
-            d3.select("#guidance-scale-expl-container")
-                .transition()
-                    .style("display", "block")
-                .transition()
-                    .duration(500)
-                    .style("opacity", "1")
-                    .style("left", window.compare?"152px":"347px")
-        }
-    })
-
+    .attr("id", "text-vector-generator-latent-denoiser-text-2")
+        // .text("for image generation")
+    
 
 // latent denoiser
 d3.select("#architecture-container")
@@ -371,8 +474,8 @@ d3.select("#architecture-container")
             else if (window.compare) {
                 d3.select("#text-representation-generator-alert-window-container")
                     .style("display", "block")
-                    .style("left", `${e.offsetX+547}px`)
-                    .style("top", `${e.offsetY}px`)
+                    .style("left", `${e.offsetX+555}px`)
+                    .style("top", `${e.offsetY+10}px`)
             }
         })
         .on("mouseout", () => {
@@ -450,93 +553,7 @@ d3.select("#architecture-container")
             .attr("id", "generated-image")
             .attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
 
-// Guidance scale controller
-d3.select("#architecture-container")
-    .append("div")
-        .attr("id", "guidance-scale-control-container")
-        .attr("class", "hyperparameter")
-d3.select("#guidance-scale-control-container")
-    .append("div")
-        .attr("id", "guidance-scale-control-text")
-        .text("Guidance Scale")
-d3.select("#guidance-scale-control-container")
-    .append("div")
-        .attr("id", "guidance-scale-control-dropdown-container")
-        .attr("class", "custom-select hyperparameter-dropdown-container")
-            .append("select")
-                .attr("id", "guidance-scale-control-dropdown-select")
-                .on("change", gsChanged)
-                .selectAll("option")
-                    .data(["0","1","7","20"])
-                    .enter()
-                    .append("option")
-                        .attr("value", d => `${d}.0`)
-                        .text(d => d)
-                        .property("selected", d => (d=="7"))
-
-// Guidance scale explanations
-d3.select("#architecture-container")
-    .append("div")
-        .attr("id", "guidance-scale-expl-container")
-d3.select("#guidance-scale-expl-container")
-    .append("svg")
-    .style("position", "absolute")
-    .style("pointer-events", "none")
-    .style("width", "25px")
-    .style("height", "5px")
-    .style("transform", "translate(-40px, -32px) rotate(25deg)")
-    .append("g")
-    .append("path")
-        .attr("d", "M 15 10 Q 27.5 17, 40 10")
-        .attr("stroke", "#bdbdbd")
-        .attr("fill", "transparent")
-d3.select("#guidance-scale-expl-container svg g")
-    .append("path")
-        .attr("d", "M 15 10 l 3 5")
-        .attr("stroke", "#bdbdbd")
-        .attr("fill", "transparent")
-d3.select("#guidance-scale-expl-container svg g")
-    .append("path")
-        .attr("d", "M 15 10 l 7 0")
-        .attr("stroke", "#bdbdbd")
-        .attr("fill", "transparent")
-d3.select("#guidance-scale-expl-container")
-    .append("div")
-    .attr("id", "guidance-scale-expl-text-container")
-d3.select("#guidance-scale-expl-text-container")
-    .append("div")
-    .attr("id", "guidance-scale-expl-container-1")
-d3.select("#guidance-scale-expl-container-1")
-    .append("div")
-        .attr("id", "guidance-scale-expl-container-1-1")
-        .text("controls how well the")
-d3.select("#guidance-scale-expl-container-1")
-    .append("div")
-        .attr("id", "guidance-scale-expl-container-1-2")
-        .text("image representation")
-d3.select("#guidance-scale-expl-text-container")
-    .append("div")
-        .attr("id", "guidance-scale-expl-container-2")
-d3.select("#guidance-scale-expl-container-2")
-    .append("div")
-        .attr("id", "guidance-scale-expl-container-2-1")
-        .text("adheres to")
-d3.select("#guidance-scale-expl-container-2")
-    .append("div")
-        .attr("id", "guidance-scale-expl-container-2-2")
-        .text("text prompt")
-d3.select("#guidance-scale-expl-container-2")
-    .append("div")
-        .attr("id", "guidance-scale-expl-container-2-3")
-        .text(".")
-d3.select("#guidance-scale-expl-text-container")
-    .append("div")
-    .attr("id", "guidance-scale-expl-container-3")
-d3.select("#guidance-scale-expl-container-3")
-    .append("div")
-        .attr("id", "guidance-scale-expl-container-3-1")
-        .text("Higher means stronger adherence but less creativity.")
-
+// noise control container
 d3.select("#architecture-container")
     .append("div")
         .attr("id", "timestep-0-random-noise-container")
@@ -611,18 +628,91 @@ d3.select("#seed-control-container")
         .text("Seed")
 d3.select("#seed-control-container")
     .append("div")
-    .attr("id", "seed-control-dropdown-container")
-    .attr("class", "custom-select hyperparameter-dropdown-container")
-    .append("select")
-        .attr("id", "seed-control-dropdown-select")
-        .on("change", seedChanged) 
-        .selectAll("option")
-            .data(["1","2","3"])
-            .enter()
-            .append("option")
-                .attr("value", d => d)
-                .text(d => d)
-                .property("selected", d => (d==window.seed))
+        .attr("id", "seed-control-dropdown-container")
+        .attr("class", "custom-select hyperparameter-dropdown-container")
+        .append("div")
+            .attr("id", "seed-dropdown-deco")
+d3.select("#seed-control-dropdown-container")
+    .append("div")
+        .attr("id", "seed-dropdown-box")
+        .on("mouseover", () => {
+            if (window.compare){
+                d3.select("#seed-dropdown-box").style("color","#404040")
+                d3.select("#seed-dropdown-box g").style("stroke","#404040")
+                d3.select("#seed-dropdown-deco").style("opacity", "0.9")
+            }
+            else {
+                d3.select("#seed-dropdown-box").style("color","#c51b7d")
+                d3.select("#seed-dropdown-box g").style("stroke","#c51b7d")
+                d3.select("#seed-dropdown-deco").style("opacity", "0.9")
+            }
+        })
+        .on("mouseout", () => {
+            if (window.compare) {
+                d3.select("#seed-dropdown-box").style("color","#808080")
+                d3.select("#seed-dropdown-box g").style("stroke","#808080")
+                d3.select("#seed-dropdown-deco").style("opacity", "0.5")
+            }
+            else {
+                d3.select("#seed-dropdown-box").style("color","#de77ae")
+                d3.select("#seed-dropdown-box g").style("stroke","#de77ae")
+                d3.select("#seed-dropdown-deco").style("opacity", "0.5")
+            }
+        })
+        .on("click", () => {
+            if (window.seedDropdownExpanded){
+                window.seedDropdownExpanded = false;
+                d3.select("#seed-dropdown-options-container").style("display", "none")
+            }
+            else {
+                window.seedDropdownExpanded = true;
+                d3.select("#seed-dropdown-options-container").style("display", "block")
+            }
+        })
+        .append("div")
+            .attr("id", "seed-dropdown-box-text")
+            .text(window.seed)
+d3.select("#seed-dropdown-box")
+    .append("svg")
+        .attr("id", "seed-dropdown-arrow-svg")
+        .append("g")
+            .attr("id", "seed-dropdown-arrow-g")
+            .append("path")
+                .attr("d", "M2 3 l 4.5 5 l 4.5 -5")
+d3.select("#seed-control-dropdown-container")
+    .append("div")
+        .attr("id", "seed-dropdown-options-container")
+        .append("div")
+            .attr("id", "seed-dropdown-desc")
+d3.select("#seed-dropdown-options-container")
+    .selectAll("p")
+    .data([1,2,3])
+    .enter()
+    .append("p")
+        .attr("class", "seed-dropdown-options")
+        .attr("id", d => `seed-dropdown-option-${d}`)
+        .text(d=>d)
+        .on("mouseover", function () {
+            window.seedHovered = true;
+            window.hoveredSeed = d3.select(`#${this.id}`).text()
+            d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.hoveredSeed}_${window.gs}_${window.timestep}.jpg`)
+            d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.hoveredSeed}_${window.gs}_${window.timestep}.jpg`)
+            d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.hoveredSeed}_${window.gs}_${window.timestep}.jpg`)
+            d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.hoveredSeed}_${window.gs}_${window.timestep}.jpg`)
+            drawUmap()
+        })
+        .on("mouseout", function () {
+            window.seedHovered = false;
+            window.hoveredSeed = -1;
+            d3.select("#improved-latent-img").attr("src", `./assets/latent_viz/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+            d3.select("#generated-image").attr("src", `./assets/img/${window.selectedPrompt}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+            d3.select("#improved-latent-img-2").attr("src", `./assets/latent_viz/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+            d3.select("#generated-image-2").attr("src", `./assets/img/${window.selectedPrompt2}/${window.seed}_${window.gs}_${window.timestep}.jpg`)
+            drawUmap()
+        })
+        .on("click", seedChanged)
+
+    
 
 // Hide button
 let animationDuration = 500;
