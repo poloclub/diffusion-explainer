@@ -21,14 +21,14 @@ d3.select("#description")
             .text("What is Stable Diffusion?")
 d3.select("#description-section-what")
     .append("p")
-        .html(`Stable Diffusion is a text-to-image model 
-        that transforms a text prompt into a high-resolution image. 
+        .html(`
+        Stable Diffusion is a text-to-image model that transforms a text prompt into a high-resolution image. 
         For example, if you type in 
         <span style="color: var(--text3);">a cute and adorable bunny</span>, 
-        Stable Diffusion generates high-resolution images depicting exactly that 
+        Stable Diffusion generates high-resolution images depicting that 
         &mdash; <span style="color: var(--text3);">a cute and adorable bunny</span> &mdash; 
-        in a few seconds! 
-        This powerful tool provides a quick and easy way to visualize your ideas.`)
+        in a few seconds. 
+        Click “Select another prompt” in Diffusion Explainer to change prompts and check the fascinating images generated from each prompt!`)
 
 // How does Stable Diffusion work?
 d3.select("#description")
@@ -39,13 +39,30 @@ d3.select("#description")
             .text("How does Stable Diffusion work?")
 d3.select("#description-section-how-work")
     .append("p")
-        .text('Stable Diffusion first generates a vector representation of an image depicted in the text prompt. This image representation is then upscaled into a high-resolution image.')
+        // .text('Stable Diffusion first generates a vector representation of an image depicted in the text prompt. This image representation is then upscaled into a high-resolution image.')
+        .html(`
+        Stable Diffusion first changes the text prompt into a <span style="font-style: italic">text representation</span>, 
+        numerical values that summarize the prompt. 
+        The text representation is used to generate an <span style="font-style: italic">image representation</span>, 
+        which summarizes an image depicted in the text prompt. 
+        This image representation is then upscaled into a high-resolution image.
+        `)
 d3.select("#description-section-how-work")
     .append("p")
-        .html('You may wonder why Stable Diffusion introduces image representation instead of directly generating high-resolution images. The reason is <span style="font-style: italic;">computational cost efficiency</span>. Doing most computations on representation, which summarizes an image in a compact form, significantly reduces the computational cost while maintaining high image quality.')
+        // .html('You may wonder why Stable Diffusion introduces image representation instead of directly generating high-resolution images. The reason is <span style="font-style: italic;">computational cost efficiency</span>. Doing most computations on representation, which summarizes an image in a compact form, significantly reduces the computational cost while maintaining high image quality.')
+        .html(`
+        You may wonder why Stable Diffusion introduces image representation instead of directly generating high-resolution images. 
+        The reason is <span style="font-style: italic">computational efficiency</span>. 
+        Doing most computations on compact image representation instead of a high-resolution image significantly reduces the time and cost for the computations while maintaining high image quality.
+        `)
 d3.select("#description-section-how-work")
     .append("p")
-        .html('The image representation starts as a random noise and is refined over multiple timesteps to reach the image representation for your text prompt. The number of timesteps is a hyperparameter determined before refining and typically set to 50.')
+        // .html('The image representation starts as a random noise and is refined over multiple timesteps to reach the image representation for your text prompt. The number of timesteps is a hyperparameter determined before refining and typically set to 50.')
+        .html(`
+        The image representation, which starts as a random noise, 
+        is refined over multiple timesteps to reach the image representation for a high-quality image with strong adherence to the text prompt. 
+        The number of refining timesteps is typically set as 50 or 100; we fix it to 50 in Diffusion Explainer.
+        `)
 d3.select("#description-section-how-work")
     .append("p")
         .html('We break down the image generation process of Stable Diffusion into three main steps:')
@@ -53,10 +70,10 @@ d3.select("#description-section-how-work")
         .attr("id", "description-generation-main-steps-ol")
 d3.select("#description-generation-main-steps-ol")
     .append("li")
-        .html('<a style="font-weight: 500" href="#description-subsec-text-representation-generation">Text Representation Generation</a>: Stable Diffusion converts a text prompt into a text vector representation to guide the image generation.')
+        .html('<a style="font-weight: 500" href="#description-subsec-text-representation-generation">Text Representation Generation</a>: Stable Diffusion converts a text prompt into a text vector representation.')
 d3.select("#description-generation-main-steps-ol")
     .append("li")
-        .html('<a style="font-weight: 500" href="#description-subsec-image-representation-refining">Image Representation Refining</a>: Starting with a random noise, Stable Diffusion refines the image representation little by little, with the guidance of the text representation. Stable Diffusion repeats the refining over multiple timesteps (50 in our Diffusion Explainer).')
+        .html('<a style="font-weight: 500" href="#description-subsec-image-representation-refining">Image Representation Refining</a>: Starting with random noise, Stable Diffusion refines the image representation little by little, with the guidance of the text representation. Stable Diffusion repeats the refining over multiple timesteps (50 in our Diffusion Explainer).')
 d3.select("#description-generation-main-steps-ol")
     .append("li")
         .html('<a style="font-weight: 500" href="#description-subsec-image-upscaling">Image Upscaling</a>: Stable Diffusion upscales the image representation into a high-resolution image.')
@@ -72,8 +89,20 @@ d3.select("#description-section-how-work")
         .append("h2")
             .text("Text Representation Generation")
 d3.select("#description-subsec-text-representation-generation")
+    .append("img")
+        .attr("class", "description-gif")
+        .attr("id", "text-representation-generation-expansion-gif")
+        .attr("src", "assets/gif/trg.gif")
+d3.select("#description-subsec-text-representation-generation")
     .append("p")
-        .text("Text representation generation consists of tokenizing and text encoding.")
+        // .text("Text representation generation consists of tokenizing and text encoding.")
+        .html(`
+        Clicking Text Representation Generation shows how a text prompt is converted into a text representation, 
+        a vector that summarizes the prompt. 
+        It consists of two steps: 
+        <span style="font-style: italic">tokenizing</span> 
+        and 
+        <span style="font-style: italic">text encoding</span>.`)
 // Tokenizing
 d3.select("#description-subsec-text-representation-generation")
     .append("div")
@@ -85,7 +114,8 @@ d3.select("#description-subsubsec-tokenizing")
         .html('1. Tokenizing')
 d3.select("#description-subsubsec-tokenizing")
     .append("p")
-        .html("Tokenizing is a common way to handle text input to standardize the format of the input and enable the text input to be processed by neural networks.")
+        // .html("Tokenizing is a common way to handle text input to standardize the format of the input and enable the text input to be processed by neural networks.")
+        .html(`Tokenizing is a common way to handle text data to change the text into numbers and process them with neural networks.`)
 d3.select("#description-subsubsec-tokenizing")
     .append("div")
         .attr("class", "description-paragraph")
@@ -202,7 +232,8 @@ d3.select("#description-subsubsec-tokenizing-token-example-paragraph")
 
 d3.select("#description-subsubsec-tokenizing")
     .append("p")
-        .html('To ensure that all token sequences have the same length for easier computation, Stable Diffusion pads or truncates the token sequences to exactly 77 tokens. If the input prompt has fewer than 77 tokens, <span class="text-vector-generator-token description-token" id="description-token-end"></span> tokens are added to the end of the sequence until it reaches 77 tokens. If the input prompt has more than 77 tokens, the last 77 tokens are retained and the rest are truncated. The number of tokens was set to balance performance and computational efficiency.')
+        // .html('To ensure that all token sequences have the same length for easier computation, Stable Diffusion pads or truncates the token sequences to exactly 77 tokens. If the input prompt has fewer than 77 tokens, <span class="text-vector-generator-token description-token" id="description-token-end"></span> tokens are added to the end of the sequence until it reaches 77 tokens. If the input prompt has more than 77 tokens, the last 77 tokens are retained and the rest are truncated. The number of tokens was set to balance performance and computational efficiency.')
+        .html('For easier computation, Stable Diffusion keeps the token sequences of any text prompts to have the same length of 77 by padding or truncating. If the input prompt has fewer than 77 tokens, <span class="text-vector-generator-token description-token" id="description-token-end"></span> tokens are added to the end of the sequence until it reaches 77 tokens. If the input prompt has more than 77 tokens, the first 77 tokens are retained and the rest are truncated. The length of 77 was set to balance performance and computational efficiency.')
 d3.select("#description-token-end").text("<end>")
 // Text encoding
 d3.select("#description-subsec-text-representation-generation")
@@ -215,10 +246,10 @@ d3.select("#description-subsubsec-text-encoding")
         .html('2. Text encoding')
 d3.select("#description-subsubsec-text-encoding")
     .append("p")
-        .html(`Stable Diffusion converts each token in the token sequence into a text representation that contains image-related information. This is done by using the text encoder of a neural network called <a href="https://openai.com/research/clip">CLIP.</a>`)
+        .html(`Stable Diffusion converts the token sequence into a text representation. To use the text representation for guiding image generation, Stable Diffusion ensures that the text representation contains the information related to the image depicted in the prompt. This is done by using a special neural network called <a href="https://openai.com/research/clip">CLIP</a>.`)
 d3.select("#description-subsubsec-text-encoding")
     .append("p")
-        .html("CLIP consists of an image encoder and text encoder, which encode an image and its text description into an image and text representation that are close to each other. Therefore, the text representation for a text prompt computed by CLIP’s text encoder is likely to contain information about the images described in the text prompt.")
+        .html("CLIP, which consists of an image encoder and a text encoder, is trained to encode an image and its text description into vectors that are similar to each other. Therefore, the text representation for a prompt computed by CLIP’s text encoder is likely to contain information about the images described in the prompt. You can display the visual explanations by clicking the Text Encoder above.")
 
 // Image Representation Refining
 d3.select("#description-section-how-work")
@@ -231,10 +262,10 @@ d3.select("#description-subsec-image-representation-refining")
     .append("img")
         .attr("class", "description-gif")
         .attr("id", "image-refining-description-gif")
-        .attr("src", "assets/gif/imagerefine.gif")
+        .attr("src", "assets/gif/irr.gif")
 d3.select("#description-subsec-image-representation-refining")
     .append("p")
-        .text("Stable Diffusion generates an image representation that adheres to the text prompt by refining a randomly initialized noise over multiple timesteps. Each refinement step involves predicting and removing noise to gradually improve the quality of the image representation.")
+        .html("Stable Diffusion generates image representation, a vector that numerically summarizes a high-resolution image depicted in the text prompt. This is done by refining a randomly initialized noise over multiple timesteps to gradually improve the image quality and adherence to the prompt. You can change the initial random noise by adjusting the <span style='font-style: italic;'>seed </span> in Diffusion Explainer. Click Image Representation Refiner to visualize each refinement step, which involves noise prediction and removal.")
 // Noise Prediction
 d3.select("#description-subsec-image-representation-refining")
     .append("div")
@@ -246,7 +277,7 @@ d3.select("#description-subsubsec-noise-prediction")
         .html('1. Noise Prediction')
 d3.select("#description-subsubsec-noise-prediction")
     .append("p")
-        .html("At each timestep, a neural network UNet predicts noise in the image representation of the current timestep. UNet takes three inputs:")
+        .html("At each timestep, a neural network called UNet predicts noise in the image representation of the current timestep. UNet takes three inputs:")
 d3.select("#description-subsubsec-noise-prediction")
     .append("ol")
         .attr("id", "description-unet-input-ol")
@@ -255,26 +286,42 @@ d3.select("#description-unet-input-ol")
     .html(`<span style="font-weight: 500;">Image representation</span> of the current timestep`)
 d3.select("#description-unet-input-ol")
     .append("li")
-    .html(`<span style="font-weight: 500; color: var(--text3);">Text representation</span> of the text prompt to guide what noise should be removed from the current image representation to generate an image adhering to the text prompt`)
+    .html(`<span style="font-weight: 500; color: var(--text3);">Text representation</span> of the prompt to guide what noise should be removed from the current image representation to generate an image adhering to the text prompt`)
 d3.select("#description-unet-input-ol")
     .append("li")
-    .html(`<span style="font-weight: 500;">Timestep</span>, encoded as a vector, to indicate the amount of noise remaining in the current image representation`)
+    .html(`<span style="font-weight: 500;">Timestep</span> to indicate the amount of noise remaining in the current image representation`)
 
 d3.select("#description-subsubsec-noise-prediction")
     .append("p")
         .html(`In other words, 
-        UNet predicts a prompt-conditioned noise in the current image representation 
+        UNet predicts a <span style="color: var(--text3);">prompt-conditioned noise</span> in the current image representation 
         under the guidance of the text prompt's representation and timestep.`)
 d3.select("#description-subsubsec-noise-prediction")
     .append("p")
         .html(`However, even though we condition the noise prediction with the text prompt, 
-        the generated image representation may not adhere strongly enough to the text prompt. 
-        To improve the adherence of the predicted noise to the text prompt, 
-        Stable Diffusion additionally predicts <span style="color: #a0a0a0;">generic noise conditioned on an empty prompt (" ")</span>. 
-        The final noise prediction is a weighted sum of the predicted 
-        <span style="color: #a0a0a0;">generic noise</span> and the
-        <span style="color: var(--text3);">prompt-conditioned noise</span>
-        with the weights controlled by the hyperparameter <span style="font-weight: 500;">guidance scale</span>:`)
+        the generated image representation usually does not adhere strongly enough to the text prompt. 
+        To improve the adherence, 
+        Stable Diffusion measures the impact of the prompt by additionally predicting <span style="color: #909090;">generic noise conditioned on an empty prompt (" ")</span>
+        and subtracting it from the prompt-conditioned noise:`) 
+        // The final noise prediction is a weighted sum of the predicted 
+        // <span style="color: #a0a0a0;">generic noise</span> and the
+        // <span style="color: var(--text3);">prompt-conditioned noise</span>
+        // with the weights controlled by the hyperparameter <span style="font-weight: 500;">guidance scale</span>:`)
+d3.select("#description-subsubsec-noise-prediction")
+    .append("p")
+        .attr("class", "description-equation")
+        .html(`
+        <span class="description-equation-term" style="color: var(--text3); background-color: #4d922110;">impact of prompt</span> 
+        <span class="description-equation-op">=</span> 
+        <span class="description-equation-term" style="color: var(--text3); background-color: #4d922110;">prompt-conditioned noise</span> 
+        <span class="description-equation-op">-</span> 
+        <span class="description-equation-term" style="color: #909090; background-color: #a0a0a020;">generic noise</span>`)
+d3.select("#description-subsubsec-noise-prediction")
+    .append("p")
+    .html(`
+    In other words, the generic noise contributes to better image quality, 
+    while the impact of the prompt contributes to the adherence to the prompt. 
+    The final noise is a weighted sum of them controlled by a value called <span style="color: var(--text3);">guidance scale</span>:`)
 d3.select("#description-subsubsec-noise-prediction")
     .append("p")
         .attr("class", "description-equation")
@@ -283,6 +330,17 @@ d3.select("#description-equation-gs")
     .append("span")
         .attr("class", "description-equation-term")
         .style("background-color", "#a0a0a020")
+        .style("color", "#909090")
+        .text("generic noise")
+d3.select("#description-equation-gs")
+    .append("span")
+        .attr("class", "description-equation-op")
+        .text(" + ")
+d3.select("#description-equation-gs")
+    .append("span")
+        .attr("class", "description-equation-term")
+        .style("background-color", "#27641910")
+        .style("color", "var(--text3)")
         .text("guidance scale")
 d3.select("#description-equation-gs")
     .append("span")
@@ -290,36 +348,18 @@ d3.select("#description-equation-gs")
         .text(" x ")
 d3.select("#description-equation-gs")
     .append("span")
-        .style("background-color", "#a0a0a020")
+        .style("background-color", "#27641910")
         .style("color", "var(--text3)")
         .attr("class", "description-equation-term")
-        .text("prompt-conditioned noise")
-d3.select("#description-equation-gs")
-    .append("span")
-        .attr("class", "description-equation-op")
-        .text(" + ")
-d3.select("#description-equation-gs")
-    .append("span")
-        .attr("class", "description-equation-op")
-        .text("(1 - ")
-d3.select("#description-equation-gs")
-    .append("span")
-        .attr("class", "description-equation-term")
-        .style("background-color", "#a0a0a020")
-        .text("guidance scale")
-d3.select("#description-equation-gs")
-    .append("span")
-        .attr("class", "description-equation-op")
-        .text(") x ")
-d3.select("#description-equation-gs")
-    .append("span")
-        .attr("class", "description-equation-term")
-        .style("background-color", "#a0a0a020")
-        .style("color", "#909090")
-        .text("generic noise")
+        .text("impact of prompt")
 d3.select("#description-subsubsec-noise-prediction")
     .append("p")
-    .html(`A guidance scale of 0 means no adherence to the text prompt, while a guidance scale of 1 means using only the prompt-conditioned noise without introducing generic noise. Larger guidance scales result in stronger adherence to the text prompt. To see how the introduction of generic noise and guidance scale enhances image quality, you can check out our Diffusion Explainer by setting the guidance scale to 0 or 7.`)
+    .html(`A guidance scale of 0 means no adherence to the text prompt, 
+    while a guidance scale of 1 means using the original prompt-conditioned noise. 
+    Larger guidance scales result in stronger adherence to the text prompt, 
+    while too large values can lower the image quality. 
+    Change the guidance scale value in Diffusion Explainer and see how it changes the generated images.`)
+
 // Noise Removal
 d3.select("#description-subsec-image-representation-refining")
     .append("div")
@@ -331,10 +371,10 @@ d3.select("#description-subsubsec-noise-removal")
         .html('2. Noise Removal')
 d3.select("#description-subsubsec-noise-removal")
     .append("p")
-        .html("Stable Diffusion then decides how much of the predicted noise to actually remove from the image, as determined by a “scheduler.” Gradually removing small amounts of noise helps refine the image gradually and produce sharper images.")
+        .html("Stable Diffusion then decides how much of the predicted noise to actually remove from the image, as determined by an algorithm called scheduler. Removing small amounts of noise helps refine the image gradually and produce sharper images.")
 d3.select("#description-subsubsec-noise-removal")
     .append("p")
-        .html("By default, the scheduler makes this decision by accounting for the total number of timesteps. The downscaled noise is then subtracted from the image representation of the current timestep to obtain the refined representation, which becomes the image representation of the next timestep:")
+        .html("The scheduler makes this decision by accounting for the total number of timesteps. The downscaled noise is then subtracted from the image representation of the current timestep to obtain the refined representation, which becomes the image representation of the next timestep:")
 d3.select("#description-subsubsec-noise-removal")
     .append("p")
         .attr("class", "description-equation")
@@ -376,7 +416,35 @@ d3.select("#description-subsec-image-upscaling")
     .attr("src", "assets/gif/upscale.gif")
 d3.select("#description-subsec-image-upscaling")
     .append("p")
-        .text("After all denoising steps have been completed, Stable Diffusion uses a neural network called Decoder to upscale the image representation into a high-resolution image. The refined image representation has been fully denoised with the guidance of the text representations, and the resulting high-resolution image should adhere strongly to the text prompt.")
+        .text("After all denoising steps have been completed, Stable Diffusion uses a neural network called Decoder to upscale the image representation into a high-resolution image. The refined image representation fully denoised with the guidance of the text representations would result in a high-resolution image strongly adhering to the text prompt.")
+
+// Comparison View
+d3.select("#description")
+    .append("div")
+        .attr("id", "description-section-comparison")
+        .attr("class", "description-sec")
+        .append("h1")
+            .text("How do prompt keywords affect image generation?")
+            .style("margin-bottom", "0.5em")
+d3.select("#description-section-comparison")
+    .append("img")
+        .attr("class", "description-gif")
+        .attr("id", "rcv-expansion-gif")
+        .attr("src", "assets/gif/rcv.gif")
+d3.select("#description-section-comparison")
+    .append("p")
+        .html(`
+        Writing text prompts can be very heuristic and repetitive. 
+        For example, starting from the prompt 
+        <span style="color: var(--text3); font-style: italic;">a cute bunny</span>, 
+        you should repetitively add and remove keywords such as 
+        <span style="color: var(--text3); font-style: italic;">in the style of cute pixar character</span>, 
+        until you reach to the desired image.`)
+d3.select("#description-section-comparison")
+    .append("p")
+        .text(`
+        Therefore, understanding how prompt keywords affect image generation would be greatly helpful for writing and refining your prompt. 
+        Click the keywords highlighted in the text prompt and compare the image generation of the two prompts that differ only in the keywords.`)
 
 // What can we change
 d3.select("#description")

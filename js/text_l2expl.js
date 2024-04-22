@@ -21,6 +21,8 @@ document.addEventListener("mouseup", (e) => {
         // else if (e.clientY > descriptionBox.y) {}
         // else {reduceTextVectorGeneratorL2();}
         else if (document.querySelector("#architecture-container-hide-button-container:hover") != null) {}
+        else if (document.querySelector(".controller-button-circle:hover") != null) {}
+        else if (document.querySelector("#controller-timestep-slider-container:hover") != null) {}
         else if (e.clientX > mainLeft && e.clientX < mainRight && e.clientY > mainTop && e.clientY < mainBottom) {reduceTextVectorGeneratorL2();}
         else {}
     }

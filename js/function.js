@@ -1515,13 +1515,14 @@ function expandLatentDenoiserL3 () {
     d3.select("#latent-denoiser-container")
         .transition()
         .duration(animationDuration)
-            .style("height", "383px")
+            // .style("height", "383px")
+            .style("height", "363px")
     
     // Change the height of main
     d3.select("#architecture-wrapper")
         .transition()
             .duration(animationDuration)
-            .style("height", "515px")
+            .style("height", "495px")
 
     // hide guidance scale expl ...
     d3.select("#text-vector-generator-latent-denoiser-text")
