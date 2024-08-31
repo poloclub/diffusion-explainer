@@ -1,4 +1,4 @@
-# Diffusion-Explainer <a href="https://poloclub.github.io/diffusion-explainer/"><img align="right" src="./icons/logo.svg" height="38"></img></a>
+# Diffusion-Explainer
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![arxiv badge](https://img.shields.io/badge/arXiv-2305.03509-red)](https://arxiv.org/abs/2305.03509)
 <!-- ![crown_jewel]() -->
