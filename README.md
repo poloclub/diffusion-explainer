@@ -15,7 +15,12 @@
 </tr>
 </table>
 
-# How to run locally
+### Research Paper
+[**Diffusion Explainer: Visual Explanation for Text-to-image Stable Diffusion.**](https://arxiv.org/abs/2305.03509)
+Seongmin Lee, Benjamin Hoover, Hendrik Strobelt, Zijie J. Wang, ShengYun Peng, Austin Wright, Kevin Li, Haekyu Park, Haoyang Yang, Duen Horng Chau.
+Short paper, IEEE VIS 2024.
+
+## How to run locally
 ```
 git clone https://github.com/poloclub/diffusion-explainer.git
 cd diffusion-explainer
@@ -25,7 +30,7 @@ python -m http.server 8000
 Then, on your web browser, access http://localhost:8000.
 You can replace 8000 with other port numbers you want to use.
 
-# Credits
+## Credits
 Led by [Seongmin Lee](http://www.seongmin.xyz),
 Diffusion Explainer is created by Machine Learning and Human-computer Interaction researchers at Georgia Tech and IBM Research.
 The team includes
@@ -40,14 +45,20 @@ The team includes
 [Alex Yang](https://alexanderyang.me/),
 and [Polo Chau](http://www.cc.gatech.edu/~dchau/).
 
-# License
+## Citation
+
+```bibTeX
+@article{lee2024diffusion,
+  title = {{D}iffusion {E}xplainer: {V}isual {E}xplanation for {T}ext-to-image {S}table {D}iffusion},
+  shorttitle = {Diffusion Explainer},
+  author = {Lee, Seongmin and Hoover, Benjamin and Strobelt, Hendrik and Wang, Zijie J and Peng, ShengYun and Wright, Austin and Li, Kevin and Park, Haekyu and Yang, Haoyang and Chau, Duen Horng},
+  journal={IEEE VIS},
+  year={2024}
+}
+```
+
+## License
 The software is available under the [MIT License](https://github.com/poloclub/diffusion-explainer/blob/main/LICENSE).
 
-# Contact
+## Contact
 If you have any questions, feel free to [open an issue](https://github.com/poloclub/diffusion-explainer/issues/new/choose) or contact [Seongmin Lee](http://www.seongmin.xyz/).
-
-<!-- # Citation
-To learn more about Diffusion Explainer, please read our [paper](https:) and [demo video](https). Thanks!
-
-```latex
-``` -->
