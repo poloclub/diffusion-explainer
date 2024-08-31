@@ -5,7 +5,7 @@
 
 <table>
 <tr>
-    <td colspan="4"><img src="./assets/preview/de_crownjewel.png" style="width: 100%"></td>
+    <td colspan="4"><img src="https://github.com/user-attachments/assets/72974e4c-0a5e-436f-b7a1-89de0500bce1" style="width: 100%"></td>
 </tr>
 <tr>
     <td><a href="http://poloclub.github.io/diffusion-explainer">🚀 Live Demo</a></td>
