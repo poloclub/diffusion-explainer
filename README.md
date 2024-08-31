@@ -1,4 +1,10 @@
 # Diffusion-Explainer
+
+Diffusion Explainer is an interactive visualization tool designed to help anyone learn how Stable Diffusion transforms text prompts into images.
+It runs in your browser, allowing you to experiment with several preset prompts without any installation, coding skills, or GPUs.
+Try Diffusion Explainer at https://poloclub.github.io/diffusion-explainer and watch a demo video on YouTube https://youtu.be/Zg4gxdIWDds!
+
+
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
 [![arxiv badge](https://img.shields.io/badge/arXiv-2305.03509-red)](https://arxiv.org/abs/2305.03509)
 <!-- ![crown_jewel]() -->
@@ -16,7 +22,7 @@
 </table>
 
 ### Research Paper
-[**Diffusion Explainer: Visual Explanation for Text-to-image Stable Diffusion.**](https://arxiv.org/abs/2305.03509)
+[**Diffusion Explainer: Visual Explanation for Text-to-image Stable Diffusion**](https://arxiv.org/abs/2305.03509).
 Seongmin Lee, Benjamin Hoover, Hendrik Strobelt, Zijie J. Wang, ShengYun Peng, Austin Wright, Kevin Li, Haekyu Park, Haoyang Yang, Duen Horng Chau.
 Short paper, IEEE VIS 2024.
 
